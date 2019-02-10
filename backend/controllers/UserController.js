@@ -1,6 +1,6 @@
 const Database = require("../utils/db.configuration");
 
-var createAccount = (email, password) => {
+exports.createAccount = (email, password) => {
   var user = new Database.User();
   user.email = email;
   user.password = password;
@@ -13,7 +13,7 @@ var createAccount = (email, password) => {
     });
 };
 
-var signIn = (email, password) => {
+exports.signIn = (email, password) => {
   Database.UserService.login(email, password, false)
     .then(loggedinUser => {
       console.log("Welcome user " + loggedinUser.email);
