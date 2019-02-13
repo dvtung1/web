@@ -31,6 +31,7 @@
       <br />
       <button type="submit">Sign In</button>
     </form>
+    <p *ngIf="errMsg !== null">{{ errMsg }}</p>
     <p>Does not have account? <a routerLink="/signup">Please register</a></p>
   </div>
 </div>

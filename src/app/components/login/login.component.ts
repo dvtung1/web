@@ -1,16 +1,28 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UserAuthService } from "src/app/services/user-auth.service";
 import { NgForm } from "@angular/forms";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"]
 })
-export class LoginComponent implements OnInit {
-  constructor(private userAuthService: UserAuthService) {}
+export class LoginComponent implements OnInit, OnDestroy {
+  private authStatusSub: Subscription;
+  errMsg: string;
 
-  ngOnInit() {}
+  constructor(private userAuthService: UserAuthService) {
+    this.authStatusSub = new Subscription();
+  }
+
+  ngOnInit() {
+    this.authStatusSub.add(
+      this.userAuthService.getAuthStatusListener().subscribe(respond => {
+        this.errMsg = respond;
+      })
+    );
+  }
 
   onLogIn(form: NgForm) {
     if (form.invalid) {
@@ -21,5 +33,9 @@ export class LoginComponent implements OnInit {
     var email = form.value.email;
     var password = form.value.password;
     this.userAuthService.signIn(email, password);
+  }
+
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }

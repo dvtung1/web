@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { UserModel } from "src/app/models/UserAuth.model";
+import { Subject, Observable } from "rxjs";
 
 //backend api url for communication (Port 3000)
 // const BACKEND_URL = environment.apiUrl + "/user/";
@@ -14,6 +15,7 @@ export class UserAuthService {
   private userToken: string;
   private userId: string;
   private isAuthenticated: boolean = false;
+  private authStatusListener = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +32,7 @@ export class UserAuthService {
         },
         error => {
           console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
         }
       );
   }
@@ -53,7 +56,20 @@ export class UserAuthService {
         },
         error => {
           console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
         }
       );
+  }
+  getUserId(): string {
+    return this.userId;
+  }
+  getUserToken(): string {
+    return this.userToken;
+  }
+  isUserAuthenticated(): boolean {
+    return this.isAuthenticated;
+  }
+  getAuthStatusListener() {
+    return this.authStatusListener.asObservable();
   }
 }
