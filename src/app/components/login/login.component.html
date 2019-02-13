@@ -1,0 +1,36 @@
+<div class="text-center">
+  <div>
+    <form (submit)="onLogIn(loginForm)" #loginForm="ngForm">
+      <h1>Log In</h1>
+      <br />
+      <p>Sign in using PUrfect Dining account!</p>
+      <br />
+
+      <label for="email"><b>Enter Email: </b></label>
+      <input
+        type="email"
+        placeholder="Enter Email"
+        name="email"
+        required
+        autofocus
+        ngModel
+      />
+      <br />
+      <br />
+
+      <label for="password"><b>Enter password: </b></label>
+      <input
+        type="password"
+        placeholder="Enter Password"
+        name="password"
+        required
+        ngModel
+      />
+
+      <br />
+      <br />
+      <button type="submit">Sign In</button>
+    </form>
+    <p>Does not have account? <a routerLink="/signup">Please register</a></p>
+  </div>
+</div>
