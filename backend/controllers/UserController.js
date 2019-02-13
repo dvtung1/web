@@ -20,13 +20,11 @@ exports.createAccount = (req, res) => {
     .then(user => {
       //send back json include user and message
       return res.status(201).json({
-        user: user,
         message: `User ${user.email} has successfully created account`
       });
     })
     .catch(err => {
       return res.status(500).json({
-        statusCode: err.statusCode,
         message: err.message
       });
     });
@@ -45,14 +43,19 @@ exports.signIn = (req, res) => {
   //use backendless api to log in, "true" means the user login info will be saved
   Backendless.UserService.login(email, password, true)
     .then(loggedinUser => {
+      var userToken = Backendless.LocalCache.get("user-token");
+      var userObjectId = Backendless.LocalCache.get("current-user-id");
+      // var userObject = Backendless.UserService.getCurrentUser();
+
+      //send token, objectId, userObject as JSON
       return res.status(200).json({
-        user: loggedinUser,
-        message: `User ${loggedinUser.email} has successfully logged in`
+        userToken: userToken,
+        userId: userObjectId
+        // userObject: userObject
       });
     })
     .catch(err => {
-      return res.status(500).json({
-        statusCode: err.statusCode,
+      return res.status(401).json({
         message: err.message
       });
     });

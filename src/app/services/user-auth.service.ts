@@ -11,6 +11,10 @@ const BACKEND_URL = environment.apiUrl + "/user";
   providedIn: "root"
 })
 export class UserAuthService {
+  private userToken: string;
+  private userId: string;
+  private isAuthenticated: boolean = false;
+
   constructor(private http: HttpClient) {}
 
   createUser(email: string, password: string) {
@@ -18,8 +22,38 @@ export class UserAuthService {
       email: email,
       password: password
     };
-    this.http.post(BACKEND_URL + "/signup", UserModel).subscribe(response => {
-      console.log(response);
-    });
+    this.http
+      .post<{ message: string }>(BACKEND_URL + "/signup", UserModel)
+      .subscribe(
+        response => {
+          console.log(response.message);
+        },
+        error => {
+          console.log(error.message);
+        }
+      );
+  }
+
+  signIn(email: string, password: string) {
+    var UserModel: UserModel = {
+      email: email,
+      password: password
+    };
+    this.http
+      .post<{ userToken: string; userId: string }>(
+        BACKEND_URL + "/login",
+        UserModel
+      )
+      .subscribe(
+        response => {
+          this.userToken = response.userToken;
+          this.userId = response.userId;
+          this.isAuthenticated = true;
+          console.log("User has logged in succesfully");
+        },
+        error => {
+          console.log(error.message);
+        }
+      );
   }
 }
