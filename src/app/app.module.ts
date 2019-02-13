@@ -12,9 +12,15 @@ import { RecoveryComponent } from "./components/recovery/recovery.component";
 
 //Services
 import { UserAuthService } from "./services/user-auth.service";
+import { LoginComponent } from "./components/login/login.component";
 
 @NgModule({
-  declarations: [AppComponent, SignupComponent, RecoveryComponent],
+  declarations: [
+    AppComponent,
+    SignupComponent,
+    RecoveryComponent,
+    LoginComponent
+  ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
   bootstrap: [AppComponent]

@@ -29,7 +29,7 @@ export class UserAuthService {
           console.log(response.message);
         },
         error => {
-          console.log(error.message);
+          console.log(error.error.message);
         }
       );
   }
@@ -52,7 +52,7 @@ export class UserAuthService {
           console.log("User has logged in succesfully");
         },
         error => {
-          console.log(error.message);
+          console.log(error.error.message);
         }
       );
   }
