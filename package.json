@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "ng build && ng serve --open",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "start-server": "nodemon backend/server.js"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +25,7 @@
     "core-js": "^2.5.4",
     "express": "^4.16.4",
     "jquery": "^3.3.1",
+    "nodemon": "^1.18.10",
     "popper.js": "^1.14.7",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
