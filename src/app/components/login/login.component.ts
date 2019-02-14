@@ -12,14 +12,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   errMsg: string;
 
-  constructor(private userAuthService: UserAuthService) {}
+  constructor(private userAuthService: UserAuthService) {
+    this.authStatusSub = new Subscription();
+  }
 
   ngOnInit() {
-    this.authStatusSub = this.userAuthService
-      .getAuthStatusListener()
-      .subscribe(respond => {
+    this.authStatusSub.add(
+      this.userAuthService.getAuthStatusListener().subscribe(respond => {
         this.errMsg = respond;
-      });
+      })
+    );
   }
 
   onLogIn(form: NgForm) {
