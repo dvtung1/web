@@ -1,5 +1,14 @@
 <div class="text-center">
-  <div>
+  <div *ngIf="isSuccess">
+    <p>A confirmation email has been sent to your email. Thank you!</p>
+    <p [hidden]="isResend">
+      Has not received email yet?
+      <a routerLink="/signup" (click)="resendEmail()">Resend confirmation</a>
+    </p>
+    <p [hidden]="!isResend">New confirmation has been resend!</p>
+    <a routerLink="/login">Return to log in page</a>
+  </div>
+  <div *ngIf="!isSuccess">
     <form (submit)="onSignUp(signupForm)" #signupForm="ngForm">
       <h1>Sign Up</h1>
       <br />
@@ -32,6 +41,6 @@
       <button type="submit">Sign Up</button>
     </form>
     <p>Already have an account? <a routerLink="/login">Please sign in</a></p>
-    <p *ngIf="errMsg !== null">{{ errMsg }}</p>
+    <p>{{ errMsg }}</p>
   </div>
 </div>

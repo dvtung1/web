@@ -10,7 +10,9 @@ import { Subscription } from "rxjs";
 })
 export class SignupComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
-  public errMsg: string;
+  isSuccess: boolean;
+  errMsg: string;
+  isResend: boolean;
   constructor(private userAuthService: UserAuthService) {
     this.authStatusSub = new Subscription();
   }
@@ -18,7 +20,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
-        this.errMsg = respond;
+        if (respond === "success") {
+          this.isSuccess = true;
+        } else {
+          this.errMsg = respond;
+        }
       })
     );
   }
@@ -33,6 +39,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     var email = form.value.email;
     var password = form.value.password;
     this.userAuthService.createUser(email, password);
+  }
+
+  resendEmail() {
+    this.userAuthService.resendConfirmation();
+    this.isResend = true;
   }
 
   ngOnDestroy() {

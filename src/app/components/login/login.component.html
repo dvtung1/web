@@ -29,9 +29,12 @@
 
       <br />
       <br />
-      <button type="submit">Sign In</button>
+      <button [disabled]="loginForm.form.invalid" type="submit">Sign In</button>
     </form>
-    <p *ngIf="errMsg !== null">{{ errMsg }}</p>
+    <p>{{ errMsg }}</p>
     <p>Does not have account? <a routerLink="/signup">Please register</a></p>
+    <p>
+      Forgot your password? <a routerLink="/recovery">Recovery your password</a>
+    </p>
   </div>
 </div>
