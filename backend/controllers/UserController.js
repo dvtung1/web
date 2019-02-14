@@ -20,7 +20,22 @@ exports.createAccount = (req, res) => {
     .then(user => {
       //send back json include user and message
       return res.status(201).json({
-        message: `User ${user.email} has successfully created account`
+        message: `User has successfully created account`
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
+exports.resendConfirmation = (req, res) => {
+  var email = req.body.email;
+  Backendless.UserService.resendEmailConfirmation(email)
+    .then(() => {
+      return res.status(200).json({
+        message: "Resend confirmation successfully"
       });
     })
     .catch(err => {
@@ -56,6 +71,27 @@ exports.signIn = (req, res) => {
     })
     .catch(err => {
       return res.status(401).json({
+        message: err.message
+      });
+    });
+};
+
+/*
+  Recovery password with an email sent along with instruction to set up new password.
+  @param req request
+  @param res respond
+  @return json with result messages
+*/
+exports.recoveryPassword = (req, res) => {
+  var email = req.body.email;
+  Backendless.UserService.restorePassword(email)
+    .then(() => {
+      return res.status(200).json({
+        message: "An email has been sent"
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
         message: err.message
       });
     });

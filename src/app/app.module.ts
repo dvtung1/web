@@ -13,13 +13,15 @@ import { RecoveryComponent } from "./components/recovery/recovery.component";
 //Services
 import { UserAuthService } from "./services/user-auth.service";
 import { LoginComponent } from "./components/login/login.component";
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
     RecoveryComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],

@@ -16,6 +16,7 @@ export class UserAuthService {
   private userId: string;
   private isAuthenticated: boolean = false;
   private authStatusListener = new Subject<string>();
+  private emailSignUp: string;
 
   constructor(private http: HttpClient) {}
 
@@ -29,10 +30,29 @@ export class UserAuthService {
       .subscribe(
         response => {
           console.log(response.message);
+          this.authStatusListener.next("success");
+          //if user create account successfully, save that email
+          //to resend confirmation if needed
+          this.emailSignUp = email;
         },
         error => {
           console.log(error.error.message);
           this.authStatusListener.next(error.error.message);
+        }
+      );
+  }
+
+  resendConfirmation() {
+    this.http
+      .post<{ message: string }>(BACKEND_URL + "/resend", {
+        email: this.emailSignUp
+      })
+      .subscribe(
+        response => {
+          console.log(response.message);
+        },
+        error => {
+          console.log(error.error.message);
         }
       );
   }
@@ -59,6 +79,18 @@ export class UserAuthService {
           this.authStatusListener.next(error.error.message);
         }
       );
+  }
+
+  recoveryPassword(email: string) {
+    this.http.post(BACKEND_URL + "/recovery", { email: email }).subscribe(
+      () => {
+        this.authStatusListener.next("success");
+      },
+      error => {
+        console.log(error.error.message);
+        this.authStatusListener.next(error.error.message);
+      }
+    );
   }
   getUserId(): string {
     return this.userId;
