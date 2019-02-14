@@ -13,20 +13,18 @@ export class SignupComponent implements OnInit, OnDestroy {
   isSuccess: boolean;
   errMsg: string;
   isResend: boolean;
-  constructor(private userAuthService: UserAuthService) {
-    this.authStatusSub = new Subscription();
-  }
+  constructor(private userAuthService: UserAuthService) {}
 
   ngOnInit() {
-    this.authStatusSub.add(
-      this.userAuthService.getAuthStatusListener().subscribe(respond => {
+    this.authStatusSub = this.userAuthService
+      .getAuthStatusListener()
+      .subscribe(respond => {
         if (respond === "success") {
           this.isSuccess = true;
         } else {
           this.errMsg = respond;
         }
-      })
-    );
+      });
   }
 
   onSignUp(form: NgForm) {
