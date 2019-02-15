@@ -1,40 +1,42 @@
 <div class="text-center">
+  <br />
+  <br />
+  
   <div>
     <form (submit)="onLogIn(loginForm)" #loginForm="ngForm">
-      <h1>Log In</h1>
+      <div class="logo">
+        <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
+      </div>
       <br />
-      <p>Sign in using PUrfect Dining account!</p>
       <br />
-
-      <label for="email"><b>Enter Email: </b></label>
-      <input
-        type="email"
-        placeholder="Enter Email"
-        name="email"
-        required
-        autofocus
-        ngModel
-      />
       <br />
       <br />
 
-      <label for="password"><b>Enter password: </b></label>
-      <input
-        type="password"
-        placeholder="Enter Password"
-        name="password"
-        required
-        ngModel
-      />
+      <div class="fields">
+        <label for="email"><b>Username/Email: </b></label>
+        <input
+          type="email"
+          name="email"
+          required
+          autofocus
+          ngModel
+        />
+        <br />
 
+        <label for="password" text-align: right><b>Password: </b></label>
+        <input
+          type="password"
+          name="password"
+          required
+          ngModel
+        />
+      </div>
       <br />
-      <br />
+
       <button [disabled]="loginForm.form.invalid" type="submit">Sign In</button>
+      <a style="display: inline" routerLink="/recovery">Forgot password?</a>
     </form>
     <p>{{ errMsg }}</p>
-    <p>Does not have account? <a routerLink="/signup">Please register</a></p>
-    <p>
-      Forgot your password? <a routerLink="/recovery">Recovery your password</a>
-    </p>
+    <p>Don't have an account? <a routerLink="/signup">Sign up!</a></p>
   </div>
 </div>
