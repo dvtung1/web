@@ -1,4 +1,5 @@
 <div class="text-center">
+  <!--Only show this part when the user has successfully sign up new account-->
   <div *ngIf="isSuccess">
     <p>A confirmation email has been sent to your email. Thank you!</p>
     <p [hidden]="isResend">
@@ -8,6 +9,9 @@
     <p [hidden]="!isResend">New confirmation has been resend!</p>
     <a routerLink="/login">Return to log in page</a>
   </div>
+  <!---->
+
+  <!--Make this part below disappear when user successfuly sign up-->
   <div *ngIf="!isSuccess">
     <form (submit)="onSignUp(signupForm)" #signupForm="ngForm">
       <h1>Sign Up</h1>
@@ -38,9 +42,13 @@
 
       <br />
       <br />
-      <button type="submit">Sign Up</button>
+      <!--disable the button when the form is invalid-->
+      <button [disabled]="signupForm.form.invalid" type="submit">
+        Sign Up
+      </button>
     </form>
     <p>Already have an account? <a routerLink="/login">Please sign in</a></p>
+    <!--Print out the error message iff there is an error-->
     <p>{{ errMsg }}</p>
   </div>
 </div>

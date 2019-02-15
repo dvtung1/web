@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { UserModel } from "src/app/models/UserAuth.model";
+import { UserModel } from "src/app/models/user-model";
 import { Subject, Observable } from "rxjs";
 
 //backend api url for communication (Port 3000)
@@ -14,9 +14,9 @@ const BACKEND_URL = environment.apiUrl + "/user";
 export class UserAuthService {
   private userToken: string;
   private userId: string;
-  private isAuthenticated: boolean = false;
-  private authStatusListener = new Subject<string>();
-  private emailSignUp: string;
+  private isAuthenticated: boolean;
+  private authStatusListener = new Subject<string>(); //help with emit messages
+  private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
 
   constructor(private http: HttpClient) {}
 
@@ -25,6 +25,7 @@ export class UserAuthService {
       email: email,
       password: password
     };
+    //send User info to the backend server
     this.http
       .post<{ message: string }>(BACKEND_URL + "/signup", UserModel)
       .subscribe(
@@ -43,6 +44,7 @@ export class UserAuthService {
   }
 
   resendConfirmation() {
+    //send email to the backend server
     this.http
       .post<{ message: string }>(BACKEND_URL + "/resend", {
         email: this.emailSignUp
@@ -62,6 +64,7 @@ export class UserAuthService {
       email: email,
       password: password
     };
+    //send user info to log in
     this.http
       .post<{ userToken: string; userId: string }>(
         BACKEND_URL + "/login",
@@ -69,10 +72,12 @@ export class UserAuthService {
       )
       .subscribe(
         response => {
+          //save user token and id
           this.userToken = response.userToken;
           this.userId = response.userId;
           this.isAuthenticated = true;
           console.log("User has logged in succesfully");
+          //TODO add new route when user successfully log in
         },
         error => {
           console.log(error.error.message);
@@ -82,6 +87,7 @@ export class UserAuthService {
   }
 
   recoveryPassword(email: string) {
+    //send email to backend server for recovery password
     this.http.post(BACKEND_URL + "/recovery", { email: email }).subscribe(
       () => {
         this.authStatusListener.next("success");

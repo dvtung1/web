@@ -1,10 +1,13 @@
 <div class="text-center">
+  <!--only show when the user has successfully recovery their password-->
   <div *ngIf="isSuccess">
     <p>
       An email with password recovery instruction has been sent to your email
     </p>
     <a routerLink="/login">Click here to log in</a>
   </div>
+  <!---->
+
   <div *ngIf="!isSuccess">
     <h1>Recover PUrfect Dining Password</h1>
     <br />
@@ -23,7 +26,9 @@
 
       <br />
       <br />
-      <button type="submit">Send Email</button>
+      <button [disabled]="recoveryForm.form.invalid" type="submit">
+        Send Email
+      </button>
     </form>
     <p>
       Remember your password now?

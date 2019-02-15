@@ -5,10 +5,9 @@
 const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/UserController");
-const userAuthentication = require("../middlewares/userAuthentication.middleware");
-//Input route, http verb, along with controllers below
+const userAuthentication = require("../middlewares/userAuthentication.middleware"); //middleware to check user has logged in or not
 
-//route /signup will execute createAccount method
+//Input route, http verb, along with controllers below
 router.post("/signup", UserController.createAccount);
 router.post("/login", UserController.signIn);
 router.post("/recovery", UserController.recoveryPassword);

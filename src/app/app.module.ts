@@ -5,15 +5,15 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 
-//Components
-import { AppComponent } from "./app.component";
-import { SignupComponent } from "./components/signup/signup.component";
-import { RecoveryComponent } from "./components/recovery/recovery.component";
-
 //Services
 import { UserAuthService } from "./services/user-auth.service";
-import { LoginComponent } from "./components/login/login.component";
-import { HomeComponent } from './components/home/home.component';
+
+//Components
+import { AppComponent } from "./app.component";
+import { SignupComponent } from "./components/user-auth/signup/signup.component";
+import { RecoveryComponent } from "./components/user-auth/recovery/recovery.component";
+import { LoginComponent } from "./components/user-auth/login/login.component";
+import { HomeComponent } from "./components/main/home/home.component";
 
 @NgModule({
   declarations: [

@@ -9,14 +9,15 @@ import { Subscription } from "rxjs";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private authStatusSub: Subscription;
-  errMsg: string;
+  private authStatusSub: Subscription; //listen to server through subject emitter
+  errMsg: string; //error message
 
   constructor(private userAuthService: UserAuthService) {
     this.authStatusSub = new Subscription();
   }
 
   ngOnInit() {
+    //get the respond when user try to log in
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         this.errMsg = respond;
@@ -25,10 +26,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogIn(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-
     //get email and password input from the form
     var email = form.value.email;
     var password = form.value.password;
