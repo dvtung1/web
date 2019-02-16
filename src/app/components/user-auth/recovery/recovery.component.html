@@ -1,4 +1,19 @@
 <div class="text-center">
+  <br />
+  <br />
+
+  <div class="logo">
+    <img
+      src="https://i.imgur.com/iChU2VU.png"
+      alt="PUrfect Dining Logo"
+      width="150px"
+    />
+  </div>
+
+  <br />
+  <br />
+  <br />
+  <br />
   <!--only show when the user has successfully recovery their password-->
   <div *ngIf="isSuccess">
     <p>
@@ -9,31 +24,35 @@
   <!---->
 
   <div *ngIf="!isSuccess">
-    <h1>Recover PUrfect Dining Password</h1>
+    <span class="recoverTitle">Recover PUrfect Dining Account</span>
     <br />
-    <p>We will send a recovery instruction to your email.</p>
-    <br />
+    <span
+      >Please enter your email to receive an email with a password reset
+      link</span
+    >
     <form (submit)="onRecovery(recoveryForm)" #recoveryForm="ngForm">
       <label for="email"><b>Enter your Email: </b></label>
       <input
         type="email"
         placeholder="Enter Email"
         name="email"
+        class="emailField"
         required
         autofocus
         ngModel
       />
 
       <br />
-      <br />
+      <!--disable the button when the form is invalid-->
       <button [disabled]="recoveryForm.form.invalid" type="submit">
         Send Email
       </button>
     </form>
-    <p>
-      Remember your password now?
-      <a routerLink="/login">Click here to get back</a>
-    </p>
+    <span
+      >Remember your password?
+      <a routerLink="/login">Redirect to Login page</a>
+    </span>
+    <!--Print out the error message iff there is an error-->
     <p>{{ errMsg }}</p>
   </div>
 </div>

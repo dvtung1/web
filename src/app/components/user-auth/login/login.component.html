@@ -18,19 +18,38 @@
 
       <div class="fields">
         <label for="email"><b>Username/Email: </b></label>
-        <input type="email" name="email" required autofocus ngModel />
+        <input
+          type="email"
+          name="email"
+          class="emailField"
+          required
+          autofocus
+          ngModel
+        />
         <br />
 
         <label for="password" text-align: right><b>Password: </b></label>
-        <input type="password" name="password" required ngModel />
+        <input
+          type="password"
+          name="password"
+          class="passwordField"
+          required
+          ngModel
+        />
       </div>
       <br />
 
-      <!--disable the button when the form is invalid-->
-      <button [disabled]="loginForm.form.invalid" type="submit">Sign In</button>
+      <button
+        [disabled]="loginForm.form.invalid"
+        type="submit"
+        class="signInButton"
+      >
+        Sign In
+      </button>
       <a style="display: inline" routerLink="/recovery">Forgot password?</a>
     </form>
+    <!--Print out the error message iff there is an error-->
     <p>{{ errMsg }}</p>
-    <p>Don't have an account? <a routerLink="/signup">Sign up!</a></p>
+    <span>Don't have an account? <a routerLink="/signup">Sign up!</a></span>
   </div>
 </div>
