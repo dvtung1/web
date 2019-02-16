@@ -1,7 +1,7 @@
 <div class="text-center">
   <br />
   <br />
-  
+
   <div>
     <form (submit)="onLogIn(loginForm)" #loginForm="ngForm">
       <div class="logo">
@@ -17,6 +17,7 @@
         <input
           type="email"
           name="email"
+          class="emailField"
           required
           autofocus
           ngModel
@@ -27,13 +28,14 @@
         <input
           type="password"
           name="password"
+          class="passwordField"
           required
           ngModel
         />
       </div>
       <br />
 
-      <button [disabled]="loginForm.form.invalid" type="submit">Sign In</button>
+      <button [disabled]="loginForm.form.invalid" type="submit" class="signInButton">Sign In</button>
       <a style="display: inline" routerLink="/recovery">Forgot password?</a>
     </form>
     <p>{{ errMsg }}</p>
