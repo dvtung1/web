@@ -1,3 +1,30 @@
-<p>
-  manage works!
-</p>
+<!-- Manage account will only work when the user is logged in-->
+
+<div class="text-center">
+        <div>
+          <h1>Manage Account</h1>
+          <p>Manage your account Information</p>
+          <br>
+          <button (click)="editEmailToggle()">Edit Email</button>
+            <div *ngIf=editEmail>
+                <label for="email"><b>Change Email: </b></label>
+                <input type="email" placeholder="Enter New Email" name="useremail" required autofocus>
+          
+            </div>
+            <br>
+            <button (click)="editPasswordToggle()">Edit Password</button>
+            <div *ngIf=editPassword>
+                <label for="password"><b>Change Password: </b></label>
+                <input type="password" placeholder="Enter New Password" name="userpass" required>
+            </div>
+            <br>
+            <br>
+            <button>Apply Changes</button>
+          
+        </div>
+  
+</div>
+
+  
+
+
