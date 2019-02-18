@@ -15,6 +15,7 @@ import { RecoveryComponent } from "./components/user-auth/recovery/recovery.comp
 import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
+import { ManageComponent } from './components/user-auth/manage/manage.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NavbarComponent } from "./components/navbar/navbar.component";
     RecoveryComponent,
     LoginComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    ManageComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
