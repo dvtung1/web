@@ -3,7 +3,11 @@
   <div>
     <form (submit)="onLogIn(loginForm)" #loginForm="ngForm">
       <div class="logo">
-        <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
+        <img
+          src="https://i.imgur.com/iChU2VU.png"
+          alt="PUrfect Dining Logo"
+          width="150px"
+        />
       </div>
 
       <div class="fields">
@@ -30,9 +34,16 @@
       <br />
       <br>
 
-      <button [disabled]="loginForm.form.invalid" type="submit" class="signInButton">Sign In</button>
+      <button
+        [disabled]="loginForm.form.invalid"
+        type="submit"
+        class="signInButton"
+      >
+        Sign In
+      </button>
       <a style="display: inline" routerLink="/recovery">Forgot password?</a>
     </form>
+    <!--Print out the error message iff there is an error-->
     <p>{{ errMsg }}</p>
     <span>Don't have an account? <a routerLink="/signup">Sign up!</a></span>
   </div>

@@ -9,17 +9,19 @@ import { Subscription } from "rxjs";
   styleUrls: ["./signup.component.css"]
 })
 export class SignupComponent implements OnInit, OnDestroy {
-  private authStatusSub: Subscription;
-  isSuccess: boolean;
-  errMsg: string;
-  isResend: boolean;
+  private authStatusSub: Subscription; //listen to the subject
+  isSuccess: boolean; //is user sign up successfully
+  errMsg: string; //show user the error message
+  isResend: boolean; //does user need to resend confirmation email
   constructor(private userAuthService: UserAuthService) {
     this.authStatusSub = new Subscription();
   }
 
   ngOnInit() {
+    //listen from the server through the service subject
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
+        //check if the user sign up successfully
         if (respond === "success") {
           this.isSuccess = true;
         } else {
@@ -30,17 +32,13 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   onSignUp(form: NgForm) {
-    //check if form is valid or not
-    if (form.invalid) {
-      return;
-    }
-
     //get email and password input from the form
     var email = form.value.email;
     var password = form.value.password;
     this.userAuthService.createUser(email, password);
   }
 
+  //resend email confirmation
   resendEmail() {
     this.userAuthService.resendConfirmation();
     this.isResend = true;

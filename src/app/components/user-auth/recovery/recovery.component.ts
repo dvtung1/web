@@ -9,12 +9,13 @@ import { NgForm } from "@angular/forms";
   styleUrls: ["./recovery.component.css"]
 })
 export class RecoveryComponent implements OnInit, OnDestroy {
-  private authStatusSub: Subscription;
-  isSuccess: boolean;
-  errMsg: string;
+  private authStatusSub: Subscription; //listen to the server through subject
+  isSuccess: boolean; //if the user recovery password successfully
+  errMsg: string; //error message
   constructor(private userAuthService: UserAuthService) {}
 
   ngOnInit() {
+    //listen to the respond when user try to recovery their password
     this.authStatusSub = this.userAuthService
       .getAuthStatusListener()
       .subscribe(respond => {
@@ -27,10 +28,6 @@ export class RecoveryComponent implements OnInit, OnDestroy {
   }
 
   onRecovery(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-
     var email = form.value.email;
     this.userAuthService.recoveryPassword(email);
   }

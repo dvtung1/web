@@ -1,0 +1,50 @@
+<!-- Manage account will only work when the user is logged in-->
+
+<div class="text-center">
+    
+    <h1>Manage Account</h1>
+    <p>Manage Your Account Information</p>
+    <br>
+    <button (click)="editEmailToggle()">Edit Email</button>
+    <div *ngIf=editEmail>
+
+        <!-- <form> -->
+        <label for="email"><b>Change Email: </b></label>
+        <input 
+            type="email" 
+            placeholder="Enter New Email" 
+            name="email"
+            class="emailField" 
+            required 
+            autofocus
+            #newEmail
+            />
+        <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
+        <!-- </form> -->
+
+    </div>
+    <br>
+
+    <button (click)="editPasswordToggle()">Edit Password</button>
+    <div *ngIf=editPassword>
+
+    <!-- <form> -->
+    <label for="password"><b>Change Password: </b></label>
+        <input 
+            type="text" 
+            placeholder="Enter New Password" 
+            name="password" 
+            class="passwordField"
+            required
+            autofocus
+            #newPassword
+            />
+        <button (click)="changePassword(newPassword.value)">Submit New Password</button>
+    <!-- </form> -->
+    
+    </div>
+</div>
+
+  
+
+

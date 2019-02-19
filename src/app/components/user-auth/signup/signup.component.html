@@ -1,10 +1,24 @@
 <div class="text-center">
+<<<<<<< HEAD:src/app/components/signup/signup.component.html
     <br />
     <!-- <br /> -->
     <div class="logo">
         <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
     </div>
   <div class="result" *ngIf="isSuccess">
+=======
+  <br />
+  <br />
+  <div class="logo">
+    <img
+      src="https://i.imgur.com/iChU2VU.png"
+      alt="PUrfect Dining Logo"
+      width="150px"
+    />
+  </div>
+  <!--Only show this part when the user has successfully sign up new account-->
+  <div *ngIf="isSuccess">
+>>>>>>> 9b191ebe67d53eb9d7f2c5ba791d00200f56e12b:src/app/components/user-auth/signup/signup.component.html
     <p>A confirmation email has been sent to your email. Thank you!</p>
     <p [hidden]="isResend">
       Didn't receive an email yet?
@@ -13,7 +27,18 @@
     <p [hidden]="!isResend">A new confirmation email has been sent!</p>
     <a routerLink="/login">Return to login page</a>
   </div>
+<<<<<<< HEAD:src/app/components/signup/signup.component.html
   <div class="signupForm" *ngIf="!isSuccess">
+=======
+  <!---->
+
+  <!--Make this part below disappear when user successfuly sign up-->
+  <div *ngIf="!isSuccess">
+    <br />
+    <br />
+    <br />
+    <br />
+>>>>>>> 9b191ebe67d53eb9d7f2c5ba791d00200f56e12b:src/app/components/user-auth/signup/signup.component.html
     <form (submit)="onSignUp(signupForm)" #signupForm="ngForm">
       <label for="email"><b>Enter your Purdue email: </b></label>
       <input
@@ -38,9 +63,14 @@
       />
 
       <br />
+
+      <!--disable the button when the form is invalid-->
       <button type="submit">Sign Up</button>
     </form>
-    <span class="loginText">Already have an account? <a routerLink="/login">Sign in</a></span>
+    <span class="loginText"
+      >Already have an account? <a routerLink="/login">Sign in</a></span
+    >
+    <!--Print out the error message iff there is an error-->
     <p>{{ errMsg }}</p>
   </div>
 </div>

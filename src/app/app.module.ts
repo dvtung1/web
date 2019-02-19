@@ -5,16 +5,22 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 
-//Components
-import { AppComponent } from "./app.component";
-import { SignupComponent } from "./components/signup/signup.component";
-import { RecoveryComponent } from "./components/recovery/recovery.component";
-
 //Services
 import { UserAuthService } from "./services/user-auth.service";
-import { LoginComponent } from "./components/login/login.component";
-import { HomeComponent } from './components/home/home.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+
+//Components
+import { AppComponent } from "./app.component";
+import { SignupComponent } from "./components/user-auth/signup/signup.component";
+import { RecoveryComponent } from "./components/user-auth/recovery/recovery.component";
+import { LoginComponent } from "./components/user-auth/login/login.component";
+import { HomeComponent } from "./components/main/home/home.component";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { ManageComponent } from './components/user-auth/manage/manage.component';
+import { WindsorComponent } from './components/main/diningc/windsor/windsor.component';
+import { WileyComponent } from './components/main/diningc/wiley/wiley.component';
+import { HillenbrandComponent } from './components/main/diningc/hillenbrand/hillenbrand.component';
+import { FordComponent } from './components/main/diningc/ford/ford.component';
+import { EarheartComponent } from './components/main/diningc/earheart/earheart.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +29,13 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     RecoveryComponent,
     LoginComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    ManageComponent,
+    WindsorComponent,
+    WileyComponent,
+    HillenbrandComponent,
+    FordComponent,
+    EarheartComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],

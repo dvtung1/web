@@ -1,16 +1,18 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { SignupComponent } from "./components/signup/signup.component";
-import { RecoveryComponent } from "./components/recovery/recovery.component";
-import { LoginComponent } from "./components/login/login.component";
-import { HomeComponent } from './components/home/home.component';
+import { SignupComponent } from "./components/user-auth/signup/signup.component";
+import { RecoveryComponent } from "./components/user-auth/recovery/recovery.component";
+import { LoginComponent } from "./components/user-auth/login/login.component";
+import { HomeComponent } from "./components/main/home/home.component";
+import { ManageComponent } from './components/user-auth/manage/manage.component';
 
 const routes: Routes = [
-  { path: "", redirectTo: "/login", pathMatch: "full" },
+  { path: "", component: HomeComponent },
   { path: "login", component: LoginComponent },
   { path: "signup", component: SignupComponent },
   { path: "recovery", component: RecoveryComponent },
-  { path: "home", component: HomeComponent }
+  { path: "home", component: HomeComponent },
+  { path: "manage", component: ManageComponent }
 ];
 
 @NgModule({

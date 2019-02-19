@@ -76,6 +76,20 @@ exports.signIn = (req, res) => {
     });
 };
 
+exports.logOut = (req, res) => {
+  Backendless.UserService.logout()
+    .then(() => {
+      return res.status(200).json({
+        message: "User has been logged out"
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
 /*
   Recovery password with an email sent along with instruction to set up new password.
   @param req request
