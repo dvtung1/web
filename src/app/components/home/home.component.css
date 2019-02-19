@@ -1,0 +1,23 @@
+h1 {
+    text-align: center;
+    /* display: inline-block; */
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 23px;   
+    margin-bottom: -10px;
+}
+
+hr {
+    width: 1300px;
+}
+
+div {
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 150px;
+    padding-left: 80px;
+    padding-top: 20px;
+    display: block;
+}

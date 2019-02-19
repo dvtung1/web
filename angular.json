@@ -19,7 +19,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/bulma/css/bulma.min.css"
+            ],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -77,7 +81,7 @@
             "styles": [
               "src/styles.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/bulma/css/bulma.css"
+              "./node_modules/bulma/css/bulma.min.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",

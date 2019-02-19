@@ -19,18 +19,13 @@ div {
     height: 40px;
     line-height: 40px;
     text-align: center;
-    margin: auto;
     padding: 10px;
 }
 
-text-center {
-    margin: auto;
+.instructions {
+    margin-top: 180px;
 }
 
-.emailField {
-    padding: 5px;
-}
-
-.recoverTitle {
-    font-size: 23px;
+.result {
+    margin-top: 180px;
 }

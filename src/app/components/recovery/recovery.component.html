@@ -1,24 +1,14 @@
 <div class="text-center">
-  <br>
-  <br>
-
+  
   <div class="logo">
       <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
   </div>
 
-  <br>
-  <br>
-  <br>
-  <br>
-  <div *ngIf="isSuccess">
-    <p>
-      An email with password recovery instruction has been sent to your email
-    </p>
+  <div class="result" *ngIf="isSuccess">
+    <p>An email with password recovery instruction has been sent to your email</p>
     <a routerLink="/login">Click here to log in</a>
   </div>
-  <div *ngIf="!isSuccess">
-    <span class="recoverTitle">Recover PUrfect Dining Account</span>
-    <br>
+  <div class="instructions" *ngIf="!isSuccess">
     <span>Please enter your email to receive an email with a password reset link</span>
     <form (submit)="onRecovery(recoveryForm)" #recoveryForm="ngForm">
       <label for="email"><b>Enter your Email: </b></label>

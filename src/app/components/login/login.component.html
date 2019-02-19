@@ -1,16 +1,10 @@
-<div class="text-center">
-  <br />
-  <br />
+<div class="text-center" xmlns:text-align="http://www.w3.org/1999/xhtml">
 
   <div>
     <form (submit)="onLogIn(loginForm)" #loginForm="ngForm">
       <div class="logo">
         <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
 
       <div class="fields">
         <label for="email"><b>Username/Email: </b></label>
@@ -34,6 +28,7 @@
         />
       </div>
       <br />
+      <br>
 
       <button [disabled]="loginForm.form.invalid" type="submit" class="signInButton">Sign In</button>
       <a style="display: inline" routerLink="/recovery">Forgot password?</a>

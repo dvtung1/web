@@ -1,10 +1,10 @@
 <div class="text-center">
     <br />
-    <br />
+    <!-- <br /> -->
     <div class="logo">
         <img src="https://i.imgur.com/iChU2VU.png" alt="PUrfect Dining Logo" width="150px">
     </div>
-  <div *ngIf="isSuccess">
+  <div class="result" *ngIf="isSuccess">
     <p>A confirmation email has been sent to your email. Thank you!</p>
     <p [hidden]="isResend">
       Didn't receive an email yet?
@@ -13,11 +13,7 @@
     <p [hidden]="!isResend">A new confirmation email has been sent!</p>
     <a routerLink="/login">Return to login page</a>
   </div>
-  <div *ngIf="!isSuccess">
-      <br />
-      <br />
-      <br />
-      <br />
+  <div class="signupForm" *ngIf="!isSuccess">
     <form (submit)="onSignUp(signupForm)" #signupForm="ngForm">
       <label for="email"><b>Enter your Purdue email: </b></label>
       <input

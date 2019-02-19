@@ -8,7 +8,7 @@ label {
     width: 160px;
     text-align: right;
     display: inline-block;
-    /* font-size: 15px; */
+    /* padding: 10px; */
     margin-right: 10px;
 }
 
@@ -16,22 +16,18 @@ div {
     height: 40px;
     line-height: 40px;
     text-align: center;
-    margin: auto;
     padding: 10px;
 }
 
-text-center {
-    margin: auto;
+.fields {
+    margin-top: 190px; 
+}
+
+.logo {
+    margin-bottom: 20px;
+    margin-top: 20px; 
 }
 
 .signInButton {
     margin-right: 10px;
-}
-
-.emailField {
-    padding: 5px;
-}
-
-.passwordField {
-    padding: 5px;
 }
