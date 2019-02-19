@@ -15,12 +15,13 @@ import { RecoveryComponent } from "./components/user-auth/recovery/recovery.comp
 import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
-import { ManageComponent } from './components/user-auth/manage/manage.component';
-import { WindsorComponent } from './components/main/diningc/windsor/windsor.component';
-import { WileyComponent } from './components/main/diningc/wiley/wiley.component';
-import { HillenbrandComponent } from './components/main/diningc/hillenbrand/hillenbrand.component';
-import { FordComponent } from './components/main/diningc/ford/ford.component';
-import { EarheartComponent } from './components/main/diningc/earheart/earheart.component';
+import { ManageComponent } from "./components/user-auth/manage/manage.component";
+import { WindsorComponent } from "./components/main/diningc/windsor/windsor.component";
+import { WileyComponent } from "./components/main/diningc/wiley/wiley.component";
+import { HillenbrandComponent } from "./components/main/diningc/hillenbrand/hillenbrand.component";
+import { FordComponent } from "./components/main/diningc/ford/ford.component";
+import { EarheartComponent } from "./components/main/diningc/earheart/earheart.component";
+import { CommonComponent } from "./components/main/diningC/common/common.component";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { EarheartComponent } from './components/main/diningc/earheart/earheart.c
     WileyComponent,
     HillenbrandComponent,
     FordComponent,
-    EarheartComponent
+    EarheartComponent,
+    CommonComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
