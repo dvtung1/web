@@ -16,6 +16,11 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { ManageComponent } from './components/user-auth/manage/manage.component';
+import { WindsorComponent } from './components/main/diningc/windsor/windsor.component';
+import { WileyComponent } from './components/main/diningc/wiley/wiley.component';
+import { HillenbrandComponent } from './components/main/diningc/hillenbrand/hillenbrand.component';
+import { FordComponent } from './components/main/diningc/ford/ford.component';
+import { EarheartComponent } from './components/main/diningc/earheart/earheart.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,12 @@ import { ManageComponent } from './components/user-auth/manage/manage.component'
     LoginComponent,
     HomeComponent,
     NavbarComponent,
-    ManageComponent
+    ManageComponent,
+    WindsorComponent,
+    WileyComponent,
+    HillenbrandComponent,
+    FordComponent,
+    EarheartComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
