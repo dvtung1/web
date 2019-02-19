@@ -3,10 +3,12 @@
 <div class="text-center">
     
     <h1>Manage Account</h1>
-    <p>Manage your account Information</p>
+    <p>Manage Your Account Information</p>
     <br>
     <button (click)="editEmailToggle()">Edit Email</button>
     <div *ngIf=editEmail>
+
+        <!-- <form> -->
         <label for="email"><b>Change Email: </b></label>
         <input 
             type="email" 
@@ -15,22 +17,31 @@
             class="emailField" 
             required 
             autofocus
+            #newEmail
             />
-        <button type="submit">Submit New Email</button>
+        <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
+        <!-- </form> -->
+
     </div>
     <br>
+
     <button (click)="editPasswordToggle()">Edit Password</button>
     <div *ngIf=editPassword>
+
+    <!-- <form> -->
     <label for="password"><b>Change Password: </b></label>
         <input 
-            type="password" 
+            type="text" 
             placeholder="Enter New Password" 
             name="password" 
             class="passwordField"
             required
             autofocus
+            #newPassword
             />
-        <button type="submit">Submit New Password</button>
+        <button (click)="changePassword(newPassword.value)">Submit New Password</button>
+    <!-- </form> -->
+    
     </div>
 </div>
 

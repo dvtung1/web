@@ -20,4 +20,15 @@ export class ManageComponent implements OnInit {
   editPasswordToggle() {
     this.editPassword = !this.editPassword;
   }
+
+  changeEmail(value) {
+    var newEmail = value;
+    //console.log(newEmail);
+  }
+
+  changePassword(value) {
+    var newPassword = value;
+    //console.log(newPassword);
+  }
+
 }
