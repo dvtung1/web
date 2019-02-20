@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: "home", component: HomeComponent },
   { path: "manage", component: ManageComponent }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

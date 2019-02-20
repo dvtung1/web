@@ -20,7 +20,6 @@ import { WindsorComponent } from "./components/main/diningc/windsor/windsor.comp
 import { WileyComponent } from "./components/main/diningc/wiley/wiley.component";
 import { HillenbrandComponent } from "./components/main/diningc/hillenbrand/hillenbrand.component";
 import { FordComponent } from "./components/main/diningc/ford/ford.component";
-import { EarheartComponent } from "./components/main/diningc/earheart/earheart.component";
 import { CommonComponent } from "./components/main/diningC/common/common.component";
 
 @NgModule({
@@ -36,7 +35,6 @@ import { CommonComponent } from "./components/main/diningC/common/common.compone
     WileyComponent,
     HillenbrandComponent,
     FordComponent,
-    EarheartComponent,
     CommonComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],

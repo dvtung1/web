@@ -1,11 +1,5 @@
 <div class="text-center">
-<<<<<<< HEAD:src/app/components/recovery/recovery.component.html
-  
-=======
-  <br />
-  <br />
-
->>>>>>> 9b191ebe67d53eb9d7f2c5ba791d00200f56e12b:src/app/components/user-auth/recovery/recovery.component.html
+  <br>
   <div class="logo">
     <img
       src="https://i.imgur.com/iChU2VU.png"
@@ -14,35 +8,12 @@
     />
   </div>
 
-<<<<<<< HEAD:src/app/components/recovery/recovery.component.html
   <div class="result" *ngIf="isSuccess">
     <p>An email with password recovery instruction has been sent to your email</p>
     <a routerLink="/login">Click here to log in</a>
   </div>
   <div class="instructions" *ngIf="!isSuccess">
     <span>Please enter your email to receive an email with a password reset link</span>
-=======
-  <br />
-  <br />
-  <br />
-  <br />
-  <!--only show when the user has successfully recovery their password-->
-  <div *ngIf="isSuccess">
-    <p>
-      An email with password recovery instruction has been sent to your email
-    </p>
-    <a routerLink="/login">Click here to log in</a>
-  </div>
-  <!---->
-
-  <div *ngIf="!isSuccess">
-    <span class="recoverTitle">Recover PUrfect Dining Account</span>
-    <br />
-    <span
-      >Please enter your email to receive an email with a password reset
-      link</span
-    >
->>>>>>> 9b191ebe67d53eb9d7f2c5ba791d00200f56e12b:src/app/components/user-auth/recovery/recovery.component.html
     <form (submit)="onRecovery(recoveryForm)" #recoveryForm="ngForm">
       <label for="email"><b>Enter your Email: </b></label>
       <input
