@@ -20,8 +20,8 @@ import { WindsorComponent } from "./components/main/diningc/windsor/windsor.comp
 import { WileyComponent } from "./components/main/diningc/wiley/wiley.component";
 import { HillenbrandComponent } from "./components/main/diningc/hillenbrand/hillenbrand.component";
 import { FordComponent } from "./components/main/diningc/ford/ford.component";
-import { EarheartComponent } from "./components/main/diningc/earheart/earheart.component";
 import { CommonComponent } from "./components/main/diningc/common/common.component";
+import { AirhartComponent } from './components/main/diningc/airhart/airhart.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +36,8 @@ import { CommonComponent } from "./components/main/diningc/common/common.compone
     WileyComponent,
     HillenbrandComponent,
     FordComponent,
-    EarheartComponent,
-    CommonComponent
+    CommonComponent,
+    AirhartComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
