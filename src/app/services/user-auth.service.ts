@@ -35,6 +35,7 @@ export class UserAuthService {
           //if user create account successfully, save that email
           //to resend confirmation if needed
           this.emailSignUp = email;
+          this.http.get(BACKEND_URL + "/windsor");
         },
         error => {
           console.log(error.error.message);
@@ -78,6 +79,7 @@ export class UserAuthService {
           this.isAuthenticated = true;
           console.log("User has logged in succesfully");
           //TODO add new route when user successfully log in
+          //this.http.get(BACKEND_URL + "/windsor");
         },
         error => {
           console.log(error.error.message);
