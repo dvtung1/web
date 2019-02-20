@@ -6,6 +6,10 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { ManageComponent } from './components/user-auth/manage/manage.component';
 import { WindsorComponent } from './components/main/diningc/windsor/windsor.component';
+import { EarheartComponent } from './components/main/diningc/earheart/earheart.component';
+import { FordComponent } from './components/main/diningc/ford/ford.component';
+import { HillenbrandComponent } from './components/main/diningc/hillenbrand/hillenbrand.component';
+import { WileyComponent } from './components/main/diningc/wiley/wiley.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -14,7 +18,11 @@ const routes: Routes = [
   { path: "recovery", component: RecoveryComponent },
   { path: "home", component: HomeComponent },
   { path: "manage", component: ManageComponent },
-  { path: "windsor", component: WindsorComponent}
+  { path: "windsor", component: WindsorComponent},
+  { path: "earheart", component: EarheartComponent},
+  { path: "ford", component: FordComponent},
+  { path: "hillenbrand", component: HillenbrandComponent},
+  { path: "wiley", component: WileyComponent}
 ];
 
 @NgModule({
