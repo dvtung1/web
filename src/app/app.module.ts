@@ -22,6 +22,8 @@ import { HillenbrandComponent } from "./components/main/diningc/hillenbrand/hill
 import { FordComponent } from "./components/main/diningc/ford/ford.component";
 import { CommonComponent } from "./components/main/diningc/common/common.component";
 import { AirhartComponent } from './components/main/diningc/airhart/airhart.component';
+import { PeteszaComponent } from './components/main/diningc/petesza/petesza.component';
+import { OnebowlComponent } from './components/main/diningc/onebowl/onebowl.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { AirhartComponent } from './components/main/diningc/airhart/airhart.comp
     HillenbrandComponent,
     FordComponent,
     CommonComponent,
-    AirhartComponent
+    AirhartComponent,
+    PeteszaComponent,
+    OnebowlComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService],
