@@ -10,6 +10,8 @@ import { AirhartComponent } from './components/main/diningc/airhart/airhart.comp
 import { FordComponent } from './components/main/diningc/ford/ford.component';
 import { HillenbrandComponent } from './components/main/diningc/hillenbrand/hillenbrand.component';
 import { WileyComponent } from './components/main/diningc/wiley/wiley.component';
+import { PeteszaComponent} from './components/main/diningc/petesza/petesza.component';
+import { OnebowlComponent} from './components/main/diningc/onebowl/onebowl.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -22,7 +24,9 @@ const routes: Routes = [
   { path: "airhart", component: AirhartComponent},
   { path: "ford", component: FordComponent},
   { path: "hillenbrand", component: HillenbrandComponent},
-  { path: "wiley", component: WileyComponent}
+  { path: "wiley", component: WileyComponent},
+  { path: "onebowl", component: OnebowlComponent},
+  { path: "petesza", component: PeteszaComponent}
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
