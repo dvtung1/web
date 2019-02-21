@@ -175,3 +175,20 @@ exports.checkIfUserLoggedIn = (req, res) => {
       });
     });
 };
+
+exports.getUserEmail() = (req, res) => {
+  // can use isValidLogin to get a truth value instead
+  Backendless.UserService.getCurrentUser()
+    .then(result => {
+      return res.status(200).json({
+        // will not return or display password
+        userEmail: result.email,
+        userUserName: result.username
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};

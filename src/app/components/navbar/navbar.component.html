@@ -7,11 +7,14 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   </head>
   <body>
-    <div class="navbar is-primary">
+    <nav class="navbar is-primary">
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" routerLink="/home">Home</a>
           <span class="navbar-burger burger" data-target="navMenu">
+            <span></span>
+            <span></span>
+            <span></span>
           </span>
         </div>
         <div id="navMenu" class="navbar-menu" *ngIf="!loggedIn">
@@ -26,6 +29,16 @@
           </div>
         </div>
       </div>
-    </div>
+    </nav>
+    <script type="text/javascript">
+      (function() {
+        var burger = document.querySelector('.burger');
+        var nav = document.querySelector('#'+burger.dataset.target);
+        burger.addEventListener('click', function(){
+          burger.classList.toggle('is-active');
+          nav.classList.toggle('is-active');
+        });
+      })();
+    </script>
   </body>
 </html>
