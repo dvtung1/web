@@ -12,8 +12,8 @@ var UserModel = require("../models/UserModel");
 */
 exports.createAccount = (req, res) => {
   var user = new UserModel();
-  user.email = req.body.email;
-  user.password = req.body.password;
+  user.setEmail(req.body.email);
+  user.setPassword(req.body.password);
 
   //register for new account using backendless API
   Backendless.UserService.register(new Backendless.User(user))
