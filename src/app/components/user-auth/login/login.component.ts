@@ -21,17 +21,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     //get the respond when user try to log in
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
-<<<<<<< HEAD
         if (respond === "authenticated") {
           this.authStatusListener.next("authenticated");
         } else {
           this.errMsg = respond;
-=======
-        if(respond === "authenticated"){
-          this.authStatusListener.next("authenticated");
-        }else{
-        this.errMsg = respond;
->>>>>>> 97b82f011693a0d3477718130a3ff8c705950a61
         }
       })
     );
@@ -48,11 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatusSub.unsubscribe();
   }
 
-<<<<<<< HEAD
   getAuthStatusListener() {
-=======
-  getAuthStatusListener(){
->>>>>>> 97b82f011693a0d3477718130a3ff8c705950a61
     return this.authStatusListener.asObservable();
   }
 }

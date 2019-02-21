@@ -3,10 +3,6 @@
 */
 
 require("../utils/db.configuration"); //initialize backendless database
-<<<<<<< HEAD
-=======
-
->>>>>>> 97b82f011693a0d3477718130a3ff8c705950a61
 /*
   Create new account.
   @param req http request
@@ -114,7 +110,7 @@ exports.recoveryPassword = (req, res) => {
     });
 };
 
- /*
+/*
   Change email by visiting the manage account page and entering the new email you want associated with your account
   @param req request
   @param res respond

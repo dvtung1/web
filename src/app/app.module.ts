@@ -22,7 +22,6 @@ import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component"
 import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
 import { FordComponent } from "./components/main/DiningC/ford/ford.component";
 import { CommonComponent } from "./components/main/DiningC/common/common.component";
-import { AirhartComponent } from "./components/main/DiningC/airhart/airhart.component";
 import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
 import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
 import { EarhartComponent } from './components/main/diningc/earhart/earhart.component';
@@ -41,7 +40,6 @@ import { EarhartComponent } from './components/main/diningc/earhart/earhart.comp
     HillenbrandComponent,
     FordComponent,
     CommonComponent,
-    AirhartComponent,
     PeteszaComponent,
     OnebowlComponent,
     EarhartComponent
