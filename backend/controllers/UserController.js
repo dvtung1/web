@@ -3,10 +3,6 @@
 */
 
 require("../utils/db.configuration"); //initialize backendless database
-<<<<<<< HEAD
-=======
-
->>>>>>> 97b82f011693a0d3477718130a3ff8c705950a61
 /*
   Create new account.
   @param req http request
