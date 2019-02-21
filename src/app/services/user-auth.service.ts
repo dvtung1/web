@@ -85,6 +85,8 @@ export class UserAuthService {
           //TODO add new route when user successfully log in
           this.currentUserEmail = email;
           this.currentUserPassword = password;
+          this.authStatusListener.next("authenticated");
+
         },
         error => {
           console.log(error.error.message);

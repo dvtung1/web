@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UserAuthService } from "src/app/services/user-auth.service";
 import { NgForm } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Subscription, Subject } from "rxjs";
 
 @Component({
   selector: "app-login",
@@ -11,6 +11,7 @@ import { Subscription } from "rxjs";
 export class LoginComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription; //listen to server through subject emitter
   errMsg: string; //error message
+  private authStatusListener = new Subject<string>(); //help with emit messages
 
   constructor(private userAuthService: UserAuthService) {
     this.authStatusSub = new Subscription();
@@ -20,7 +21,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     //get the respond when user try to log in
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
+        if(respond === "authenticated"){
+          this.authStatusListener.next("authenticated");
+        }else{
         this.errMsg = respond;
+        }
       })
     );
   }
@@ -34,5 +39,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
+  }
+
+  getAuthStatusListener(){
+    return this.authStatusListener.asObservable();
   }
 }
