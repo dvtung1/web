@@ -110,3 +110,23 @@ exports.recoveryPassword = (req, res) => {
       });
     });
 };
+
+/*
+  Change email by visiting the manage account page and entering the new email you want associated with your account
+  @param req request
+  @param res respond
+  @return json with result messages
+*/
+exports.modifyEmail = (req, res) => {
+  var newEmail = req.body.email;
+  var cUser = Backendless.UserService.getCurrentUser();
+  if(cUser){
+    console.log("my email before update is: " + cUser.email);
+    cUser.email = newEmail;
+    cUser = Backendless.UserService.update(cUser);
+    console.log("my email is : " + cUser.email);
+  }
+  else{
+      console.log("Logged in user was not found or user not logged in");
+  }
+}
