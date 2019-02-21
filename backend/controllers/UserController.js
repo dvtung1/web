@@ -176,7 +176,7 @@ exports.checkIfUserLoggedIn = (req, res) => {
     });
 };
 
-exports.getUserEmail() = (req, res) => {
+/*exports.getUserEmail() = (req, res) => {
   // can use isValidLogin to get a truth value instead
   Backendless.UserService.getCurrentUser()
     .then(result => {
@@ -191,4 +191,4 @@ exports.getUserEmail() = (req, res) => {
         message: err.message
       });
     });
-};
+};*/

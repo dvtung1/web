@@ -2,7 +2,7 @@
   Ford Dining Court
 </strong></header>
 
-<form>
+<form *ngIf="loggedIn">
     <textarea rows="4" cols="50" name="comment" placeholder="Enter a comment here!"></textarea>
     <br>
     <button type="submit">
