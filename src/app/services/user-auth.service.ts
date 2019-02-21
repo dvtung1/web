@@ -19,6 +19,7 @@ export class UserAuthService {
   private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
   private currentUserEmail: string; // the current email of the user (when logged in)
   private currentUserPassword: string; // the current email of the user (when logged in)
+  private isLoggedIn: boolean;
 
   constructor(private http: HttpClient) {}
 
@@ -79,6 +80,8 @@ export class UserAuthService {
           this.userId = response.userId;
           this.isAuthenticated = true;
           console.log("User has logged in succesfully");
+          window.location.assign("/home");
+          window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.currentUserEmail = email;
           this.currentUserPassword = password;
@@ -103,33 +106,58 @@ export class UserAuthService {
     );
   }
 
-
-  changeUserEmail(newemail: string){
+  changeUserEmail(newemail: string) {
     // change email
     console.log("This is the entered email: " + newemail);
-    this.http.post(BACKEND_URL + "/modifyemail", {email: newemail}).subscribe(
-      () => {
-        this.authStatusListener.next('Esuccess');
-      },
-      error => {
-        console.log(error.error.message);
-        this.authStatusListener.next(error.error.message);
-      }
-    );
+    this.http
+      .post<{ message: string }>(BACKEND_URL + "/modifyemail", {
+        email: newemail
+      })
+      .subscribe(
+        () => {
+          this.authStatusListener.next("Esuccess");
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
   }
 
-  changeUserPassword(newpassword: string){
+  changeUserPassword(newpassword: string) {
     // change password
     console.log("This is the new entered password: " + newpassword);
-    this.http.post(BACKEND_URL + "/modifypassword", {email: newpassword}).subscribe(
-      () => {
-        this.authStatusListener.next('Psuccess');
-      },
-      error => {
-        console.log(error.error.message);
-        this.authStatusListener.next(error.error.message);
-      }
-    );
+    this.http
+      .post<{ message: string }>(BACKEND_URL + "/modifypassword", {
+        password: newpassword
+      })
+      .subscribe(
+        () => {
+          this.authStatusListener.next("Psuccess");
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
+  }
+
+  checkIfUserLoggedIn() {
+    // change password
+    console.log("Checking if User is Logged In...");
+    this.http
+      .get<{ message: string }>(BACKEND_URL + "/checkloggedin")
+      .subscribe(
+        response => {
+          // this is
+          console.log(response.message);
+          this.authStatusListener.next("success");
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
   }
 
   getUserId(): string {

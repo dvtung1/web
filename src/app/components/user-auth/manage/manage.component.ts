@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserAuthService } from 'src/app/services/user-auth.service';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { UserAuthService } from "src/app/services/user-auth.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-manage',
-  templateUrl: './manage.component.html',
-  styleUrls: ['./manage.component.css']
+  selector: "app-manage",
+  templateUrl: "./manage.component.html",
+  styleUrls: ["./manage.component.css"]
 })
 export class ManageComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription; //listen to the subject
@@ -21,23 +21,25 @@ export class ManageComponent implements OnInit, OnDestroy {
     // console.log("after");
     // console.log(this.isLoggedIn);
     this.authStatusSub = new Subscription();
+    this.userAuthService.checkIfUserLoggedIn();
   }
 
   ngOnInit() {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         //check if the user sign up successfully
-        if (respond === "Esuccess") {
+        if (respond === "success") {
+          this.isLoggedIn = true;
+        } else if (respond === "Esuccess") {
           this.isESuccess = true;
-        }else if(respond === "Psuccess"){
+        } else if (respond === "Psuccess") {
           this.isPSuccess = true;
-        }else {
+        } else {
           this.errMsg = respond;
         }
       })
     );
   }
-
 
   editEmailToggle() {
     this.editEmail = !this.editEmail;
@@ -63,5 +65,4 @@ export class ManageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
   }
-
 }

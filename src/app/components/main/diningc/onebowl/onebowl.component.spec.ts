@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AirhartComponent } from './airhart.component';
+import { OnebowlComponent } from './onebowl.component';
 
-describe('AirhartComponent', () => {
-  let component: AirhartComponent;
-  let fixture: ComponentFixture<AirhartComponent>;
+describe('OnebowlComponent', () => {
+  let component: OnebowlComponent;
+  let fixture: ComponentFixture<OnebowlComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AirhartComponent ]
+      declarations: [ OnebowlComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AirhartComponent);
+    fixture = TestBed.createComponent(OnebowlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
