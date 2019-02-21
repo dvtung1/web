@@ -18,6 +18,7 @@
     <div *ngIf=editEmail>
 
         <!-- <form> -->
+        <div *ngIf=!isESuccess>
         <label for="email"><b>Change Email: </b></label>
         <input 
             type="email" 
@@ -30,7 +31,10 @@
             />
         <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
         <!-- </form> -->
-
+        </div>
+        <div *ngIf=isESuccess>
+            <p>Email Successfully Changed</p>
+        </div>
     </div>
     <br>
 
@@ -38,19 +42,23 @@
     <div *ngIf=editPassword>
 
     <!-- <form> -->
-    <label for="password"><b>Change Password: </b></label>
-        <input 
-            type="text" 
-            placeholder="Enter New Password" 
-            name="password" 
-            class="passwordField"
-            required
-            autofocus
-            #newPassword
-            />
+        <div *ngIf=!isPSuccess>
+        <label for="password"><b>Change Password: </b></label>
+            <input 
+                type="password" 
+                placeholder="Enter New Password" 
+                name="password" 
+                class="passwordField"
+                required
+                autofocus
+                #newPassword
+                />
         <button (click)="changePassword(newPassword.value)">Submit New Password</button>
     <!-- </form> -->
-    
+        </div>
+        <div *ngIf=isPSuccess>
+        <p>Password Successfully Changed</p>
+        </div>   
     </div>
 </div>
 
