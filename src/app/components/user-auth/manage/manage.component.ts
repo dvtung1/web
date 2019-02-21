@@ -15,6 +15,8 @@ export class ManageComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false; // if user is currently logged in
   isESuccess: boolean = false; // if email change was successful
   isPSuccess: boolean = false; // if password change was successful
+  currentUserEmail: string = ""; // contains the current user email
+  currentUserName: string = ""; // contains the current user email
 
   constructor(private userAuthService: UserAuthService) {
     // console.log("before");
@@ -23,19 +25,29 @@ export class ManageComponent implements OnInit, OnDestroy {
     // console.log(this.isLoggedIn);
     this.authStatusSub = new Subscription();
     this.userAuthService.checkIfUserLoggedIn();
+    this.userAuthService.getCurrentUserInformation();
   }
 
   ngOnInit() {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         //check if the user sign up successfully
+        //console.log("This is respond: "+respond);
         if (respond === "loggedinsuccess") {
           this.isLoggedIn = true;
         } else if (respond === "Esuccess") {
           this.isESuccess = true;
         } else if (respond === "Psuccess") {
           this.isPSuccess = true;
-        } else {
+        } 
+        else if (typeof respond == 'object'){
+          //console.log("Tdsfljdsal;fkj");
+          this.currentUserEmail = respond.email;
+          this.currentUserName = respond.username;
+          //console.log("USERNAME: "+ this.currentUserName);
+          //console.log("EMAIL: "+ this.currentUserEmail);
+        }
+        else {
           this.errMsg = respond;
         }
       })
