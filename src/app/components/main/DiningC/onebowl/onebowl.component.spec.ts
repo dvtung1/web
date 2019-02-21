@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EarheartComponent } from './earheart.component';
+import { OnebowlComponent } from './onebowl.component';
 
-describe('EarheartComponent', () => {
-  let component: EarheartComponent;
-  let fixture: ComponentFixture<EarheartComponent>;
+describe('OnebowlComponent', () => {
+  let component: OnebowlComponent;
+  let fixture: ComponentFixture<OnebowlComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EarheartComponent ]
+      declarations: [ OnebowlComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EarheartComponent);
+    fixture = TestBed.createComponent(OnebowlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
