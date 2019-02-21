@@ -146,7 +146,7 @@ export class UserAuthService {
     // change password
     console.log("Checking if User is Logged In...");
     this.http
-      .get<{ message: string }>(BACKEND_URL + "/checkloggedin")
+      .get<{ message: string }>(BACKEND_URL + "/checkifloggedin")
       .subscribe(
         response => {
           // this is

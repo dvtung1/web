@@ -3,7 +3,7 @@
 */
 
 require("../utils/db.configuration"); //initialize backendless database
-var UserModel = require("../models/UserModel");
+
 /*
   Create new account.
   @param req http request
@@ -11,12 +11,12 @@ var UserModel = require("../models/UserModel");
   @return json including statusCode and message
 */
 exports.createAccount = (req, res) => {
-  var user = new UserModel();
-  user.setEmail(req.body.email);
-  user.setPassword(req.body.password);
+  var user = new Backendless.User();
+  user.email = req.body.email;
+  user.password = req.body.password;
 
   //register for new account using backendless API
-  Backendless.UserService.register(new Backendless.User(user))
+  Backendless.UserService.register(user)
     .then(user => {
       //send back json include user and message
       return res.status(201).json({
@@ -111,7 +111,7 @@ exports.recoveryPassword = (req, res) => {
     });
 };
 
-/*
+ /*
   Change email by visiting the manage account page and entering the new email you want associated with your account
   @param req request
   @param res respond
