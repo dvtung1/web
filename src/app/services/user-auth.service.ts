@@ -79,7 +79,10 @@ export class UserAuthService {
           this.userToken = response.userToken;
           this.userId = response.userId;
           this.isAuthenticated = true;
-          console.log("User has logged in succesfully");
+          console.log("User has logged in succesfully... ");
+          console.log("This is the user token!!!: " + this.userToken);
+          console.log("this is the user id!!!!: " + this.userId);
+
           window.location.assign("/home");
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in

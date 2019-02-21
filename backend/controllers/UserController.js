@@ -119,11 +119,11 @@ exports.recoveryPassword = (req, res) => {
 */
 exports.modifyEmail = (req, res) => {
   var newEmail = req.body.email;
-  var cUser = Backendless.UserService.getCurrentUser()
-    .then(() => {
+  Backendless.UserService.getCurrentUser()
+    .then(currentUser => {
       //console.log("my email before update is: " + cUser.email);
-      cUser.email = newEmail;
-      cUser = Backendless.UserService.update(cUser);
+      currentUser.email = newEmail;
+      currentUser = Backendless.UserService.update(currentUser);
       //console.log("my email is : " + cUser.email);
       return res.status(200).json({
         message: "Email changed successfully"
@@ -145,11 +145,11 @@ exports.modifyEmail = (req, res) => {
 
 exports.modifyPassword = (req, res) => {
   var newPassword = req.body.password;
-  var cUser = Backendless.UserService.getCurrentUser()
-    .then(() => {
+  Backendless.UserService.getCurrentUser()
+    .then(currentUser => {
       //console.log("my email before update is: " + cUser.email);
-      cUser.password = newPassword;
-      cUser = Backendless.UserService.update(cUser);
+      currentUser.password = newPassword;
+      currentUser = Backendless.UserService.update(currentUser);
       //console.log("my email is : " + cUser.email);
       return res.status(200).json({
         message: "Password changed successfully"
@@ -163,10 +163,11 @@ exports.modifyPassword = (req, res) => {
 };
 
 exports.checkIfUserLoggedIn = (req, res) => {
-  var cUser = Backendless.UserService.getCurrentUser()
-    .then(() => {
+  // can use isValidLogin to get a truth value instead
+  Backendless.UserService.getCurrentUser()
+    .then(result => {
       return res.status(200).json({
-        message: "Current User Logged in: " + cUser.email
+        message: "Current User Logged in: " + result.email
       });
     })
     .catch(err => {
