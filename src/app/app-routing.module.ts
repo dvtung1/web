@@ -6,7 +6,7 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
 import { WindsorComponent } from "./components/main/DiningC/windsor/windsor.component";
-import { AirhartComponent } from "./components/main/DiningC/airhart/airhart.component";
+import { EarhartComponent } from "./components/main/DiningC/earhart/earhart.component";
 import { FordComponent } from "./components/main/DiningC/ford/ford.component";
 import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
 import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component";
@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: "home", component: HomeComponent },
   { path: "manage", component: ManageComponent },
   { path: "windsor", component: WindsorComponent },
-  { path: "airhart", component: AirhartComponent },
+  { path: "earhart", component: EarhartComponent },
   { path: "ford", component: FordComponent },
   { path: "hillenbrand", component: HillenbrandComponent },
   { path: "wiley", component: WileyComponent },

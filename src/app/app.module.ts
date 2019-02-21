@@ -25,6 +25,7 @@ import { CommonComponent } from "./components/main/DiningC/common/common.compone
 import { AirhartComponent } from "./components/main/DiningC/airhart/airhart.component";
 import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
 import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
+import { EarhartComponent } from './components/main/diningc/earhart/earhart.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.comp
     CommonComponent,
     AirhartComponent,
     PeteszaComponent,
-    OnebowlComponent
+    OnebowlComponent,
+    EarhartComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService, DiningService],
