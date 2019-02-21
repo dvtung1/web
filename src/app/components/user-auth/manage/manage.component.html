@@ -1,6 +1,9 @@
 <!-- This will redirect the user to the login page if not logged in -->
 <div class="text-center" *ngIf=!isLoggedIn>
     <h1> You're not Logged In </h1>
+    <div><span>Don't have an account? <a routerLink="/signup">Sign up!</a></span></div>
+    <div><span>Already have an account? <a routerLink="/login">Login</a></span></div>
+    <div><span>Don't want an account? <a routerLink="/">Homepage</a></span></div>
     
 </div>
 
@@ -15,6 +18,7 @@
     <div *ngIf=editEmail>
 
         <!-- <form> -->
+        <div *ngIf=!isESuccess>
         <label for="email"><b>Change Email: </b></label>
         <input 
             type="email" 
@@ -27,7 +31,10 @@
             />
         <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
         <!-- </form> -->
-
+        </div>
+        <div *ngIf=isESuccess>
+            <p>Email Successfully Changed</p>
+        </div>
     </div>
     <br>
 
@@ -35,19 +42,23 @@
     <div *ngIf=editPassword>
 
     <!-- <form> -->
-    <label for="password"><b>Change Password: </b></label>
-        <input 
-            type="text" 
-            placeholder="Enter New Password" 
-            name="password" 
-            class="passwordField"
-            required
-            autofocus
-            #newPassword
-            />
+        <div *ngIf=!isPSuccess>
+        <label for="password"><b>Change Password: </b></label>
+            <input 
+                type="password" 
+                placeholder="Enter New Password" 
+                name="password" 
+                class="passwordField"
+                required
+                autofocus
+                #newPassword
+                />
         <button (click)="changePassword(newPassword.value)">Submit New Password</button>
     <!-- </form> -->
-    
+        </div>
+        <div *ngIf=isPSuccess>
+        <p>Password Successfully Changed</p>
+        </div>   
     </div>
 </div>
 

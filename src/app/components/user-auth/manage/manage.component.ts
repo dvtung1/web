@@ -15,6 +15,7 @@ export class ManageComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false; // if user is currently logged in
   isESuccess: boolean = false; // if email change was successful
   isPSuccess: boolean = false; // if password change was successful
+
   constructor(private userAuthService: UserAuthService) {
     // console.log("before");
     // this.isLoggedIn = userAuthService.isUserAuthenticated();
@@ -28,7 +29,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         //check if the user sign up successfully
-        if (respond === "success") {
+        if (respond === "loggedinsuccess") {
           this.isLoggedIn = true;
         } else if (respond === "Esuccess") {
           this.isESuccess = true;

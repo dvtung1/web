@@ -18,10 +18,21 @@ var diningCourtId = {
 exports.getComments = (req, res) => {
   var diningCourtName = req.query.name;
   var getDiningCourtId = diningCourtId[diningCourtName];
+  var commentListResult = [];
   Backendless.Data.of(Place)
     .findById(getDiningCourtId)
     .then(function(place) {
+      //get specific place
       var diningTimingsList = place.getDiningTimings();
+      //iterate through the list of dining timing
+      diningTimingsList.forEach(diningTiming => {
+        commentList = diningTiming.getComments();
+        //iterate through list of comment of each dining timing
+        commentList.forEach(comment => {
+          //push each comment onto the Result list
+          commentListResult.push(comment);
+        });
+      });
       //TODO continue
     })
     .catch(function(error) {
