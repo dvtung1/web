@@ -119,7 +119,46 @@ exports.recoveryPassword = (req, res) => {
 */
 exports.modifyEmail = (req, res) => {
   var newEmail = req.body.email;
-  var cUser = Backendless.UserService.getCurrentUser();
+  var cUser = Backendless.UserService.getCurrentUser()
+  .then(() => {
+    //console.log("my email before update is: " + cUser.email);
+    cUser.email = newEmail;
+    cUser = Backendless.UserService.update(cUser);
+    //console.log("my email is : " + cUser.email);
+    return res.status(200).json({
+      message: "Email changed successfully"
+    });
+  })
+  .catch(err => {
+    return res.status(500).json({
+      message: err.message
+    });
+  });
+};
+
+exports.modifyPassword = (req, res) => {
+  var newPassword = req.body.password;
+  var cUser = Backendless.UserService.getCurrentUser()
+  .then(() => {
+    //console.log("my email before update is: " + cUser.email);
+    cUser.password = newPassword;
+    cUser = Backendless.UserService.update(cUser);
+    //console.log("my email is : " + cUser.email);
+    return res.status(200).json({
+      message: "Password changed successfully"
+    });
+  })
+  .catch(err => {
+    return res.status(500).json({
+      message: err.message
+    });
+  });
+};
+
+/*
+exports.modifyEmail = (req, res) => {
+  var newEmail = req.body.email;
+  var cUser = Backendless.UserService.getCurrentUser().then
   if(cUser){
     console.log("my email before update is: " + cUser.email);
     cUser.email = newEmail;
@@ -129,4 +168,5 @@ exports.modifyEmail = (req, res) => {
   else{
       console.log("Logged in user was not found or user not logged in");
   }
-}
+};
+*/
