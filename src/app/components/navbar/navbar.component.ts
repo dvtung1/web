@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAuthService } from 'src/app/services/user-auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -8,12 +9,19 @@ import { UserAuthService } from 'src/app/services/user-auth.service';
 })
 export class NavbarComponent implements OnInit {
   loggedIn = false;
+  private authStatusSub: Subscription;
 
 constructor(private userAuthService: UserAuthService) {
-  this.loggedIn = userAuthService.isUserAuthenticated();
 }
-
   ngOnInit() {
+    this.authStatusSub = this.userAuthService.getAuthStatusListener().subscribe(message => {
+      console.log(message);
+      if(message === "authenticated"){
+        this.loggedIn = true;
+      }
+    });
   }
+
+
 
 }

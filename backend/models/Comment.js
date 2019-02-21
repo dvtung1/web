@@ -1,4 +1,3 @@
-var User = require("./User");
 var DiningTiming = require("./DiningTiming");
 
 function Comment() {
@@ -12,7 +11,7 @@ Comment.prototype.getObjectId = function() {
   return this.objectId;
 };
 Comment.prototype.setByUser = function(user) {
-  if (user instanceof User) {
+  if (user instanceof Backendless.User) {
     this.byUser = user;
   }
 };

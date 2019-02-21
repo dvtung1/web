@@ -85,6 +85,8 @@ export class UserAuthService {
           //TODO add new route when user successfully log in
           this.currentUserEmail = email;
           this.currentUserPassword = password;
+          this.authStatusListener.next("authenticated");
+
         },
         error => {
           console.log(error.error.message);
@@ -146,7 +148,7 @@ export class UserAuthService {
     // change password
     console.log("Checking if User is Logged In...");
     this.http
-      .get<{ message: string }>(BACKEND_URL + "/checkloggedin")
+      .get<{ message: string }>(BACKEND_URL + "/checkifloggedin")
       .subscribe(
         response => {
           // this is

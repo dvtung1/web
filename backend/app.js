@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const CORS = require("./middlewares/CORS.middleware");
 
 const userRoutes = require("./routes/UserRoutes");
+const diningRoutes = require("./routes/DiningRoutes");
 
 //use body parser to read POST HTTP request and JSON params
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,5 +23,6 @@ app.use(CORS.connect);
 
 //all route /api/user/... will go to userRoutes
 app.use("/api/user", userRoutes);
+app.use("/api/dining", diningRoutes);
 
 module.exports = app;

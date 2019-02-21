@@ -7,6 +7,7 @@ import { AppRoutingModule } from "./app-routing.module";
 
 //Services
 import { UserAuthService } from "./services/user-auth.service";
+import { DiningService } from "./services/dining.service";
 
 //Components
 import { AppComponent } from "./app.component";
@@ -44,7 +45,7 @@ import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.comp
     OnebowlComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
-  providers: [UserAuthService],
+  providers: [UserAuthService, DiningService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
