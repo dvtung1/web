@@ -12,12 +12,17 @@ export class NavbarComponent implements OnInit {
   private authStatusSub: Subscription;
 
 constructor(private userAuthService: UserAuthService) {
+  this.authStatusSub = new Subscription();
+  this.userAuthService.checkIfUserLoggedIn();
 }
   ngOnInit() {
     this.authStatusSub = this.userAuthService.getAuthStatusListener().subscribe(message => {
       console.log(message);
-      if(message === "authenticated"){
+      if(message === "success"){
         this.loggedIn = true;
+      }
+      else{
+        this.loggedIn = false;
       }
     });
   }
