@@ -18,7 +18,7 @@ constructor(private userAuthService: UserAuthService) {
   ngOnInit() {
     this.authStatusSub = this.userAuthService.getAuthStatusListener().subscribe(message => {
       console.log(message);
-      if(message === "success"){
+      if(message === "loggedinsuccess" || message === "Esuccess" || message === "Psuccess"){
         this.loggedIn = true;
       }
       else{

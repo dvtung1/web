@@ -156,7 +156,7 @@ export class UserAuthService {
         response => {
           // this is
           console.log(response.message);
-          this.authStatusListener.next("success");
+          this.authStatusListener.next("loggedinsuccess");
         },
         error => {
           console.log(error.error.message);

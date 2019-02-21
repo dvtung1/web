@@ -29,7 +29,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         //check if the user sign up successfully
-        if (respond === "success") {
+        if (respond === "loggedinsuccess") {
           this.isLoggedIn = true;
         } else if (respond === "Esuccess") {
           this.isESuccess = true;
