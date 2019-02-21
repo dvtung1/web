@@ -147,6 +147,23 @@ export class UserAuthService {
       );
   }
 
+  logOut() {
+    console.log("logging user out...");
+    this.http
+    .post<{ message: string }>(BACKEND_URL + "/logout", {
+
+    })
+    .subscribe(
+      response => {
+        console.log(response.message);
+        window.alert("User successfully logged out...");
+      },
+      error => {
+        console.log(error.error.message);
+      }
+    );
+  }
+
   checkIfUserLoggedIn() {
     // change password
     console.log("Checking if User is Logged In...");
