@@ -16,14 +16,14 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
-import { WindsorComponent } from "./components/main/diningc/windsor/windsor.component";
-import { WileyComponent } from "./components/main/diningc/wiley/wiley.component";
-import { HillenbrandComponent } from "./components/main/diningc/hillenbrand/hillenbrand.component";
-import { FordComponent } from "./components/main/diningc/ford/ford.component";
-import { CommonComponent } from "./components/main/diningc/common/common.component";
-import { AirhartComponent } from './components/main/diningc/airhart/airhart.component';
-import { PeteszaComponent } from './components/main/diningc/petesza/petesza.component';
-import { OnebowlComponent } from './components/main/diningc/onebowl/onebowl.component';
+import { WindsorComponent } from "./components/main/DiningC/windsor/windsor.component";
+import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component";
+import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
+import { FordComponent } from "./components/main/DiningC/ford/ford.component";
+import { CommonComponent } from "./components/main/DiningC/common/common.component";
+import { AirhartComponent } from "./components/main/DiningC/airhart/airhart.component";
+import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
+import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
 
 @NgModule({
   declarations: [

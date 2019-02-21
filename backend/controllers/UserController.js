@@ -3,7 +3,7 @@
 */
 
 require("../utils/db.configuration"); //initialize backendless database
-var UserModel = require("../models/UserModel");
+var User = require("../models/User");
 /*
   Create new account.
   @param req http request
@@ -11,12 +11,12 @@ var UserModel = require("../models/UserModel");
   @return json including statusCode and message
 */
 exports.createAccount = (req, res) => {
-  var user = new UserModel();
-  user.email = req.body.email;
-  user.password = req.body.password;
+  var user = new User();
+  user.setEmail(req.body.email);
+  user.setPassword(req.body.password);
 
   //register for new account using backendless API
-  Backendless.UserService.register(new Backendless.User(user))
+  Backendless.UserService.register(user)
     .then(user => {
       //send back json include user and message
       return res.status(201).json({
