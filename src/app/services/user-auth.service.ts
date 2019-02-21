@@ -17,6 +17,8 @@ export class UserAuthService {
   private isAuthenticated: boolean;
   private authStatusListener = new Subject<string>(); //help with emit messages
   private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
+  private currentUserEmail: string; // the current email of the user (when logged in)
+  private currentUserPassword: string; // the current email of the user (when logged in)
 
   constructor(private http: HttpClient) {}
 
@@ -35,7 +37,6 @@ export class UserAuthService {
           //if user create account successfully, save that email
           //to resend confirmation if needed
           this.emailSignUp = email;
-          this.http.get(BACKEND_URL + "/windsor");
         },
         error => {
           console.log(error.error.message);
@@ -79,7 +80,8 @@ export class UserAuthService {
           this.isAuthenticated = true;
           console.log("User has logged in succesfully");
           //TODO add new route when user successfully log in
-          //this.http.get(BACKEND_URL + "/windsor");
+          this.currentUserEmail = email;
+          this.currentUserPassword = password;
         },
         error => {
           console.log(error.error.message);
@@ -100,6 +102,18 @@ export class UserAuthService {
       }
     );
   }
+
+
+  changeUserEmail(newemail: string){
+    // change email
+    console.log("This is the entered email: " + newemail);
+  }
+
+  changeUserPassword(newpassword: string){
+    // change password
+    console.log("This is the new entered password: " + newpassword);
+  }
+
   getUserId(): string {
     return this.userId;
   }
