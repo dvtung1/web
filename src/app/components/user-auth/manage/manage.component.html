@@ -1,6 +1,9 @@
 <!-- This will redirect the user to the login page if not logged in -->
 <div class="text-center" *ngIf=!isLoggedIn>
     <h1> You're not Logged In </h1>
+    <div><span>Don't have an account? <a routerLink="/signup">Sign up!</a></span></div>
+    <div><span>Already have an account? <a routerLink="/login">Login</a></span></div>
+    <div><span>Don't want an account? <a routerLink="/">Homepage</a></span></div>
     
 </div>
 
