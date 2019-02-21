@@ -17,10 +17,6 @@ export class NavbarComponent implements OnInit {
     this.userAuthService.checkIfUserLoggedIn();
   }
 
-  handleLink() {
-    this.loggedIn = false;
-  }
-
   ngOnInit() {
     this.authStatusSub = this.userAuthService
       .getAuthStatusListener()
