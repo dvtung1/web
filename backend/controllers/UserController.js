@@ -110,7 +110,7 @@ exports.recoveryPassword = (req, res) => {
     });
 };
 
-/*
+ /*
   Change email by visiting the manage account page and entering the new email you want associated with your account
   @param req request
   @param res respond
