@@ -21,17 +21,20 @@ export class ManageComponent implements OnInit, OnDestroy {
     // console.log("after");
     // console.log(this.isLoggedIn);
     this.authStatusSub = new Subscription();
+    this.userAuthService.checkIfUserLoggedIn();
   }
 
   ngOnInit() {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         //check if the user sign up successfully
-        if (respond === "Esuccess") {
+        if (respond === "success"){
+          this.isLoggedIn = true;
+        } else if (respond === "Esuccess") {
           this.isESuccess = true;
-        }else if(respond === "Psuccess"){
+        } else if (respond === "Psuccess"){
           this.isPSuccess = true;
-        }else {
+        } else {
           this.errMsg = respond;
         }
       })

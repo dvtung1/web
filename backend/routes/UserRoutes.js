@@ -12,8 +12,9 @@ router.post("/signup", UserController.createAccount);
 router.post("/login", UserController.signIn);
 router.post("/recovery", UserController.recoveryPassword);
 router.post("/resend", UserController.resendConfirmation);
-router.post("/modifyemail");
-router.post("/modifypassword");
+router.post("/modifyemail", UserController.modifyEmail);
+router.post("/modifypassword", UserController.modifyEmail);
+router.get("/checkifloggedin", UserController.checkIfUserLoggedIn);
 router.get("/logout", UserController.logOut);
 
 module.exports = router;
