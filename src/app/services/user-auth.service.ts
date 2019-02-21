@@ -107,11 +107,29 @@ export class UserAuthService {
   changeUserEmail(newemail: string){
     // change email
     console.log("This is the entered email: " + newemail);
+    this.http.post(BACKEND_URL + "/modifyemail", {email: newemail}).subscribe(
+      () => {
+        this.authStatusListener.next('Esuccess');
+      },
+      error => {
+        console.log(error.error.message);
+        this.authStatusListener.next(error.error.message);
+      }
+    );
   }
 
   changeUserPassword(newpassword: string){
     // change password
     console.log("This is the new entered password: " + newpassword);
+    this.http.post(BACKEND_URL + "/modifypassword", {email: newpassword}).subscribe(
+      () => {
+        this.authStatusListener.next('Psuccess');
+      },
+      error => {
+        console.log(error.error.message);
+        this.authStatusListener.next(error.error.message);
+      }
+    );
   }
 
   getUserId(): string {

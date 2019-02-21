@@ -1,27 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserAuthService } from 'src/app/services/user-auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-manage',
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.css']
 })
-export class ManageComponent implements OnInit {
+export class ManageComponent implements OnInit, OnDestroy {
+  private authStatusSub: Subscription; //listen to the subject
+  errMsg: string; //show user the error message
   editEmail: boolean = false; // if user pushed button for editing email
   editPassword: boolean = false; // if user pushed button for editing password
   isLoggedIn: boolean = false; // if user is currently logged in
-  usrtoken: string;
+  isESuccess: boolean = false; // if email change was successful
+  isPSuccess: boolean = false; // if password change was successful
   constructor(private userAuthService: UserAuthService) {
     // console.log("before");
     // this.isLoggedIn = userAuthService.isUserAuthenticated();
-    // this.usrtoken = userAuthService.getUserToken();
     // console.log("after");
     // console.log(this.isLoggedIn);
-    // console.log(this.usrtoken);
+    this.authStatusSub = new Subscription();
   }
 
   ngOnInit() {
+    this.authStatusSub.add(
+      this.userAuthService.getAuthStatusListener().subscribe(respond => {
+        //check if the user sign up successfully
+        if (respond === "Esuccess") {
+          this.isESuccess = true;
+        }else if(respond === "Psuccess"){
+          this.isPSuccess = true;
+        }else {
+          this.errMsg = respond;
+        }
+      })
+    );
   }
+
 
   editEmailToggle() {
     this.editEmail = !this.editEmail;
@@ -42,6 +58,10 @@ export class ManageComponent implements OnInit {
     // TODO: write it to the backend
     //console.log(newPassword);
     this.userAuthService.changeUserPassword(newPassword);
+  }
+
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 
 }
