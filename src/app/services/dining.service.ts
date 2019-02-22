@@ -25,7 +25,13 @@ export class DiningService {
   getComment(diningCourtName: string) {
     this.http
       .get<
-        { author: string; text: string; rating: string; objectId: string }[]
+        {
+          author: string;
+          text: string;
+          rating: string;
+          objectId: string;
+          authorId: string;
+        }[]
       >(BACKEND_URL + "/comment?name=" + diningCourtName)
       .subscribe(
         respond => {
@@ -37,6 +43,7 @@ export class DiningService {
             cmt.byUser = comment.author;
             cmt.rating = comment.rating;
             cmt.objectId = comment.objectId;
+            cmt.authorId = comment.authorId;
             //add cmt to the result array
             arrayComment.push(cmt);
           });
@@ -71,6 +78,19 @@ export class DiningService {
         error => {
           console.log(error.error.message);
           //this.diningCourtEmitter.next(error.error.message);
+        }
+      );
+  }
+  removeComment(commentId: string) {
+    this.http
+      .get<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
+      .subscribe(
+        respond => {
+          location.reload();
+          console.log(respond);
+        },
+        error => {
+          console.log(error.error.message);
         }
       );
   }

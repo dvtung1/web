@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UserAuthService } from "src/app/services/user-auth.service";
 import { DiningService } from "src/app/services/dining.service";
 
-import { Subscription } from "rxjs";
+import { Subscription, Subject } from "rxjs";
 import { Comment } from "src/app/models/comment";
 import { NgForm } from "@angular/forms";
 
@@ -15,6 +15,8 @@ export class FordComponent implements OnInit, OnDestroy {
   commentList: Comment[];
   loggedIn = false;
   ifDeleted = false;
+  userId: string = "";
+  count = 0;
   private authStatusSub: Subscription;
   private diningListener: Subscription;
 
@@ -32,6 +34,7 @@ export class FordComponent implements OnInit, OnDestroy {
         console.log(message);
         if (message === "loggedinsuccess") {
           this.loggedIn = true;
+          this.userId = this.userAuthService.getUserId();
         } else {
           this.loggedIn = false;
         }
@@ -57,8 +60,7 @@ export class FordComponent implements OnInit, OnDestroy {
     var inputComment = form.value.comment;
     this.diningService.postComment(inputComment, "Ford");
   }
-  deleteComment() {
-    console.log("hi");
-    this.ifDeleted = true;
+  deleteComment(commentId: string) {
+    this.diningService.removeComment(commentId);
   }
 }

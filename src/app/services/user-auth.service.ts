@@ -3,9 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { User } from "src/app/models/user";
 import { Subject, Observable } from "rxjs";
-import {Component} from '@angular/core';
-import {Location} from '@angular/common';
-
+import { Component } from "@angular/core";
+import { Location } from "@angular/common";
 
 //backend api url for communication (Port 3000)
 // const BACKEND_URL = environment.apiUrl + "/user/";
@@ -14,7 +13,6 @@ const BACKEND_URL = environment.apiUrl + "/user";
 @Injectable({
   providedIn: "root"
 })
-
 export class UserAuthService {
   private userToken: string;
   private userId: string;
@@ -168,14 +166,9 @@ export class UserAuthService {
       );
   }
 
-
   logOut() {
     console.log("logging user out...");
-    this.http
-    .post<{ message: string }>(BACKEND_URL + "/logout", {
-
-    })
-    .subscribe(
+    this.http.post<{ message: string }>(BACKEND_URL + "/logout", {}).subscribe(
       response => {
         console.log(response.message);
         this._location.back();
@@ -205,12 +198,13 @@ export class UserAuthService {
       );
   }
 
-
   getCurrentUserInformation() {
     // get the user information
     console.log("Getting User Information...");
     this.http
-      .get<{userEmail: string; userUserName: string}>(BACKEND_URL + "/getcurrentuserinfo")
+      .get<{ userEmail: string; userUserName: string }>(
+        BACKEND_URL + "/getcurrentuserinfo"
+      )
       .subscribe(
         response => {
           this.currentUserEmail = response.userEmail;
@@ -223,15 +217,13 @@ export class UserAuthService {
             email: this.currentUserEmail,
             username: this.currentUserName
           });
-      },
-    error => {
-        console.log(error.error.message);
-        this.authStatusListener.next(error.error.message);
-      }
-    );
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
   }
-
-
 
   getUserId(): string {
     return this.userId;

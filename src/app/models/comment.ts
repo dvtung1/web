@@ -4,6 +4,7 @@ export class Comment {
   private _ofDiningTiming: string;
   private _rating: string;
   private _text: string;
+  public authorId: string;
 
   public get byUser(): string {
     return this._byUser;

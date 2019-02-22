@@ -50,10 +50,12 @@ exports.getComments = (req, res) => {
         commentList.forEach(comment => {
           //push each comment onto the Result list
           commentListResult.push({
+            //author: comment.byUser.email,
             author: comment.byUser.email,
             text: comment.text,
             rating: comment.rating,
-            objectId: comment.objectId
+            objectId: comment.objectId,
+            authorId: comment.byUser.objectId
           });
         });
       });
@@ -146,6 +148,30 @@ exports.postComment = (req, res) => {
         });
     })
     //catch for user
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+exports.deleteComment = (req, res) => {
+  var id = req.params.id;
+  Backendless.Data.of(Comment)
+    .findById(id)
+    .then(comment => {
+      Backendless.Data.of(Comment)
+        .remove(comment)
+        .then(respond => {
+          return res.status(200).json({
+            message: "Delete comment successfully"
+          });
+        })
+        .catch(err => {
+          return res.status(500).json({
+            message: err.message
+          });
+        });
+    })
     .catch(err => {
       return res.status(500).json({
         message: err.message
