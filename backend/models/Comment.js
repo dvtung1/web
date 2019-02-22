@@ -5,7 +5,7 @@ function Comment() {
   this.ofDiningTiming;
   this.rating = "";
   this.text = "";
-  this.objectId = "";
+  this.objectId;
 }
 Comment.prototype.getObjectId = function() {
   return this.objectId;

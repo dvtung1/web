@@ -4,6 +4,7 @@ import { DiningService } from "src/app/services/dining.service";
 
 import { Subscription } from "rxjs";
 import { Comment } from "src/app/models/comment";
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: "app-ford",
@@ -47,9 +48,12 @@ export class FordComponent implements OnInit, OnDestroy {
     this.diningListener.unsubscribe();
     this.authStatusSub.unsubscribe();
   }
-  postComment(value) {
-    console.log(value);
-    var inputComment = value;
+  // postComment(inputComment) {
+  //   //  var inputComment = form.value.comment;
+  //   this.diningService.postComment(inputComment, "Ford");
+  // }
+  postComment(form: NgForm) {
+    var inputComment = form.value.comment;
     this.diningService.postComment(inputComment, "Ford");
   }
 }

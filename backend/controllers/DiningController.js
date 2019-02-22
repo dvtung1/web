@@ -70,33 +70,60 @@ exports.getComments = (req, res) => {
 exports.postComment = (req, res) => {
   var inputComment = req.body.inputComment;
   var diningCourt = req.body.diningCourt;
+
   var currentUserOID = "";
   //get current user
   Backendless.UserService.getCurrentUser()
     .then(currentUser => {
+      console.log(currentUser);
       //get random diningTiming --- will fix later
       Backendless.Data.of(DiningTiming)
         .findFirst()
         .then(ofDiningTiming => {
           //get specific dining court name
+          console.log(ofDiningTiming);
           Backendless.Data.of(Place)
             .findById(diningCourtId[diningCourt])
             .then(place => {
-              ofDiningTiming.setOfPlace(place);
+              ofDiningTiming.ofPlace = place;
+              console.log(place);
               var comment = new Comment();
-              comment.setByUser = currentUser;
-              comment.setText = inputComment;
-              comment.setRating = ""; //TODO
-              comment.setOfDiningTiming = ofDiningTiming;
+              comment.byUser = currentUser; //
+              comment.text = inputComment;
+              comment.rating = ""; //TODO
+              comment.ofDiningTiming = ofDiningTiming; //
+              console.log(comment);
+              Backendless.Data.of(Comment)
+                .save(comment)
+                .then(savedComment => {
+                  return res.status(200).json({
+                    message: "save comment successfully"
+                  });
+                })
+                .catch(err => {
+                  return res.status(500).json({
+                    message: "comment" //err.message
+                  });
+                });
+            })
+            //catch for Place
+            .catch(err => {
+              res.status(500).json({
+                message: "place" //err.message
+              });
             });
+        })
+        //catch for DiningTiming
+        .catch(err => {
+          return res.status(500).json({
+            message: "diningtiming" //err.message
+          });
         });
-
-      // currentUserOID = result.objectId;
-      // console.log("cuid:" + currentUserOID);
     })
+    //catch for user
     .catch(err => {
       return res.status(500).json({
-        message: err.message
+        message: "user" //err.message
       });
     });
   //Backendless.Data.of(diningCourt).saveSync();

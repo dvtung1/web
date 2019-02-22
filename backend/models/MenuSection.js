@@ -1,7 +1,7 @@
 function MenuSection() {
   this.menuItems = [];
   this.name = "";
-  this.objectId = "";
+  this.objectId;
 }
 
 MenuSection.prototype.getObjectId = function() {

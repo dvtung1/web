@@ -51,7 +51,7 @@ export class DiningService {
     return this.diningCourtEmitter.asObservable();
   }
 
-  postComment(inputComment: string, diningCourt: string){
+  postComment(inputComment: string, diningCourt: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
       diningCourt: diningCourt
@@ -59,16 +59,17 @@ export class DiningService {
     console.log(inputComment);
     console.log(diningCourt);
     this.http
-    .post<{message: string}>(BACKEND_URL + "/postcomment", commentModel)
-    .subscribe(
-      () => {
-        this.diningCourtEmitter.next("successfully posting user comment...");
-        window.alert("comment successfully posted");
-      },
-      error => {
-        console.log(error.error.message);
-        this.diningCourtEmitter.next(error.error.message);
-      }
-    );
+      .post<{ message: string }>(BACKEND_URL + "/comment", commentModel)
+      .subscribe(
+        message => {
+          console.log(message);
+          //this.diningCourtEmitter.next("successfully posting user comment...");
+          //window.alert("comment successfully posted");
+        },
+        error => {
+          console.log(error.error.message);
+          this.diningCourtEmitter.next(error.error.message);
+        }
+      );
   }
 }
