@@ -21,9 +21,12 @@ export class DiningService {
   */
   getComment(diningCourtName: string) {
     this.http
-      .get<any[]>(BACKEND_URL + "/comment?name=" + diningCourtName)
+      .get<{ author: string; text: string; rating: string }[]>(
+        BACKEND_URL + "/comment?name=" + diningCourtName
+      )
       .subscribe(
         respond => {
+          //get list of json object with author, text, and rating
           this.diningCourtEmitter.next(respond);
         },
         err => {
