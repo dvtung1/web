@@ -13,6 +13,7 @@ exports.createAccount = (req, res) => {
   var user = new Backendless.User();
   user.email = req.body.email;
   user.password = req.body.password;
+  user.username = req.body.email;
 
   //register for new account using backendless API
   Backendless.UserService.register(user)
@@ -152,6 +153,26 @@ exports.modifyPassword = (req, res) => {
       //console.log("my email is : " + cUser.email);
       return res.status(200).json({
         message: "Password changed successfully"
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
+
+exports.modifyUsername = (req, res) => {
+  var newUsername = req.body.username;
+  Backendless.UserService.getCurrentUser()
+    .then(currentUser => {
+      //console.log("my email before update is: " + cUser.email);
+      currentUser.username = newUsername;
+      currentUser = Backendless.UserService.update(currentUser);
+      //console.log("my email is : " + cUser.email);
+      return res.status(200).json({
+        message: "Username changed successfully"
       });
     })
     .catch(err => {

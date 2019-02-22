@@ -12,9 +12,11 @@ export class ManageComponent implements OnInit, OnDestroy {
   errMsg: string; //show user the error message
   editEmail: boolean = false; // if user pushed button for editing email
   editPassword: boolean = false; // if user pushed button for editing password
+  editUsername: boolean = false; // if user pushed button for editing username
   isLoggedIn: boolean = false; // if user is currently logged in
   isESuccess: boolean = false; // if email change was successful
   isPSuccess: boolean = false; // if password change was successful
+  isUNSuccess: boolean = false; // if username change was successful
   currentUserEmail: string = ""; // contains the current user email
   currentUserName: string = ""; // contains the current user email
 
@@ -39,7 +41,9 @@ export class ManageComponent implements OnInit, OnDestroy {
           this.isESuccess = true;
         } else if (respond === "Psuccess") {
           this.isPSuccess = true;
-        } 
+        } else if(respond === "UNsuccess"){
+          this.isUNSuccess = true;
+        }
         else if (typeof respond == 'object'){
           //console.log("Tdsfljdsal;fkj");
           this.currentUserEmail = respond.email;
@@ -60,20 +64,27 @@ export class ManageComponent implements OnInit, OnDestroy {
   editPasswordToggle() {
     this.editPassword = !this.editPassword;
   }
+  editUsernameToggle() {
+    this.editUsername = !this.editUsername;
+  }
 
   changeEmail(value) {
     var newEmail = value;
-    // TODO: write it to the backend
     //console.log(newEmail);
     this.userAuthService.changeUserEmail(newEmail);
   }
 
   changePassword(value) {
     var newPassword = value;
-    // TODO: write it to the backend
     //console.log(newPassword);
     this.userAuthService.changeUserPassword(newPassword);
   }
+
+  changeUsername(value) {
+    var newUsername = value;
+    this.userAuthService.changeUserUsername(newUsername);
+  }
+
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();

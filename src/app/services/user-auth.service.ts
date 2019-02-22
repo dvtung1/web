@@ -144,6 +144,24 @@ export class UserAuthService {
       );
   }
 
+  changeUserUsername(newusername: string) {
+    console.log("This is the new entered username: " + newusername);
+    this.http
+      .post<{ message: string }>(BACKEND_URL + "/modifyusername", {
+        username: newusername
+      })
+      .subscribe(
+        () => {
+          this.authStatusListener.next("UNsuccess");
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
+  }
+
+
   logOut() {
     console.log("logging user out...");
     this.http

@@ -16,6 +16,29 @@
     <p>This is your current username: {{ currentUserName }}</p>
     <p>This is your current email: {{ currentUserEmail }}</p>
     <br>
+    <button (click)="editUsernameToggle()">Edit Username</button>
+    <div *ngIf=editUsername>
+
+        <!-- <form> -->
+        <div *ngIf=!isUNSuccess>
+        <label for="username"><b>Change Username: </b></label>
+        <input 
+            type="text" 
+            placeholder="Enter New Username" 
+            name="username"
+            class="usernameField" 
+            required 
+            autofocus
+            #newUsername
+            />
+        <button (click)="changeUsername(newUsername.value)">Submit New Username</button>
+        <!-- </form> -->
+        </div>
+        <div *ngIf=isUNSuccess>
+            <p>Username Successfully Changed</p>
+        </div>
+    </div>
+    <br>
     <button (click)="editEmailToggle()">Edit Email</button>
     <div *ngIf=editEmail>
 
