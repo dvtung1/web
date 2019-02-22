@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
         ) {
           this.loggedIn = true;
         } else {
-          this.loggedIn = false;
+          // this.loggedIn = false;
         }
       });
   }
