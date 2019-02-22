@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Subject, Observable } from "rxjs";
 import { Comment } from "../models/comment";
+import { postComment } from "src/app/models/post-comment";
 
 const BACKEND_URL = environment.apiUrl + "/dining";
 
@@ -48,5 +49,24 @@ export class DiningService {
 
   getDiningCourtEmitter(): Observable<any> {
     return this.diningCourtEmitter.asObservable();
+  }
+
+  postComment(inputComment: string, diningCourt: string){
+    var commentModel: postComment = {
+      inputComment: inputComment,
+      diningCourt: diningCourt
+    };
+    this.http
+    .post<{message: string}>(BACKEND_URL + "/postcomment", commentModel)
+    .subscribe(
+      () => {
+        this.diningCourtEmitter.next("successfully posting user comment...");
+        window.alert("comment successfully posted");
+      },
+      error => {
+        console.log(error.error.message);
+        this.diningCourtEmitter.next(error.error.message);
+      }
+    );
   }
 }

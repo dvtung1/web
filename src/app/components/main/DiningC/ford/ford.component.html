@@ -4,18 +4,19 @@
   </strong>
 </header>
 
-<form *ngIf="loggedIn">
+<div *ngIf="loggedIn">
   <textarea
     rows="4"
     cols="50"
     name="comment"
     placeholder="Enter a comment here!"
+    #inputComment
   ></textarea>
   <br />
-  <button type="submit">
+  <button (click)="postComment(inputComment.value)">
     Post
   </button>
-</form>
+</div>
 
 <div *ngFor="let comment of commentList">
   <p>{{ comment.byUser }}</p>

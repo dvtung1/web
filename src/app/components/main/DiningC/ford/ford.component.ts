@@ -47,4 +47,9 @@ export class FordComponent implements OnInit, OnDestroy {
     this.diningListener.unsubscribe();
     this.authStatusSub.unsubscribe();
   }
+  postComment(value) {
+    console.log(value);
+    var inputComment = value;
+    this.diningService.postComment(inputComment, "Ford");
+  }
 }

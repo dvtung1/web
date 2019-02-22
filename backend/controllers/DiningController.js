@@ -59,3 +59,18 @@ exports.getComments = (req, res) => {
       });
     });
 };
+
+exports.postComment = (req, res) => {
+  var inputComment = req.Body.inputComment;
+  var diningCourt = req.Body.diningCourt;
+  var currentUserOID;
+  Backendless.UserService.getCurrentUser()
+    .then(result => {
+      currentUserOID = result.objectId;
+      console.log("cuid:" + currentUserOID);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  Backendless.Data.of(diningCourt).saveSync();
+};
