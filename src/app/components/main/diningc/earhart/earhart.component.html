@@ -1,11 +1,24 @@
-<header><strong>
-  Earhart Dining Court
-</strong></header>
+<br>
+<header>
+<strong>Earhart</strong>
+</header>
 
 <form *ngIf="loggedIn">
-    <textarea rows="4" cols="50" name="comment" placeholder="Enter a comment here!"></textarea>
-    <br>
-    <button type="submit">
-      Post
-    </button>
+  <textarea
+    rows="4"
+    cols="50"
+    name="comment"
+    placeholder="Enter a comment here!"
+  ></textarea>
+  <br />
+  <button type="submit">Post</button>
 </form>
+<div class="commentSection">
+  <br><br>
+  <div *ngFor="let comment of commentList">
+    <p class="username">{{ comment.byUser }}</p>
+    <p>{{ comment.text }}</p>
+    <p>Rating: {{ comment.rating }}</p>
+    <br>
+  </div>
+</div>
