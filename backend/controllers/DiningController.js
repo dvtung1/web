@@ -86,8 +86,9 @@ exports.postComment = (req, res) => {
               var comment = new Comment();
               comment.setByUser = currentUser;
               comment.setText = inputComment;
-              comment.setRating = ""; //TODO
+              comment.setRating = "4"; //TODO
               comment.setOfDiningTiming = ofDiningTiming;
+              //Backendless.Persistence.of("Comment").save(comment);
             });
         });
 
@@ -99,5 +100,5 @@ exports.postComment = (req, res) => {
         message: err.message
       });
     });
-  //Backendless.Data.of(diningCourt).saveSync();
+  //Backendless.Data.of(ofDiningTiming).saveSync(comment);
 };

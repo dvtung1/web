@@ -13,6 +13,7 @@ import { Comment } from "src/app/models/comment";
 export class FordComponent implements OnInit, OnDestroy {
   commentList: Comment[];
   loggedIn = false;
+  ifDeleted = false;
   private authStatusSub: Subscription;
   private diningListener: Subscription;
 
@@ -51,5 +52,9 @@ export class FordComponent implements OnInit, OnDestroy {
     console.log(value);
     var inputComment = value;
     this.diningService.postComment(inputComment, "Ford");
+  }
+  deleteComment(){
+    console.log("hi");
+    this.ifDeleted = true;
   }
 }

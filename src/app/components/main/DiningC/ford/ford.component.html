@@ -4,7 +4,6 @@
 </header>
 
 <div *ngIf="loggedIn">
-  <form>
     <textarea
       rows="4"
       cols="50"
@@ -12,7 +11,6 @@
       placeholder="Enter a comment here!"
       #inputComment
     ></textarea>
-  </form>
   <br />
   <button (click)="postComment(inputComment.value)">Post</button>
   <div class="commentSection">
@@ -21,6 +19,7 @@
       <p class="username">{{ comment.byUser }}</p>
       <p>{{ comment.text }}</p>
       <p>Rating: {{ comment.rating }}</p>
+      <button>edit</button> <button (click) = "deleteComment()">delete</button>
       <br />
     </div>
   </div>

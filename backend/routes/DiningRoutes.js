@@ -6,5 +6,6 @@ const userAuthentication = require("../middlewares/userAuthentication.middleware
 router.get("/comment", DiningController.getComments);
 router.post("/comment", DiningController.postComment);
 //get and post are different verbs so using the same route name is ok
+//thats a useful comment @tung, thank you
 
 module.exports = router;

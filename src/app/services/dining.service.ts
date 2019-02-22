@@ -59,7 +59,7 @@ export class DiningService {
     console.log(inputComment);
     console.log(diningCourt);
     this.http
-    .post<{message: string}>(BACKEND_URL + "/postcomment", commentModel)
+    .post<{message: string}>(BACKEND_URL + "/comment", commentModel)
     .subscribe(
       () => {
         this.diningCourtEmitter.next("successfully posting user comment...");
