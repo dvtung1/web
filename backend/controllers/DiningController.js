@@ -9,13 +9,20 @@ var Comment = require("../models/Comment");
 
 var diningCourtId = {
   Windsor: "B291DFF7-E046-215C-FF9F-11C8A56BD100",
+  windsor: "B291DFF7-E046-215C-FF9F-11C8A56BD100",
   Wiley: "88790C84-6521-2DEA-FF40-4D9626089C00",
+  wiley: "88790C84-6521-2DEA-FF40-4D9626089C00",
   PeteZa: "661C1300-4A45-252D-FF8C-FE6F89BC2700",
+  peteZa: "661C1300-4A45-252D-FF8C-FE6F89BC2700",
   Bowl: "61088508-60C5-4F4E-FFAE-B302C12F3B00",
+  bowl: "61088508-60C5-4F4E-FFAE-B302C12F3B00",
   Hillenbrand: "6EBE3858-7951-86E0-FFD8-F8B182302400",
+  hillenbrand: "6EBE3858-7951-86E0-FFD8-F8B182302400",
   Earhart: "23394555-ACCC-C8BE-FF85-21FC323CA700",
-  Ford: "DC746107-DAB6-993C-FF95-EA5339CDDB00"
-};
+  earhart: "23394555-ACCC-C8BE-FF85-21FC323CA700",
+  Ford: "DC746107-DAB6-993C-FF95-EA5339CDDB00",
+  ford: "DC746107-DAB6-993C-FF95-EA5339CDDB00"
+}; //temporary duplicate with lowercase, later will use only lowercase to compare
 
 /*
   Get comments along with author name and rating.
@@ -26,14 +33,14 @@ var diningCourtId = {
 exports.getComments = (req, res) => {
   var diningCourtName = req.query.name;
   if (!(diningCourtName in diningCourtId)) {
-    console.log("wrong dining court name");
-    return;
+    return res.status(404).json({
+      message: "diningCourt not recognized"
+    });
   }
-  var getDiningCourtId = diningCourtId[diningCourtName];
   var commentListResult = []; //list of comments that will be return
   Backendless.Data.of(Place)
-    .findById(getDiningCourtId)
-    .then(function(place) {
+    .findById(diningCourtId[diningCourtName])
+    .then(place => {
       //get specific place
       var diningTimingsList = place.getDiningTimings();
       //iterate through the list of dining timing
@@ -64,13 +71,33 @@ exports.postComment = (req, res) => {
   var inputComment = req.body.inputComment;
   var diningCourt = req.body.diningCourt;
   var currentUserOID = "";
+  //get current user
   Backendless.UserService.getCurrentUser()
-    .then(result => {
-      currentUserOID = result.objectId;
-      console.log("cuid:" + currentUserOID);
+    .then(currentUser => {
+      //get random diningTiming --- will fix later
+      Backendless.Data.of(DiningTiming)
+        .findFirst()
+        .then(ofDiningTiming => {
+          //get specific dining court name
+          Backendless.Data.of(Place)
+            .findById(diningCourtId[diningCourt])
+            .then(place => {
+              ofDiningTiming.setOfPlace(place);
+              var comment = new Comment();
+              comment.setByUser = currentUser;
+              comment.setText = inputComment;
+              comment.setRating = ""; //TODO
+              comment.setOfDiningTiming = ofDiningTiming;
+            });
+        });
+
+      // currentUserOID = result.objectId;
+      // console.log("cuid:" + currentUserOID);
     })
     .catch(err => {
-      console.log(err);
+      return res.status(500).json({
+        message: err.message
+      });
     });
   //Backendless.Data.of(diningCourt).saveSync();
 };

@@ -40,3 +40,5 @@ Comment.prototype.setText = function(text) {
 Comment.prototype.getText = function() {
   return this.text;
 };
+
+module.exports = Comment;
