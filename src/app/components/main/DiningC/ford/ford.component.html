@@ -1,24 +1,27 @@
-<br>
+<br />
 <header>
-<strong>Ford</strong>
+  <strong>Ford</strong>
 </header>
 
 <div *ngIf="loggedIn">
-  <textarea
-    rows="4"
-    cols="50"
-    name="comment"
-    placeholder="Enter a comment here!"
-    #inputComment
-  ></textarea>
+  <form>
+    <textarea
+      rows="4"
+      cols="50"
+      name="comment"
+      placeholder="Enter a comment here!"
+      #inputComment
+    ></textarea>
+  </form>
   <br />
   <button (click)="postComment(inputComment.value)">Post</button>
-<div class="commentSection">
-  <br><br>
-  <div *ngFor="let comment of commentList">
-    <p class="username">{{ comment.byUser }}</p>
-    <p>{{ comment.text }}</p>
-    <p>Rating: {{ comment.rating }}</p>
-    <br>
+  <div class="commentSection">
+    <br /><br />
+    <div *ngFor="let comment of commentList">
+      <p class="username">{{ comment.byUser }}</p>
+      <p>{{ comment.text }}</p>
+      <p>Rating: {{ comment.rating }}</p>
+      <br />
+    </div>
   </div>
 </div>
