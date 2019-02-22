@@ -25,8 +25,8 @@ const routes: Routes = [
   { path: "hillenbrand", component: HillenbrandComponent },
   { path: "wiley", component: WileyComponent },
   { path: "earhart", component: EarhartComponent},
-  { path: "onebowl", component: OnebowlComponent },
-  { path: "petesza", component: PeteszaComponent }
+  { path: "petesza", component: PeteszaComponent },
+  { path: "onebowl", component: OnebowlComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
