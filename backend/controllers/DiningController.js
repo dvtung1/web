@@ -61,9 +61,9 @@ exports.getComments = (req, res) => {
 };
 
 exports.postComment = (req, res) => {
-  var inputComment = req.Body.inputComment;
-  var diningCourt = req.Body.diningCourt;
-  var currentUserOID;
+  var inputComment = req.body.inputComment;
+  var diningCourt = req.body.diningCourt;
+  var currentUserOID = "";
   Backendless.UserService.getCurrentUser()
     .then(result => {
       currentUserOID = result.objectId;
@@ -72,5 +72,5 @@ exports.postComment = (req, res) => {
     .catch(err => {
       console.log(err);
     });
-  Backendless.Data.of(diningCourt).saveSync();
+  //Backendless.Data.of(diningCourt).saveSync();
 };

@@ -1,7 +1,6 @@
+<br>
 <header>
-  <strong>
-    Ford Dining Court
-  </strong>
+<strong>Ford</strong>
 </header>
 
 <div *ngIf="loggedIn">
@@ -13,14 +12,13 @@
     #inputComment
   ></textarea>
   <br />
-  <button (click)="postComment(inputComment.value)">
-    Post
-  </button>
+  <button (click)="postComment(inputComment.value)">Post</button>
+<div class="commentSection">
+  <br><br>
+  <div *ngFor="let comment of commentList">
+    <p class="username">{{ comment.byUser }}</p>
+    <p>{{ comment.text }}</p>
+    <p>Rating: {{ comment.rating }}</p>
+    <br>
+  </div>
 </div>
-
-<div *ngFor="let comment of commentList">
-  <p>{{ comment.byUser }}</p>
-  <p>{{ comment.text }}</p>
-  <p>Rating: {{ comment.rating }}</p>
-</div>
-

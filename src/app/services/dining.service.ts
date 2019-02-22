@@ -56,6 +56,8 @@ export class DiningService {
       inputComment: inputComment,
       diningCourt: diningCourt
     };
+    console.log(inputComment);
+    console.log(diningCourt);
     this.http
     .post<{message: string}>(BACKEND_URL + "/postcomment", commentModel)
     .subscribe(
