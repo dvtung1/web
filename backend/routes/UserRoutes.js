@@ -15,6 +15,7 @@ router.post("/resend", UserController.resendConfirmation);
 router.post("/modifyemail", UserController.modifyEmail);
 router.post("/modifypassword", UserController.modifyPassword);
 router.get("/checkifloggedin", UserController.checkIfUserLoggedIn);
-router.get("/logout", UserController.logOut);
+router.post("/logout", UserController.logOut);
+router.get("/getcurrentuserinfo", UserController.getCurrentUserInfo);
 
 module.exports = router;

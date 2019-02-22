@@ -1,15 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { UserAuthService } from "src/app/services/user-auth.service";
 import { Subscription } from "rxjs";
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
-  selector: "app-navbar",
-  templateUrl: "./navbar.component.html",
-  styleUrls: ["./navbar.component.css"]
+  selector: 'app-earhart',
+  templateUrl: './earhart.component.html',
+  styleUrls: ['./earhart.component.css']
 })
-export class NavbarComponent implements OnInit {
-  loggedIn = false;
+export class EarhartComponent implements OnInit {
+  loggedIn = false
   private authStatusSub: Subscription;
 
   constructor(private userAuthService: UserAuthService) {
@@ -23,9 +22,7 @@ export class NavbarComponent implements OnInit {
       .subscribe(message => {
         console.log(message);
         if (
-          message === "loggedinsuccess" ||
-          message === "Esuccess" ||
-          message === "Psuccess"
+          message === "loggedinsuccess"
         ) {
           this.loggedIn = true;
         } else {
@@ -33,8 +30,5 @@ export class NavbarComponent implements OnInit {
         }
       });
   }
-  logOut() {
-    this.loggedIn = false;
-    this.userAuthService.logOut();
-  }
+
 }

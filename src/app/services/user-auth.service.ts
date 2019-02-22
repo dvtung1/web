@@ -15,10 +15,10 @@ export class UserAuthService {
   private userToken: string;
   private userId: string;
   private isAuthenticated: boolean;
-  private authStatusListener = new Subject<string>(); //help with emit messages
+  private authStatusListener = new Subject<any>(); //help with emit messages
   private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
   private currentUserEmail: string; // the current email of the user (when logged in)
-  private currentUserPassword: string; // the current email of the user (when logged in)
+  private currentUserName: string; // the current email of the user (when logged in)
   private isLoggedIn: boolean;
 
   constructor(private http: HttpClient) {}
@@ -86,8 +86,6 @@ export class UserAuthService {
           window.location.assign("/home");
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
-          this.currentUserEmail = email;
-          this.currentUserPassword = password;
           this.authStatusListener.next("authenticated");
         },
         error => {
@@ -146,6 +144,23 @@ export class UserAuthService {
       );
   }
 
+  logOut() {
+    console.log("logging user out...");
+    this.http
+    .post<{ message: string }>(BACKEND_URL + "/logout", {
+
+    })
+    .subscribe(
+      response => {
+        console.log(response.message);
+        window.alert("User successfully logged out...");
+      },
+      error => {
+        console.log(error.error.message);
+      }
+    );
+  }
+
   checkIfUserLoggedIn() {
     // change password
     console.log("Checking if User is Logged In...");
@@ -163,6 +178,34 @@ export class UserAuthService {
         }
       );
   }
+
+
+  getCurrentUserInformation() {
+    // get the user information
+    console.log("Getting User Information...");
+    this.http
+      .get<{userEmail: string; userUserName: string}>(BACKEND_URL + "/getcurrentuserinfo")
+      .subscribe(
+        response => {
+          this.currentUserEmail = response.userEmail;
+          this.currentUserName = response.userUserName;
+          //console.log("this is the currentuseremail: "+this.currentUserEmail);
+          //console.log("this is the current user name: "+this.currentUserName);
+          this.authStatusListener.next(this.currentUserEmail);
+          this.authStatusListener.next(this.currentUserName);
+          this.authStatusListener.next({
+            email: this.currentUserEmail,
+            username: this.currentUserName
+          });
+      },
+    error => {
+        console.log(error.error.message);
+        this.authStatusListener.next(error.error.message);
+      }
+    );
+  }
+
+
 
   getUserId(): string {
     return this.userId;

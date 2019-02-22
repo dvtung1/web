@@ -9,6 +9,7 @@ import { WindsorComponent } from "./components/main/DiningC/windsor/windsor.comp
 import { FordComponent } from "./components/main/DiningC/ford/ford.component";
 import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
 import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component";
+import { EarhartComponent } from "./components/main/DiningC/earhart/earhart.component";
 import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
 import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
 
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: "ford", component: FordComponent },
   { path: "hillenbrand", component: HillenbrandComponent },
   { path: "wiley", component: WileyComponent },
+  { path: "earhart", component: EarhartComponent},
   { path: "onebowl", component: OnebowlComponent },
   { path: "petesza", component: PeteszaComponent }
 ];

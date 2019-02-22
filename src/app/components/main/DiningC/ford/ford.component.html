@@ -22,3 +22,15 @@
   <p>{{ comment.text }}</p>
   <p>Rating: {{ comment.rating }}</p>
 </div>
+<form *ngIf="loggedIn">
+  <textarea
+    rows="4"
+    cols="50"
+    name="comment"
+    placeholder="Enter a comment here!"
+  ></textarea>
+  <br />
+  <button type="submit">
+    Post
+  </button>
+</form>

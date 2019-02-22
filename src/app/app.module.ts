@@ -24,6 +24,7 @@ import { FordComponent } from "./components/main/DiningC/ford/ford.component";
 import { CommonComponent } from "./components/main/DiningC/common/common.component";
 import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
 import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
+import { EarhartComponent } from './components/main/DiningC/earhart/earhart.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.comp
     FordComponent,
     CommonComponent,
     PeteszaComponent,
-    OnebowlComponent
+    OnebowlComponent,
+    EarhartComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService, DiningService],
