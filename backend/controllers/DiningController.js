@@ -88,7 +88,8 @@ exports.postComment = (req, res) => {
               comment.setText = inputComment;
               comment.setRating = "4"; //TODO
               comment.setOfDiningTiming = ofDiningTiming;
-              //Backendless.Persistence.of("Comment").save(comment);
+              console.log(currentUser.email); // The current user object is null 
+              Backendless.Data.of("Comment").save({text: inputComment, byUser: currentUser});
             });
         });
 
