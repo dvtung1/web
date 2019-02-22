@@ -126,5 +126,5 @@ exports.postComment = (req, res) => {
         message: "user" //err.message
       });
     });
-  //Backendless.Data.of(diningCourt).saveSync();
+  //Backendless.Data.of(ofDiningTiming).saveSync(comment);
 };

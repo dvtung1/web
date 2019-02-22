@@ -14,6 +14,7 @@ import { NgForm } from "@angular/forms";
 export class FordComponent implements OnInit, OnDestroy {
   commentList: Comment[];
   loggedIn = false;
+  ifDeleted = false;
   private authStatusSub: Subscription;
   private diningListener: Subscription;
 
@@ -55,5 +56,9 @@ export class FordComponent implements OnInit, OnDestroy {
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
     this.diningService.postComment(inputComment, "Ford");
+  }
+  deleteComment(){
+    console.log("hi");
+    this.ifDeleted = true;
   }
 }
