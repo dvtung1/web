@@ -42,7 +42,7 @@ export class DiningService {
           this.diningCourtEmitter.next(arrayComment);
         },
         err => {
-          console.log(err);
+          console.log(err.error.message);
         }
       );
   }
@@ -61,8 +61,8 @@ export class DiningService {
     this.http
       .post<{ message: string }>(BACKEND_URL + "/comment", commentModel)
       .subscribe(
-        message => {
-          console.log(message);
+        respond => {
+          console.log(respond.message);
           //this.diningCourtEmitter.next("successfully posting user comment...");
           //window.alert("comment successfully posted");
         },

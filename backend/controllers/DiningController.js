@@ -75,55 +75,64 @@ exports.postComment = (req, res) => {
   //get current user
   Backendless.UserService.getCurrentUser()
     .then(currentUser => {
-      console.log(currentUser);
       //get random diningTiming --- will fix later
       Backendless.Data.of(DiningTiming)
         .findFirst()
         .then(ofDiningTiming => {
           //get specific dining court name
-          console.log(ofDiningTiming);
           Backendless.Data.of(Place)
             .findById(diningCourtId[diningCourt])
             .then(place => {
               ofDiningTiming.ofPlace = place;
-              console.log(place);
               var comment = new Comment();
-              comment.byUser = currentUser; //
               comment.text = inputComment;
-              comment.rating = ""; //TODO
-              comment.ofDiningTiming = ofDiningTiming; //
-              console.log(comment);
+              //TODO temporary generating random rating score
+              var randomNumber = Math.floor(Math.random() * 10 + 1);
+              randomNumber = randomNumber.toString();
+              comment.rating = randomNumber;
+
+              //Save that comment to the database
               Backendless.Data.of(Comment)
                 .save(comment)
                 .then(savedComment => {
-                  return res.status(200).json({
-                    message: "save comment successfully"
-                  });
+                  //After saving and getting comment objectId, set its relation to the user
+                  Backendless.Data.of(Comment)
+                    .setRelation(savedComment, "byUser", [currentUser])
+                    .then(count => {
+                      return res.status(200).json({
+                        message: "save comment successfully"
+                      });
+                    })
+                    .catch(err => {
+                      return res.status(500).json({
+                        message: err.message
+                      });
+                    });
                 })
                 .catch(err => {
                   return res.status(500).json({
-                    message: "comment" //err.message
+                    message: err.message
                   });
                 });
             })
             //catch for Place
             .catch(err => {
               res.status(500).json({
-                message: "place" //err.message
+                message: err.message
               });
             });
         })
         //catch for DiningTiming
         .catch(err => {
           return res.status(500).json({
-            message: "diningtiming" //err.message
+            message: err.message
           });
         });
     })
     //catch for user
     .catch(err => {
       return res.status(500).json({
-        message: "user" //err.message
+        message: err.message
       });
     });
   //Backendless.Data.of(ofDiningTiming).saveSync(comment);

@@ -7,7 +7,7 @@ function DiningTiming() {
   this.menu = [];
   this.ofPlace;
   this.ratings = [];
-  this.objectId;
+  //this.objectId;
 }
 DiningTiming.prototype.getObjectId = function() {
   return this.objectId;

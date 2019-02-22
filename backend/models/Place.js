@@ -1,9 +1,9 @@
 function Place() {
-  this.objectId;
   this.address = "";
   this.diningTimings = [];
   this.name = "";
   this.phone = "";
+  //this.objectId;
 }
 
 Place.prototype.getObjectId = function() {
