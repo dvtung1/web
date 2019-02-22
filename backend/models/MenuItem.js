@@ -1,7 +1,7 @@
 function MenuItem() {
   this.allergens = "";
   this.name = "";
-  this.objectId = "";
+  this.objectId;
 }
 
 MenuItem.prototype.getObjectId = function() {

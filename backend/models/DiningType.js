@@ -1,7 +1,7 @@
 function DiningType() {
   this.diningTimings = [];
   this.name = "";
-  this.objectId = "";
+  this.objectId;
 }
 
 DiningType.prototype.getObjectId = function() {

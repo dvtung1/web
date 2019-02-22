@@ -4,23 +4,25 @@
 </header>
 
 <div *ngIf="loggedIn">
+  <form (submit)="postComment(commentForm)" #commentForm="ngForm">
     <textarea
       rows="4"
       cols="50"
       name="comment"
       placeholder="Enter a comment here!"
-      #inputComment
+      ngModel
     ></textarea>
+    <button type="submit">Submit comment</button>
+    <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
+  </form>
   <br />
-  <button (click)="postComment(inputComment.value)">Post</button>
-  <div class="commentSection">
-    <br /><br />
-    <div *ngFor="let comment of commentList">
-      <p class="username">{{ comment.byUser }}</p>
-      <p>{{ comment.text }}</p>
-      <p>Rating: {{ comment.rating }}</p>
-      <button>edit</button> <button (click) = "deleteComment()">delete</button>
-      <br />
-    </div>
+</div>
+<div class="commentSection">
+  <br /><br />
+  <div *ngFor="let comment of commentList">
+    <p class="username">{{ comment.byUser }}</p>
+    <p>{{ comment.text }}</p>
+    <p>Rating: {{ comment.rating }}</p>
+    <br />
   </div>
 </div>

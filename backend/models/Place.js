@@ -1,5 +1,5 @@
 function Place() {
-  this.objectId = "";
+  this.objectId;
   this.address = "";
   this.diningTimings = [];
   this.name = "";
