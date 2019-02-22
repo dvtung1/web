@@ -83,11 +83,18 @@ exports.postComment = (req, res) => {
           Backendless.Data.of(Place)
             .findById(diningCourtId[diningCourt])
             .then(place => {
-              ofDiningTiming.ofPlace = place;
+              //set relationship between the diningTiming and the Place
+              Backendless.Data.of(DiningTiming)
+                .setRelation(ofDiningTiming, "ofPlace", [place])
+                .then(respond => {});
+              Backendless.Data.of(Place)
+                .addRelation(place, "diningTimings", [ofDiningTiming])
+                .then(respond => {});
+
+              //initialize comment
               var comment = new Comment();
               comment.text = inputComment;
-              //TODO temporary generating random rating score
-              var randomNumber = Math.floor(Math.random() * 10 + 1);
+              var randomNumber = Math.floor(Math.random() * 10 + 1); //FIXME temp randomize rating score
               randomNumber = randomNumber.toString();
               comment.rating = randomNumber;
 
@@ -98,16 +105,25 @@ exports.postComment = (req, res) => {
                   //After saving and getting comment objectId, set its relation to the user
                   Backendless.Data.of(Comment)
                     .setRelation(savedComment, "byUser", [currentUser])
-                    .then(count => {
-                      return res.status(200).json({
-                        message: "save comment successfully"
-                      });
-                    })
-                    .catch(err => {
-                      return res.status(500).json({
-                        message: err.message
-                      });
-                    });
+                    .then(respond => {});
+                  //set back relation from user to comment
+                  Backendless.Data.of(Backendless.User)
+                    .addRelation(currentUser, "comments", [savedComment])
+                    .then(respond => {});
+                  //set relation from comment to ofDiningTiming
+                  Backendless.Data.of(Comment)
+                    .setRelation(savedComment, "ofDiningTiming", [
+                      ofDiningTiming
+                    ])
+                    .then(respond => {});
+                  //set back relation from diningTiming to comment
+                  Backendless.Data.of(DiningTiming)
+                    .addRelation(ofDiningTiming, "comments", [savedComment])
+                    .then(respond => {});
+
+                  return res.status(200).json({
+                    message: "add comment successfully"
+                  });
                 })
                 .catch(err => {
                   return res.status(500).json({
@@ -135,5 +151,4 @@ exports.postComment = (req, res) => {
         message: err.message
       });
     });
-  //Backendless.Data.of(ofDiningTiming).saveSync(comment);
 };
