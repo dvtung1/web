@@ -4,6 +4,7 @@ import { environment } from "src/environments/environment";
 import { Subject, Observable } from "rxjs";
 import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
+import { Location } from "@angular/common";
 
 const BACKEND_URL = environment.apiUrl + "/dining";
 
@@ -12,7 +13,7 @@ const BACKEND_URL = environment.apiUrl + "/dining";
 })
 export class DiningService {
   private diningCourtEmitter = new Subject<any>();
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private location: Location) {}
 
   /*
     Get comments with author name and rating from the server
@@ -63,12 +64,13 @@ export class DiningService {
       .subscribe(
         respond => {
           console.log(respond.message);
+          //reload the page right after the comment get into the database
+          location.reload();
           //this.diningCourtEmitter.next("successfully posting user comment...");
-          //window.alert("comment successfully posted");
         },
         error => {
           console.log(error.error.message);
-          this.diningCourtEmitter.next(error.error.message);
+          //this.diningCourtEmitter.next(error.error.message);
         }
       );
   }

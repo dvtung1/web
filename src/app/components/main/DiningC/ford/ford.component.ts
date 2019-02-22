@@ -57,7 +57,7 @@ export class FordComponent implements OnInit, OnDestroy {
     var inputComment = form.value.comment;
     this.diningService.postComment(inputComment, "Ford");
   }
-  deleteComment(){
+  deleteComment() {
     console.log("hi");
     this.ifDeleted = true;
   }
