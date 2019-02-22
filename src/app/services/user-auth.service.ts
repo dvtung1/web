@@ -3,6 +3,9 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { User } from "src/app/models/user";
 import { Subject, Observable } from "rxjs";
+import {Component} from '@angular/core';
+import {Location} from '@angular/common';
+
 
 //backend api url for communication (Port 3000)
 // const BACKEND_URL = environment.apiUrl + "/user/";
@@ -11,6 +14,7 @@ const BACKEND_URL = environment.apiUrl + "/user";
 @Injectable({
   providedIn: "root"
 })
+
 export class UserAuthService {
   private userToken: string;
   private userId: string;
@@ -21,7 +25,9 @@ export class UserAuthService {
   private currentUserName: string; // the current email of the user (when logged in)
   private isLoggedIn: boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private _location: Location) {}
+
+  //constructor(private _location: Location) {}
 
   createUser(email: string, password: string) {
     var UserModel: User = {
@@ -83,7 +89,8 @@ export class UserAuthService {
           console.log("This is the user token!!!: " + this.userToken);
           console.log("this is the user id!!!!: " + this.userId);
 
-          window.location.assign("/home");
+          //window.location.assign("/home");
+          this._location.back();
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");
@@ -171,7 +178,8 @@ export class UserAuthService {
     .subscribe(
       response => {
         console.log(response.message);
-        window.alert("User successfully logged out...");
+        this._location.back();
+        //window.alert("User successfully logged out...");
       },
       error => {
         console.log(error.error.message);
