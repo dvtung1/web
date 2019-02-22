@@ -3,6 +3,7 @@ import { UserAuthService } from "src/app/services/user-auth.service";
 import { DiningService } from "src/app/services/dining.service";
 
 import { Subscription } from "rxjs";
+import { Comment } from "src/app/models/comment";
 
 @Component({
   selector: "app-ford",
@@ -10,7 +11,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./ford.component.css"]
 })
 export class FordComponent implements OnInit, OnDestroy {
-  commentList: any[];
+  commentList: Comment[];
   loggedIn = false;
   private authStatusSub: Subscription;
   private diningListener: Subscription;

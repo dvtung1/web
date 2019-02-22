@@ -45,7 +45,8 @@ exports.getComments = (req, res) => {
           commentListResult.push({
             author: comment.byUser.email,
             text: comment.text,
-            rating: comment.rating
+            rating: comment.rating,
+            objectId: comment.objectId
           });
         });
       });
