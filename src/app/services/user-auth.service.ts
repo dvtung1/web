@@ -23,9 +23,7 @@ export class UserAuthService {
   private currentUserName: string; // the current email of the user (when logged in)
   private isLoggedIn: boolean;
 
-  constructor(private http: HttpClient, private _location: Location) {}
-
-  //constructor(private _location: Location) {}
+  constructor(private http: HttpClient) {}
 
   createUser(email: string, password: string) {
     var UserModel: User = {
@@ -87,8 +85,7 @@ export class UserAuthService {
           console.log("This is the user token!!!: " + this.userToken);
           console.log("this is the user id!!!!: " + this.userId);
 
-          //window.location.assign("/home");
-          this._location.back();
+          window.location.assign("/home");
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");
@@ -171,8 +168,7 @@ export class UserAuthService {
     this.http.post<{ message: string }>(BACKEND_URL + "/logout", {}).subscribe(
       response => {
         console.log(response.message);
-        this._location.back();
-        //window.alert("User successfully logged out...");
+        window.alert("User successfully logged out...");
       },
       error => {
         console.log(error.error.message);
