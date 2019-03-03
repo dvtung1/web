@@ -2,7 +2,7 @@
   Controller file that contain all the logic business for DiningCourt. Link to DiningRoutes
 */
 
-require("../utils/db.configuration"); //initialize backendless database
+var Backendless = require("../utils/db.configuration"); //initialize backendless database
 var Place = require("../models/Place");
 var DiningTiming = require("../models/DiningTiming");
 var Comment = require("../models/Comment");
@@ -42,7 +42,7 @@ exports.getComments = (req, res) => {
     .findById(diningCourtId[diningCourtName])
     .then(place => {
       //get specific place
-      var diningTimingsList = place.getDiningTimings();
+      var diningTimingsList = place.diningTimings;
       //iterate through the list of dining timing
       diningTimingsList.forEach(diningTiming => {
         var commentList = diningTiming.comments;
@@ -73,7 +73,6 @@ exports.postComment = (req, res) => {
   var inputComment = req.body.inputComment;
   var diningCourt = req.body.diningCourt;
 
-  var currentUserOID = "";
   //get current user
   Backendless.UserService.getCurrentUser()
     .then(currentUser => {
@@ -86,42 +85,22 @@ exports.postComment = (req, res) => {
             .findById(diningCourtId[diningCourt])
             .then(place => {
               //set relationship between the diningTiming and the Place
-              Backendless.Data.of(DiningTiming)
-                .setRelation(ofDiningTiming, "ofPlace", [place])
-                .then(respond => {});
-              Backendless.Data.of(Place)
-                .addRelation(place, "diningTimings", [ofDiningTiming])
-                .then(respond => {});
+              place.addDiningTimings(ofDiningTiming);
 
               //initialize comment
-              var comment = new Comment();
-              comment.text = inputComment;
-              var randomNumber = Math.floor(Math.random() * 10 + 1); //FIXME temp randomize rating score
-              randomNumber = randomNumber.toString();
-              comment.rating = randomNumber;
+              var comment = new Comment({
+                text: inputComment,
+                rating: 5
+              });
 
               //Save that comment to the database
-              Backendless.Data.of(Comment)
-                .save(comment)
+              comment
+                .save()
                 .then(savedComment => {
                   //After saving and getting comment objectId, set its relation to the user
-                  Backendless.Data.of(Comment)
-                    .setRelation(savedComment, "byUser", [currentUser])
-                    .then(respond => {});
-                  //set back relation from user to comment
-                  Backendless.Data.of(Backendless.User)
-                    .addRelation(currentUser, "comments", [savedComment])
-                    .then(respond => {});
+                  savedComment.setByUser(currentUser);
                   //set relation from comment to ofDiningTiming
-                  Backendless.Data.of(Comment)
-                    .setRelation(savedComment, "ofDiningTiming", [
-                      ofDiningTiming
-                    ])
-                    .then(respond => {});
-                  //set back relation from diningTiming to comment
-                  Backendless.Data.of(DiningTiming)
-                    .addRelation(ofDiningTiming, "comments", [savedComment])
-                    .then(respond => {});
+                  savedComment.setOfDiningTiming(ofDiningTiming);
 
                   return res.status(200).json({
                     message: "add comment successfully"
@@ -159,8 +138,8 @@ exports.deleteComment = (req, res) => {
   Backendless.Data.of(Comment)
     .findById(id)
     .then(comment => {
-      Backendless.Data.of(Comment)
-        .remove(comment)
+      comment
+        .remove()
         .then(respond => {
           return res.status(200).json({
             message: "Delete comment successfully"

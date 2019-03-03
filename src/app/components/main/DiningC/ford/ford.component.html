@@ -25,7 +25,7 @@
     <p>{{ comment.text }}</p>
     <p>Rating: {{ comment.rating }}</p>
     <br />
-    <div *ngIf="comment.authorId == userId">
+    <div>
       <button>Edit</button
       ><button (click)="deleteComment(comment.objectId)">Delete</button>
     </div>

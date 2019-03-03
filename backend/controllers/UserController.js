@@ -2,7 +2,7 @@
   Controller file that contain all the logic business for User. Link to UserRoutes
 */
 
-require("../utils/db.configuration"); //initialize backendless database
+var Backendless = require("../utils/db.configuration"); //initialize backendless database
 /*
   Create new account.
   @param req http request

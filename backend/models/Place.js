@@ -1,39 +1,29 @@
-function Place() {
-  this.address = "";
-  this.diningTimings = [];
-  this.name = "";
-  this.phone = "";
-  //this.objectId;
+var DiningTiming = require("../models/DiningTiming");
+class Place {
+  constructor(args) {
+    args = args || {};
+    this.address = args.address || null;
+    this.name = args.name || null;
+    this.phone = args.phone || null;
+    this.diningTimings;
+    this.objectId;
+  }
+   //save instance to database
+   save(){
+    return Backendless.Data.of(Place).save(this);
+  }
+
+  //remove current instance from database
+  remove(){
+    return Backendless.Data.of(Place).remove(this);
+  }
+  
+  addDiningTimings(ofDiningTiming){
+    Backendless.Data.of(Place)
+      .addRelation(this, "diningTimings", [ofDiningTiming]);
+    Backendless.Data.of(DiningTiming)
+      .setRelation(ofDiningTiming, "ofPlace", [this]);
+  }
 }
-
-Place.prototype.getObjectId = function() {
-  return this.objectId;
-};
-
-Place.prototype.setAddress = function(address) {
-  this.address = address;
-};
-
-Place.prototype.getAddress = function() {
-  return this.address;
-};
-Place.prototype.setDiningTimings = function(listDiningTimings) {
-  this.diningTimings = listDiningTimings;
-};
-Place.prototype.getDiningTimings = function() {
-  return this.diningTimings;
-};
-Place.prototype.setName = function(name) {
-  this.name = name;
-};
-Place.prototype.getName = function() {
-  return this.name;
-};
-Place.prototype.setPhone = function(number) {
-  this.phone = number;
-};
-Place.prototype.getPhone = function() {
-  return this.phone;
-};
 
 module.exports = Place;
