@@ -6,6 +6,7 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 
+//backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
 
 @Injectable({
@@ -83,7 +84,7 @@ export class DiningService {
   }
   removeComment(commentId: string) {
     this.http
-      .get<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
+      .delete<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
       .subscribe(
         respond => {
           location.reload();

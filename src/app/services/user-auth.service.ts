@@ -7,7 +7,6 @@ import { Component } from "@angular/core";
 import { Location } from "@angular/common";
 
 //backend api url for communication (Port 3000)
-// const BACKEND_URL = environment.apiUrl + "/user/";
 const BACKEND_URL = environment.apiUrl + "/user";
 
 @Injectable({
@@ -114,7 +113,7 @@ export class UserAuthService {
     // change email
     console.log("This is the entered email: " + newemail);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifyemail", {
+      .put<{ message: string }>(BACKEND_URL + "/email", {
         email: newemail
       })
       .subscribe(
@@ -132,7 +131,7 @@ export class UserAuthService {
     // change password
     console.log("This is the new entered password: " + newpassword);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifypassword", {
+      .put<{ message: string }>(BACKEND_URL + "/password", {
         password: newpassword
       })
       .subscribe(
@@ -149,7 +148,7 @@ export class UserAuthService {
   changeUserUsername(newusername: string) {
     console.log("This is the new entered username: " + newusername);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifyusername", {
+      .put<{ message: string }>(BACKEND_URL + "/username", {
         username: newusername
       })
       .subscribe(
@@ -165,7 +164,7 @@ export class UserAuthService {
 
   logOut() {
     console.log("logging user out...");
-    this.http.post<{ message: string }>(BACKEND_URL + "/logout", {}).subscribe(
+    this.http.get<{ message: string }>(BACKEND_URL + "/logout").subscribe(
       response => {
         console.log(response.message);
         window.alert("User successfully logged out...");
@@ -199,7 +198,7 @@ export class UserAuthService {
     console.log("Getting User Information...");
     this.http
       .get<{ userEmail: string; userUserName: string }>(
-        BACKEND_URL + "/getcurrentuserinfo"
+        BACKEND_URL + "/userinfo"
       )
       .subscribe(
         response => {
