@@ -184,7 +184,12 @@ export class UserAuthService {
         response => {
           // this is
           console.log(response.message);
-          this.authStatusListener.next("loggedinsuccess");
+          if(response.message === "true"){
+            this.authStatusListener.next("loggedinsuccess");
+          }
+          else{
+            // do nothing
+          }
         },
         error => {
           console.log(error.error.message);
@@ -206,8 +211,8 @@ export class UserAuthService {
           this.currentUserName = response.userUserName;
           //console.log("this is the currentuseremail: "+this.currentUserEmail);
           //console.log("this is the current user name: "+this.currentUserName);
-          this.authStatusListener.next(this.currentUserEmail);
-          this.authStatusListener.next(this.currentUserName);
+          //this.authStatusListener.next(this.currentUserEmail);
+          //this.authStatusListener.next(this.currentUserName);
           this.authStatusListener.next({
             email: this.currentUserEmail,
             username: this.currentUserName
