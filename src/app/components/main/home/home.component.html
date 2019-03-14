@@ -1,100 +1,22 @@
 <br />
 <h1><strong>Dining Courts</strong></h1>
 <br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/onebowl">1bowl</a>
+
+<div *ngFor="let dining of diningArray">
+  <div class="container">
+    <div class="row text-center h-100">
+      <div class="col-md-3 text-center my-auto">
+        <div class="card card-block d-flex" style="height: 50px; width: 157px">
+          <div
+            class="card-body align-items-center d-flex justify-content-center"
+          >
+            <div class="card-body text-capitalize">
+              <a routerLink="/dining/{{ dining }}">{{ dining }}</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/earhart">Earhart</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/ford">Ford</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/hillenbrand">Hillenbrand</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/wiley">Wiley</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/windsor">Windsor</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-<div class="container">
-  <div class="row text-center h-100">
-    <div class="col-md-3 text-center my-auto">
-      <div class="card card-block d-flex" style="height: 50px; width: 157px">
-        <div class="card-body align-items-center d-flex justify-content-center">
-          <div class="card-body">
-            <a routerLink="/petesza">Pete's Za</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <br />
 </div>

@@ -5,28 +5,15 @@ import { RecoveryComponent } from "./components/user-auth/recovery/recovery.comp
 import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
-import { WindsorComponent } from "./components/main/DiningC/windsor/windsor.component";
-import { FordComponent } from "./components/main/DiningC/ford/ford.component";
-import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
-import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component";
-import { EarhartComponent } from "./components/main/DiningC/earhart/earhart.component";
-import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
-import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
+import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "login", component: LoginComponent },
   { path: "signup", component: SignupComponent },
   { path: "recovery", component: RecoveryComponent },
-  { path: "home", component: HomeComponent },
   { path: "manage", component: ManageComponent },
-  { path: "windsor", component: WindsorComponent },
-  { path: "ford", component: FordComponent },
-  { path: "hillenbrand", component: HillenbrandComponent },
-  { path: "wiley", component: WileyComponent },
-  { path: "earhart", component: EarhartComponent},
-  { path: "petesza", component: PeteszaComponent },
-  { path: "onebowl", component: OnebowlComponent }
+  { path: "dining/:diningName", component: DiningCourtComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -3,8 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { User } from "src/app/models/user";
 import { Subject, Observable } from "rxjs";
-import { Component } from "@angular/core";
-import { Location } from "@angular/common";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/user";
@@ -184,10 +182,9 @@ export class UserAuthService {
         response => {
           // this is
           console.log(response.message);
-          if(response.message === "true"){
+          if (response.message === "true") {
             this.authStatusListener.next("loggedinsuccess");
-          }
-          else{
+          } else {
             // do nothing
           }
         },

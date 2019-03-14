@@ -19,7 +19,7 @@ export class DiningService {
   /*
     Get comments with author name and rating from the server
     @param diningCourtName name of the specific dining court
-    Windsor, Wiley, PeteZa, Bowl, Hillenbrand, Earhart, Ford
+    Windsor, Wiley, PeteZa, onebowl, Hillenbrand, Earhart, Ford
     @param diningType type of dining. Ex: breakfast, lunch, latelunch, dinner
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */

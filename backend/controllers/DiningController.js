@@ -10,12 +10,12 @@ var Comment = require("../models/Comment");
 var diningCourtId = {
   windsor: "B291DFF7-E046-215C-FF9F-11C8A56BD100",
   wiley: "88790C84-6521-2DEA-FF40-4D9626089C00",
-  peteZa: "661C1300-4A45-252D-FF8C-FE6F89BC2700",
-  bowl: "61088508-60C5-4F4E-FFAE-B302C12F3B00",
+  peteza: "661C1300-4A45-252D-FF8C-FE6F89BC2700",
+  onebowl: "61088508-60C5-4F4E-FFAE-B302C12F3B00",
   hillenbrand: "6EBE3858-7951-86E0-FFD8-F8B182302400",
   earhart: "23394555-ACCC-C8BE-FF85-21FC323CA700",
   ford: "DC746107-DAB6-993C-FF95-EA5339CDDB00"
-}; //temporary duplicate with lowercase, later will use only lowercase to compare
+};
 
 /*
   Get comments along with author name and rating.
