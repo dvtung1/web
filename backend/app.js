@@ -24,5 +24,9 @@ app.use(CORS.connect);
 //all route /api/user/... will go to userRoutes
 app.use("/api/user", userRoutes);
 app.use("/api/dining", diningRoutes);
+//for other unrecognized routes
+app.use("*", (req, res) => {
+  res.send("404 not found");
+});
 
 module.exports = app;
