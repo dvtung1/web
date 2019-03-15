@@ -72,6 +72,27 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
+    var swearWords = 
+    ["anal", "anus", "arsehole", "ass", "asshole",
+    "bastard", "bastardo", "bbc", "bdsm", "bitch", "bitches", "blowjob", "bondage", "boner", "boob", "boobs", "booty", "bullshit", "butt", "buttcheeks", "butthole",
+    "camel toe", "cameltoe", "clit", "clitoris", "clusterfuck", "cock", "cocks", "creampie", "cum", "cunt",
+    "deepthroat", "dick", "dildo", "doggystyle", "doggy style", 
+    "ejaculate", "ejaculation", "erotic", "erotism",
+    "faggot", "fingering", "fisting", "fuck", "fucker", "fucking", "fucked", "fucktard",
+    "gangbang", "genital", "genitalia", "genitals",
+    "handjob", "hand job", "hentai", "homoerotic", "hump", "humped", "humping",
+    "incest", "intercourse",
+    "jack off", "jerk off", "jizz",
+    "kink", "kinky",
+    "masturbate", "milf", "motherfucker",
+    "negro", "nigger", "nigga", "nipple", "nipples",
+    "orgasm", "orgasmic", "orgy",
+    "penis", "porn", "porno", "pornography", "pube", "pubes", "pubic", "pussy",
+    "queef", "rape", "raped", "raping",
+    "scat", "scrotum", "semen", "sex", "sexy", "sext", "sexting", "shit", "shitty", "shat", "slut",
+    "threesome", "tit", "tits", "titties", "titty",
+    "vagina", "vibrator",
+    "wank"];
     this.diningService.postComment(inputComment, this.diningNameBackend);
   }
   deleteComment(commentId: string) {
