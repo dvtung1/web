@@ -18,7 +18,6 @@ export class UserAuthService {
   private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
   private currentUserEmail: string; // the current email of the user (when logged in)
   private currentUserName: string; // the current email of the user (when logged in)
-  private isLoggedIn: boolean;
 
   constructor(private http: HttpClient) {}
 

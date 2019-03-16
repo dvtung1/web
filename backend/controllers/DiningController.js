@@ -55,7 +55,10 @@ exports.getComments = (req, res) => {
         });
       });
       //send the comment array as json
-      res.status(200).json(commentListResult);
+      res.status(200).json({
+        message: "Get posts successfully",
+        comments: commentListResult
+      });
     })
     .catch(function(error) {
       return res.status(500).json({

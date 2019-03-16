@@ -20,7 +20,6 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   private diningListener: Subscription;
   private diningName: string; //diningName param for UI
-  private diningNameBackend: string; //diningName param for backend to understand
 
   constructor(
     private userAuthService: UserAuthService,
@@ -48,21 +47,13 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
         //get diningName from the param route
         this.diningName = paramMap.get("diningName");
 
-        //convert some diningName so backend can understand
-        if (this.diningName === "1bowl") {
-          this.diningNameBackend = "onebowl";
-        } else if (this.diningName === "pete's za") {
-          this.diningNameBackend = "peteza";
-        } else {
-          this.diningNameBackend = this.diningName;
-        }
         //Showing all the comments
         this.diningListener = this.diningService
-          .getDiningCourtEmitter()
+          .getCommentUpdateEmitter()
           .subscribe(respond => {
             this.commentList = respond;
           });
-        this.diningService.getComment(this.diningNameBackend);
+        this.diningService.getComment(this.diningName);
       }
     });
   }
@@ -72,7 +63,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
-    this.diningService.postComment(inputComment, this.diningNameBackend);
+    this.diningService.postComment(inputComment, this.diningName);
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
