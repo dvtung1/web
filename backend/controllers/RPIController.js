@@ -70,8 +70,10 @@ exports.postRating = (req, res) => {
             message: err.message
           });
         });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
     });
-  return res.status(200).json({
-    message: "Received rating from rpi successfully"
-  });
 };
