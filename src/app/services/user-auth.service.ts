@@ -165,10 +165,6 @@ export class UserAuthService {
     this.http.get<{ message: string }>(BACKEND_URL + "/logout").subscribe(
       response => {
         console.log(response.message);
-<<<<<<< HEAD
-        this._location.back();
-=======
->>>>>>> 44b9c06ffc9afb3da92ccf6a064044f60b46b8a6
         window.alert("User successfully logged out...");
       },
       error => {
