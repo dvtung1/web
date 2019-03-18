@@ -12,11 +12,13 @@ router.post("/signup", UserController.createAccount);
 router.post("/login", UserController.signIn);
 router.post("/recovery", UserController.recoveryPassword);
 router.post("/resend", UserController.resendConfirmation);
-router.post("/modifyemail", UserController.modifyEmail);
-router.post("/modifypassword", UserController.modifyPassword);
+
 router.get("/checkifloggedin", UserController.checkIfUserLoggedIn);
-router.post("/logout", UserController.logOut);
-router.get("/getcurrentuserinfo", UserController.getCurrentUserInfo);
-router.post("/modifyusername", UserController.modifyUsername);
+router.get("/logout", userAuthentication, UserController.logOut);
+router.get("/userinfo", userAuthentication, UserController.getCurrentUserInfo);
+
+router.put("/password", userAuthentication, UserController.modifyPassword);
+router.put("/email", userAuthentication, UserController.modifyEmail);
+router.put("/username", userAuthentication, UserController.modifyUsername);
 
 module.exports = router;

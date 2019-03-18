@@ -10,6 +10,7 @@ const CORS = require("./middlewares/CORS.middleware");
 
 const userRoutes = require("./routes/UserRoutes");
 const diningRoutes = require("./routes/DiningRoutes");
+const rpiRoutes = require("./routes/RPIRoutes");
 
 //use body parser to read POST HTTP request and JSON params
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,5 +25,10 @@ app.use(CORS.connect);
 //all route /api/user/... will go to userRoutes
 app.use("/api/user", userRoutes);
 app.use("/api/dining", diningRoutes);
+app.use("/api/rpi", rpiRoutes);
+//for other unrecognized routes
+app.use("*", (req, res) => {
+  res.send("404 not found");
+});
 
 module.exports = app;

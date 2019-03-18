@@ -5,42 +5,59 @@ import { Subject, Observable } from "rxjs";
 import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
+import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
 
+//backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
 
 @Injectable({
   providedIn: "root"
 })
 export class DiningService {
-  private diningCourtEmitter = new Subject<any>();
-  constructor(private http: HttpClient, private location: Location) {}
+  private commentUpdateEmitter = new Subject<Comment[]>();
+  private commentList: Comment[] = [];
+  constructor(
+    private http: HttpClient,
+    private location: Location,
+    private router: Router
+  ) {}
 
   /*
     Get comments with author name and rating from the server
     @param diningCourtName name of the specific dining court
-    Windsor, Wiley, PeteZa, Bowl, Hillenbrand, Earhart, Ford
+    Windsor, Wiley, PeteZa, onebowl, Hillenbrand, Earhart, Ford
     @param diningType type of dining. Ex: breakfast, lunch, latelunch, dinner
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string) {
+    diningCourtName = this.convertDiningNameBackend(diningCourtName);
     this.http
-      .get<
-        { author: string; text: string; rating: string; objectId: string }[]
-      >(BACKEND_URL + "/comment?name=" + diningCourtName)
+      .get<{
+        message: string;
+        comments: any;
+      }>(BACKEND_URL + "/comment?name=" + diningCourtName)
+      .pipe(
+        map(respond => {
+          return {
+            message: respond.message,
+            comments: respond.comments.map(comment => {
+              return {
+                text: comment.text,
+                byUser: comment.author,
+                byDiningTiming: "",
+                rating: comment.rating,
+                objectId: comment.objectId,
+                authorId: comment.authorId
+              };
+            })
+          };
+        })
+      )
       .subscribe(
-        respond => {
-          var arrayComment: Comment[] = [];
-          //get list of json object with author, text, rating, and objectId
-          respond.forEach(comment => {
-            var cmt = new Comment();
-            cmt.text = comment.text;
-            cmt.byUser = comment.author;
-            cmt.rating = comment.rating;
-            cmt.objectId = comment.objectId;
-            //add cmt to the result array
-            arrayComment.push(cmt);
-          });
-          this.diningCourtEmitter.next(arrayComment);
+        transformedRespond => {
+          this.commentList = transformedRespond.comments;
+          this.commentUpdateEmitter.next([...this.commentList]);
         },
         err => {
           console.log(err.error.message);
@@ -48,8 +65,8 @@ export class DiningService {
       );
   }
 
-  getDiningCourtEmitter(): Observable<any> {
-    return this.diningCourtEmitter.asObservable();
+  getCommentUpdateEmitter(): Observable<any> {
+    return this.commentUpdateEmitter.asObservable();
   }
 
   postComment(inputComment: string, diningCourt: string) {
@@ -57,21 +74,44 @@ export class DiningService {
       inputComment: inputComment,
       diningCourt: diningCourt
     };
-    console.log(inputComment);
-    console.log(diningCourt);
+
     this.http
       .post<{ message: string }>(BACKEND_URL + "/comment", commentModel)
       .subscribe(
         respond => {
-          console.log(respond.message);
-          //reload the page right after the comment get into the database
-          location.reload();
-          //this.diningCourtEmitter.next("successfully posting user comment...");
+          //TODO
+          //location.reload();
+          this.router.navigate(["/dining/" + diningCourt]);
         },
         error => {
           console.log(error.error.message);
-          //this.diningCourtEmitter.next(error.error.message);
         }
       );
+  }
+  removeComment(commentId: string) {
+    this.http
+      .delete<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
+      .subscribe(
+        respond => {
+          location.reload();
+          console.log(respond);
+        },
+        error => {
+          console.log(error.error.message);
+        }
+      );
+  }
+  getCommentList(): Comment[] {
+    return this.commentList;
+  }
+
+  convertDiningNameBackend(diningNameFrontend): string {
+    //convert some diningName so backend can understand
+    if (diningNameFrontend === "1bowl") {
+      return "onebowl";
+    } else if (diningNameFrontend === "pete's za") {
+      return "peteza";
+    }
+    return diningNameFrontend;
   }
 }

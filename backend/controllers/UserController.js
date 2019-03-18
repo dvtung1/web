@@ -2,7 +2,7 @@
   Controller file that contain all the logic business for User. Link to UserRoutes
 */
 
-require("../utils/db.configuration"); //initialize backendless database
+var Backendless = require("../utils/db.configuration"); //initialize backendless database
 /*
   Create new account.
   @param req http request
@@ -119,12 +119,13 @@ exports.recoveryPassword = (req, res) => {
 */
 exports.modifyEmail = (req, res) => {
   var newEmail = req.body.email;
-  Backendless.UserService.getCurrentUser()
+  //Backendless.UserService.getCurrentUser() was not working
+  // so just get the objectid and update manually
+  var userobjectid = Backendless.LocalCache.get("current-user-id");
+  Backendless.Data.of("Users").findById(userobjectid)
     .then(currentUser => {
-      //console.log("my email before update is: " + cUser.email);
       currentUser.email = newEmail;
-      currentUser = Backendless.UserService.update(currentUser);
-      //console.log("my email is : " + cUser.email);
+      Backendless.Data.of("Users").save(currentUser);
       return res.status(200).json({
         message: "Email changed successfully"
       });
@@ -145,12 +146,18 @@ exports.modifyEmail = (req, res) => {
 
 exports.modifyPassword = (req, res) => {
   var newPassword = req.body.password;
-  Backendless.UserService.getCurrentUser()
+  var userobjectid = Backendless.LocalCache.get("current-user-id");
+  Backendless.Data.of("Users").findById(userobjectid)
     .then(currentUser => {
-      //console.log("my email before update is: " + cUser.email);
       currentUser.password = newPassword;
-      currentUser = Backendless.UserService.update(currentUser);
-      //console.log("my email is : " + cUser.email);
+      Backendless.Data.of("Users").save(currentUser)
+      .then(savedobject =>{
+        // have to login user with the new password 
+        // only for modifying password
+        Backendless.UserService.login(currentUser.email, newPassword, true);
+        }
+      ).catch();
+
       return res.status(200).json({
         message: "Password changed successfully"
       });
@@ -165,12 +172,11 @@ exports.modifyPassword = (req, res) => {
 
 exports.modifyUsername = (req, res) => {
   var newUsername = req.body.username;
-  Backendless.UserService.getCurrentUser()
+  var userobjectid = Backendless.LocalCache.get("current-user-id");
+  Backendless.Data.of("Users").findById(userobjectid) 
     .then(currentUser => {
-      //console.log("my email before update is: " + cUser.email);
       currentUser.username = newUsername;
-      currentUser = Backendless.UserService.update(currentUser);
-      //console.log("my email is : " + cUser.email);
+      Backendless.Data.of("Users").save(currentUser);
       return res.status(200).json({
         message: "Username changed successfully"
       });
@@ -183,11 +189,11 @@ exports.modifyUsername = (req, res) => {
 };
 
 exports.checkIfUserLoggedIn = (req, res) => {
-  // can use isValidLogin to get a truth value instead
-  Backendless.UserService.getCurrentUser()
+  // can use getCurrentUser to get a email/username instead isValidLogin()
+  Backendless.UserService.isValidLogin()
     .then(result => {
       return res.status(200).json({
-        message: "Current User Logged in: " + result.email
+        message: "" + result
       });
     })
     .catch(err => {
@@ -198,8 +204,11 @@ exports.checkIfUserLoggedIn = (req, res) => {
 };
 
 exports.getCurrentUserInfo = (req, res) => {
-  // can use isValidLogin to get a truth value instead
-  Backendless.UserService.getCurrentUser()
+  // this allows the user to view updated information after reloading
+  //Backendless.UserService.getCurrentUser() was not letting this happen
+  // get objectid for cache, and find user manually
+  var userobjectid = Backendless.LocalCache.get("current-user-id");
+  Backendless.Data.of("Users").findById(userobjectid) 
     .then(result => {
       return res.status(200).json({
         // will not return or display password

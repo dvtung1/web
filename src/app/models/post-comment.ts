@@ -1,4 +1,4 @@
-export class postComment {
-    inputComment: string;
-    diningCourt: string;
-  }
+export interface postComment {
+  inputComment: string;
+  diningCourt: string;
+}

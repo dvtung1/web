@@ -3,18 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { User } from "src/app/models/user";
 import { Subject, Observable } from "rxjs";
-import {Component} from '@angular/core';
-import {Location} from '@angular/common';
-
 
 //backend api url for communication (Port 3000)
-// const BACKEND_URL = environment.apiUrl + "/user/";
 const BACKEND_URL = environment.apiUrl + "/user";
 
 @Injectable({
   providedIn: "root"
 })
-
 export class UserAuthService {
   private userToken: string;
   private userId: string;
@@ -23,11 +18,8 @@ export class UserAuthService {
   private emailSignUp: string; //email when the user sign up successfully, use when resend confirmation needed
   private currentUserEmail: string; // the current email of the user (when logged in)
   private currentUserName: string; // the current email of the user (when logged in)
-  private isLoggedIn: boolean;
 
-  constructor(private http: HttpClient, private _location: Location) {}
-
-  //constructor(private _location: Location) {}
+  constructor(private http: HttpClient) {}
 
   createUser(email: string, password: string) {
     var UserModel: User = {
@@ -89,8 +81,7 @@ export class UserAuthService {
           console.log("This is the user token!!!: " + this.userToken);
           console.log("this is the user id!!!!: " + this.userId);
 
-          //window.location.assign("/home");
-          this._location.back();
+          window.location.assign("/home");
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");
@@ -119,7 +110,7 @@ export class UserAuthService {
     // change email
     console.log("This is the entered email: " + newemail);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifyemail", {
+      .put<{ message: string }>(BACKEND_URL + "/email", {
         email: newemail
       })
       .subscribe(
@@ -137,7 +128,7 @@ export class UserAuthService {
     // change password
     console.log("This is the new entered password: " + newpassword);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifypassword", {
+      .put<{ message: string }>(BACKEND_URL + "/password", {
         password: newpassword
       })
       .subscribe(
@@ -154,7 +145,7 @@ export class UserAuthService {
   changeUserUsername(newusername: string) {
     console.log("This is the new entered username: " + newusername);
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/modifyusername", {
+      .put<{ message: string }>(BACKEND_URL + "/username", {
         username: newusername
       })
       .subscribe(
@@ -168,17 +159,15 @@ export class UserAuthService {
       );
   }
 
-
   logOut() {
     console.log("logging user out...");
-    this.http
-    .post<{ message: string }>(BACKEND_URL + "/logout", {
-
-    })
-    .subscribe(
+    this.http.get<{ message: string }>(BACKEND_URL + "/logout").subscribe(
       response => {
         console.log(response.message);
+<<<<<<< HEAD
         this._location.back();
+=======
+>>>>>>> 44b9c06ffc9afb3da92ccf6a064044f60b46b8a6
         window.alert("User successfully logged out...");
       },
       error => {
@@ -196,7 +185,11 @@ export class UserAuthService {
         response => {
           // this is
           console.log(response.message);
-          this.authStatusListener.next("loggedinsuccess");
+          if (response.message === "true") {
+            this.authStatusListener.next("loggedinsuccess");
+          } else {
+            // do nothing
+          }
         },
         error => {
           console.log(error.error.message);
@@ -205,33 +198,32 @@ export class UserAuthService {
       );
   }
 
-
   getCurrentUserInformation() {
     // get the user information
     console.log("Getting User Information...");
     this.http
-      .get<{userEmail: string; userUserName: string}>(BACKEND_URL + "/getcurrentuserinfo")
+      .get<{ userEmail: string; userUserName: string }>(
+        BACKEND_URL + "/userinfo"
+      )
       .subscribe(
         response => {
           this.currentUserEmail = response.userEmail;
           this.currentUserName = response.userUserName;
           //console.log("this is the currentuseremail: "+this.currentUserEmail);
           //console.log("this is the current user name: "+this.currentUserName);
-          this.authStatusListener.next(this.currentUserEmail);
-          this.authStatusListener.next(this.currentUserName);
+          //this.authStatusListener.next(this.currentUserEmail);
+          //this.authStatusListener.next(this.currentUserName);
           this.authStatusListener.next({
             email: this.currentUserEmail,
             username: this.currentUserName
           });
-      },
-    error => {
-        console.log(error.error.message);
-        this.authStatusListener.next(error.error.message);
-      }
-    );
+        },
+        error => {
+          console.log(error.error.message);
+          this.authStatusListener.next(error.error.message);
+        }
+      );
   }
-
-
 
   getUserId(): string {
     return this.userId;

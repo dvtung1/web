@@ -17,14 +17,8 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
-import { WindsorComponent } from "./components/main/DiningC/windsor/windsor.component";
-import { WileyComponent } from "./components/main/DiningC/wiley/wiley.component";
-import { HillenbrandComponent } from "./components/main/DiningC/hillenbrand/hillenbrand.component";
-import { FordComponent } from "./components/main/DiningC/ford/ford.component";
-import { CommonComponent } from "./components/main/DiningC/common/common.component";
-import { PeteszaComponent } from "./components/main/DiningC/petesza/petesza.component";
-import { OnebowlComponent } from "./components/main/DiningC/onebowl/onebowl.component";
-import { EarhartComponent } from './components/main/DiningC/earhart/earhart.component';
+import { MenuComponent } from "./components/menu/menu.component";
+import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
 
 @NgModule({
   declarations: [
@@ -35,14 +29,8 @@ import { EarhartComponent } from './components/main/DiningC/earhart/earhart.comp
     HomeComponent,
     NavbarComponent,
     ManageComponent,
-    WindsorComponent,
-    WileyComponent,
-    HillenbrandComponent,
-    FordComponent,
-    CommonComponent,
-    PeteszaComponent,
-    OnebowlComponent,
-    EarhartComponent
+    MenuComponent,
+    DiningCourtComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService, DiningService],

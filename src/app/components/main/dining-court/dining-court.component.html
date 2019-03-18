@@ -1,6 +1,6 @@
 <br />
-<header>
-  <strong>Ford</strong>
+<header class="text-capitalize">
+  <strong>{{ diningName }}</strong>
 </header>
 
 <div *ngIf="loggedIn">
@@ -25,5 +25,9 @@
     <p>{{ comment.text }}</p>
     <p>Rating: {{ comment.rating }}</p>
     <br />
+    <div>
+      <button>Edit</button
+      ><button (click)="deleteComment(comment.objectId)">Delete</button>
+    </div>
   </div>
 </div>
