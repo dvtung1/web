@@ -179,7 +179,7 @@ export class UserAuthService {
       response => {
         console.log(response.message);
         this._location.back();
-        //window.alert("User successfully logged out...");
+        window.alert("User successfully logged out...");
       },
       error => {
         console.log(error.error.message);

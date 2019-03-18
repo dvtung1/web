@@ -12,6 +12,6 @@ form {
     font-weight: bold; 
 }
 
-.commentSection {
-    /*margin-left: 100px;*/
+div {
+    text-align: center;
 }

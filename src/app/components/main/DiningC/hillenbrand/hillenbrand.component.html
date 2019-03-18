@@ -13,7 +13,6 @@
   <br />
   <button type="submit">Post</button>
 </form>
-<div class="commentSection">
   <br><br>
   <div *ngFor="let comment of commentList">
     <p class="username">{{ comment.byUser }}</p>
@@ -21,4 +20,3 @@
     <p>Rating: {{ comment.rating }}</p>
     <br>
   </div>
-</div>
