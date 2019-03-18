@@ -25,38 +25,36 @@ var diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
 exports.getComments = (req, res) => {
   var diningCourtName = req.query.name;
 
-  //check if name is null
-  if (diningCourtName === null) {
-    return res.status(500).json({
-      message: "Missing diningCourtName param"
-    });
-    //check if name is recognizable
-  } else if (diningCourtList.indexOf(diningCourtName.toLowerCase()) == -1) {
+  if (diningCourtName != null) {
+    diningCourtName = diningCourtName.toLowerCase();
+  }
+
+  if (diningCourtList.indexOf(diningCourtName) === -1) {
     return res.status(500).json({
       message: "No corresponding diningCourtName is found"
     });
   }
+
+  //if dining court is "pete's za", use objectId instead
+  if (diningCourtName === "pete's za") {
+    var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
+  } else {
+    var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}'`;
+  }
+
   var diningType = req.query.type;
   //check if diningType is not null
-  if (diningType !== null) {
-    //check if diningTyoe is recognizable
-    if (diningTypeList.indexOf(diningType.toLowerCase()) === -1) {
+  if (diningType != null) {
+    //check if diningTyoe is recognizable or not
+    diningType = diningType.toLowerCase();
+    if (diningTypeList.indexOf(diningType) === -1) {
       return res.status(500).json({
         message: "No corresponding diningType is found"
       });
     }
-    if (diningCourtName.toLowerCase() === "pete's za") {
-      var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00' and ofDiningTiming.diningType.name='${diningType.toLowerCase()}'`;
-    } else {
-      var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName.toLowerCase()}' and ofDiningTiming.diningType.name='${diningType.toLowerCase()}'`;
-    }
-  } else {
-    if (diningCourtName.toLowerCase() === "pete's za") {
-      var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
-    } else {
-      var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName.toLowerCase()}'`;
-    }
+    whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
   }
+
   var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
     whereClause
   );

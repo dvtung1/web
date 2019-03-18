@@ -2,18 +2,37 @@ var Backendless = require("../utils/db.configuration"); //initialize backendless
 var DiningTiming = require("../models/DiningTiming");
 var Rating = require("../models/Rating");
 
+var diningCourtList = [
+  "windsor",
+  "wiley",
+  "pete's za",
+  "1bowl",
+  "hillenbrand",
+  "earhart",
+  "ford"
+];
+
 exports.postRating = (req, res) => {
   var rating = req.body.rating;
+  //convert rating from string to int
   rating = convertScoreInt(rating);
-  if (rating === null) {
+  if (rating == null) {
     return res.status(500).json({
       message: "Rating message is unrecognized"
     });
   }
 
   var place = req.body.place;
+  if (place != null) {
+    place = place.toLowerCase();
+  }
+  if (diningCourtList.indexOf(place) === -1) {
+    return res.status(500).json({
+      message: "No corresponding diningCourtName is found"
+    });
+  }
 
-  var queryBuilder = setupQueryBuilder(place.toLowerCase());
+  var queryBuilder = setupQueryBuilder(place);
 
   Backendless.Data.of(DiningTiming)
     .find(queryBuilder)
@@ -80,10 +99,13 @@ setupQueryBuilder = place => {
     time +
     ":00 EST' AND to < '" +
     date +
-    " 23:59:59 EST'" +
-    "and ofPlace.name = '" +
-    place +
-    "'";
+    " 23:59:59 EST'";
+  if (place === "pete's za") {
+    whereClause +=
+      " and ofPlace.objectId='72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
+  } else {
+    whereClause += ` and ofPlace.name='${place}'`;
+  }
   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
 };
 
