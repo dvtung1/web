@@ -24,7 +24,8 @@ export class NavbarComponent implements OnInit {
         if (
           message === "loggedinsuccess" ||
           message === "Esuccess" ||
-          message === "Psuccess"
+          message === "Psuccess" ||
+          message === "authenticated"
         ) {
           this.loggedIn = true;
         } else {
