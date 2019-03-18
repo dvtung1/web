@@ -22,10 +22,16 @@ app.use(bodyParser.json());
 //For Cross-Origin Resource Sharing between 2 different ports
 app.use(CORS.connect);
 
+//homepage route
+app.all("/", (req, res) => {
+  res.send("Welcome to our PUrfect Dining API page");
+});
+
 //all route /api/user/... will go to userRoutes
 app.use("/api/user", userRoutes);
 app.use("/api/dining", diningRoutes);
 app.use("/api/rpi", rpiRoutes);
+
 //for other unrecognized routes
 app.use("*", (req, res) => {
   res.send("404 not found");

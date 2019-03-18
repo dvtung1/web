@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { User } from "src/app/models/user";
 import { Subject, Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/user";
@@ -19,7 +20,7 @@ export class UserAuthService {
   private currentUserEmail: string; // the current email of the user (when logged in)
   private currentUserName: string; // the current email of the user (when logged in)
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   createUser(email: string, password: string) {
     var UserModel: User = {
@@ -81,7 +82,7 @@ export class UserAuthService {
           console.log("This is the user token!!!: " + this.userToken);
           console.log("this is the user id!!!!: " + this.userId);
 
-          window.location.assign("/home");
+          this.router.navigate(["/"]);
           window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");

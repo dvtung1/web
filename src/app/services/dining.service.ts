@@ -17,11 +17,7 @@ const BACKEND_URL = environment.apiUrl + "/dining";
 export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
-  constructor(
-    private http: HttpClient,
-    private location: Location,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient, private location: Location) {}
 
   /*
     Get comments with author name and rating from the server
@@ -30,13 +26,15 @@ export class DiningService {
     @param diningType type of dining. Ex: breakfast, lunch, latelunch, dinner
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
-  getComment(diningCourtName: string) {
+  getComment(diningCourtName: string, diningType: string) {
     diningCourtName = this.convertDiningNameBackend(diningCourtName);
     this.http
       .get<{
         message: string;
         comments: any;
-      }>(BACKEND_URL + "/comment?name=" + diningCourtName)
+      }>(
+        BACKEND_URL + "/comment?name=" + diningCourtName + "&type=" + diningType
+      )
       .pipe(
         map(respond => {
           return {
@@ -45,7 +43,6 @@ export class DiningService {
               return {
                 text: comment.text,
                 byUser: comment.author,
-                byDiningTiming: "",
                 rating: comment.rating,
                 objectId: comment.objectId,
                 authorId: comment.authorId
@@ -69,19 +66,34 @@ export class DiningService {
     return this.commentUpdateEmitter.asObservable();
   }
 
-  postComment(inputComment: string, diningCourt: string) {
+  postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
-      diningCourt: diningCourt
+      diningCourt: diningCourt,
+      diningType: diningType
     };
 
     this.http
-      .post<{ message: string }>(BACKEND_URL + "/comment", commentModel)
+      .post<{
+        message: string;
+        text: string;
+        author: string;
+        rating: string;
+        objectId: string;
+        authorId: string;
+      }>(BACKEND_URL + "/comment", commentModel)
       .subscribe(
-        respond => {
-          //TODO
-          //location.reload();
-          this.router.navigate(["/dining/" + diningCourt]);
+        comment => {
+          var cmt: Comment = {
+            text: comment.text,
+            byUser: comment.author,
+            rating: comment.rating,
+            objectId: comment.objectId,
+            authorId: comment.authorId
+          };
+          //put the item at the first position in the list
+          this.commentList.splice(0, 0, cmt);
+          this.commentUpdateEmitter.next([...this.commentList]);
         },
         error => {
           console.log(error.error.message);
@@ -93,8 +105,11 @@ export class DiningService {
       .delete<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
       .subscribe(
         respond => {
-          location.reload();
-          console.log(respond);
+          const updatedCommentList = this.commentList.filter(
+            comment => comment.objectId !== commentId
+          );
+          this.commentList = updatedCommentList;
+          this.commentUpdateEmitter.next([...this.commentList]);
         },
         error => {
           console.log(error.error.message);

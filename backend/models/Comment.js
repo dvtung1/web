@@ -11,27 +11,34 @@ class Comment {
   }
 
   //save instance to database
-  save(){
+  save() {
     return Backendless.Data.of(Comment).save(this);
   }
 
   //remove current instance from database
-  remove(){
+  remove() {
     return Backendless.Data.of(Comment).remove(this);
   }
 
-  setByUser(currentUser){
-   //After saving and getting comment objectId, set its relation to the user
-      Backendless.Data.of(Comment).setRelation(this, "byUser", [currentUser]);
-      //set back relation from user to comment
-      Backendless.Data.of(Backendless.User).addRelation(currentUser, "comments", [this]);
+  //many-1
+  setByUser(currentUser) {
+    //After saving and getting comment objectId, set its relation to the user
+    Backendless.Data.of(Comment).setRelation(this, "byUser", [currentUser]);
+    //set back relation from user to comment
+    Backendless.Data.of(Backendless.User).addRelation(currentUser, "comments", [
+      this
+    ]);
   }
-
-  setOfDiningTiming(ofDiningTiming){
+  //many-1
+  setOfDiningTiming(ofDiningTiming) {
     //set relation from comment to ofDiningTiming
-    Backendless.Data.of(Comment).setRelation(this, "ofDiningTiming", [ofDiningTiming]);
+    Backendless.Data.of(Comment).setRelation(this, "ofDiningTiming", [
+      ofDiningTiming
+    ]);
     //set back relation from diningTiming to comment
-    Backendless.Data.of(DiningTiming).addRelation(ofDiningTiming, "comments", [this]);
+    Backendless.Data.of(DiningTiming).addRelation(ofDiningTiming, "comments", [
+      this
+    ]);
   }
 }
 

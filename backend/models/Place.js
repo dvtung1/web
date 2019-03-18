@@ -8,21 +8,24 @@ class Place {
     this.diningTimings;
     this.objectId;
   }
-   //save instance to database
-   save(){
+  //save instance to database
+  save() {
     return Backendless.Data.of(Place).save(this);
   }
 
   //remove current instance from database
-  remove(){
+  remove() {
     return Backendless.Data.of(Place).remove(this);
   }
-  
-  addDiningTimings(ofDiningTiming){
-    Backendless.Data.of(Place)
-      .addRelation(this, "diningTimings", [ofDiningTiming]);
-    Backendless.Data.of(DiningTiming)
-      .setRelation(ofDiningTiming, "ofPlace", [this]);
+
+  //1-many
+  addDiningTimings(ofDiningTiming) {
+    Backendless.Data.of(Place).addRelation(this, "diningTimings", [
+      ofDiningTiming
+    ]);
+    Backendless.Data.of(DiningTiming).setRelation(ofDiningTiming, "ofPlace", [
+      this
+    ]);
   }
 }
 
