@@ -7,6 +7,7 @@ import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { error } from 'protractor';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -115,6 +116,11 @@ export class DiningService {
           console.log(error.error.message);
         }
       );
+  }
+  editComment(commentId: string) {
+    this.http
+    .get<{ message: string }>(BACKEND_URL + "/comment/get/" + commentId)
+    
   }
   getCommentList(): Comment[] {
     return this.commentList;

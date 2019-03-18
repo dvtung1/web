@@ -126,4 +126,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
   }
+  editComment(commentId: string) {
+    this.diningService.editComment(commentId);
+  }
 }

@@ -26,7 +26,7 @@
     <p>Rating: {{ comment.rating }}</p>
     <br />
     <div>
-      <button>Edit</button
+      <button (click)="editComment(comment.objectId)">Edit</button
       ><button (click)="deleteComment(comment.objectId)">Delete</button>
     </div>
   </div>
