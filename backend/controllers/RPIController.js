@@ -16,41 +16,8 @@ exports.postRating = (req, res) => {
     });
   }
   var place = req.body.place;
-  var today = new Date();
 
-  //different between UTC and EST hours
-  var hourAhead = 4;
-
-  //convert from UTC to EST time zone
-  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
-  //time format = 10:00
-  var time = today.getHours() + ":" + today.getMinutes();
-  //date format = 03/15/2018
-  var date =
-    ("0" + (today.getMonth() + 1)).slice(-2) +
-    "/" +
-    ("0" + today.getDate()).slice(-2) +
-    "/" +
-    today.getFullYear();
-
-  var whereClause =
-    "from <= '" +
-    date +
-    " " +
-    time +
-    ":00 EST' and to > '" +
-    date +
-    " " +
-    time +
-    ":00 EST' AND to < '" +
-    date +
-    " 23:59:59 EST'" +
-    "and ofPlace.name = '" +
-    place +
-    "'";
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    whereClause
-  );
+  var queryBuilder = setupQueryBuilder(place);
 
   Backendless.Data.of(DiningTiming)
     .find(queryBuilder)
@@ -86,4 +53,40 @@ exports.postRating = (req, res) => {
         message: err.message
       });
     });
+};
+
+setupQueryBuilder = place => {
+  var today = new Date();
+
+  //different between UTC and EST hours
+  var hourAhead = 4;
+
+  //convert from UTC to EST time zone
+  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
+  //time format = 10:00
+  var time = today.getHours() + ":" + today.getMinutes();
+  //date format = 03/15/2018
+  var date =
+    ("0" + (today.getMonth() + 1)).slice(-2) +
+    "/" +
+    ("0" + today.getDate()).slice(-2) +
+    "/" +
+    today.getFullYear();
+
+  var whereClause =
+    "from <= '" +
+    date +
+    " " +
+    time +
+    ":00 EST' and to > '" +
+    date +
+    " " +
+    time +
+    ":00 EST' AND to < '" +
+    date +
+    " 23:59:59 EST'" +
+    "and ofPlace.name = '" +
+    place +
+    "'";
+  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
 };

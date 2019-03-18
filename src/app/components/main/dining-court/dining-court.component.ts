@@ -16,10 +16,9 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   loggedIn = false;
   ifDeleted = false;
   userId: string = "";
-  count = 0;
   private authStatusSub: Subscription;
   private diningListener: Subscription;
-  private diningName: string; //diningName param for UI
+  diningName: string; //diningName param for UI
 
   constructor(
     private userAuthService: UserAuthService,
@@ -50,10 +49,11 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
         //Showing all the comments
         this.diningListener = this.diningService
           .getCommentUpdateEmitter()
-          .subscribe(respond => {
+          .subscribe((respond: Comment[]) => {
             this.commentList = respond;
           });
-        this.diningService.getComment(this.diningName);
+        //FIXME
+        this.diningService.getComment(this.diningName, "Dinner");
       }
     });
   }
@@ -63,7 +63,8 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
-    this.diningService.postComment(inputComment, this.diningName);
+    //FIXME
+    this.diningService.postComment(inputComment, this.diningName, "Dinner");
     // var swearWords =
     // ["anal", "anus", "arsehole", "ass", "asshole",
     // "bastard", "bastardo", "bbc", "bdsm", "bitch", "bitches", "blowjob", "bondage", "boner", "boob", "boobs", "booty", "bullshit", "butt", "buttcheeks", "butthole",
