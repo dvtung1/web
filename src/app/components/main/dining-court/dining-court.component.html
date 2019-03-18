@@ -20,6 +20,7 @@
 </div>
 <div class="commentSection">
   <br /><br />
+  <p>Total number of comments: {{ commentListsize }}</p>
   <div *ngFor="let comment of commentList">
     <p class="username">{{ comment.byUser }}</p>
     <p>{{ comment.text }}</p>

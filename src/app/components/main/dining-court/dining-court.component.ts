@@ -19,6 +19,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   private diningListener: Subscription;
   diningName: string; //diningName param for UI
+  commentListsize = "loading...";
 
   constructor(
     private userAuthService: UserAuthService,
@@ -51,6 +52,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           .getCommentUpdateEmitter()
           .subscribe((respond: Comment[]) => {
             this.commentList = respond;
+            this.commentListsize = this.commentList.length + "";
           });
         //FIXME
         this.diningService.getComment(this.diningName, "Dinner");
