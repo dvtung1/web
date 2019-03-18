@@ -19,6 +19,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   private diningListener: Subscription;
   diningName: string; //diningName param for UI
+  commentListsize = "loading...";
 
   constructor(
     private userAuthService: UserAuthService,
@@ -51,6 +52,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           .getCommentUpdateEmitter()
           .subscribe((respond: Comment[]) => {
             this.commentList = respond;
+            this.commentListsize = this.commentList.length + "";
           });
         //FIXME
         this.diningService.getComment(this.diningName, "Dinner");
@@ -64,6 +66,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
     //FIXME
+    (<HTMLInputElement>document.getElementById('comspace')).value = "";
     this.diningService.postComment(inputComment, this.diningName, "Dinner");
     // var swearWords =
     // ["anal", "anus", "arsehole", "ass", "asshole",
@@ -122,6 +125,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //     // break;
     //   }
     // }
+    window.alert("Comment posted successfully!")
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);

@@ -79,12 +79,13 @@ setupQueryBuilder = place => {
   //convert from UTC to EST time zone
   today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
   //time format = 10:00
-  var time = today.getHours() + ":" + today.getMinutes();
+  var time =
+    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
   //date format = 03/15/2018
   var date =
-    ("0" + (today.getMonth() + 1)).slice(-2) +
+    getTwoDigits(today.getMonth() + 1) +
     "/" +
-    ("0" + today.getDate()).slice(-2) +
+    getTwoDigits(today.getDate()) +
     "/" +
     today.getFullYear();
 
@@ -118,4 +119,8 @@ convertScoreInt = rating => {
     return 3;
   }
   return null;
+};
+
+getTwoDigits = num => {
+  return ("0" + num).slice(-2);
 };
