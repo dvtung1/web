@@ -125,7 +125,10 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //     // break;
     //   }
     // }
-    window.alert("Comment posted successfully!")
+    
+    //retrieve message from the server
+    
+    //window.alert("Comment posted successfully!")
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
