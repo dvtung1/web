@@ -27,7 +27,7 @@ export class DiningService {
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string, diningType: string) {
-    diningCourtName = this.convertDiningNameBackend(diningCourtName);
+    //diningCourtName = this.convertDiningNameBackend(diningCourtName);
     this.http
       .get<{
         message: string;

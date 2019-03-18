@@ -4,20 +4,16 @@ var Rating = require("../models/Rating");
 
 exports.postRating = (req, res) => {
   var rating = req.body.rating;
-  if (rating === "excellent") {
-    rating = 1;
-  } else if (rating === "satisfactory") {
-    rating = 2;
-  } else if (rating === "poor") {
-    rating = 3;
-  } else {
+  rating = convertScoreInt(rating);
+  if (rating === null) {
     return res.status(500).json({
       message: "Rating message is unrecognized"
     });
   }
+
   var place = req.body.place;
 
-  var queryBuilder = setupQueryBuilder(place);
+  var queryBuilder = setupQueryBuilder(place.toLowerCase());
 
   Backendless.Data.of(DiningTiming)
     .find(queryBuilder)
@@ -89,4 +85,15 @@ setupQueryBuilder = place => {
     place +
     "'";
   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+};
+
+convertScoreInt = rating => {
+  if (rating === "excellent") {
+    return 1;
+  } else if (rating === "satisfactory") {
+    return 2;
+  } else if (rating === "poor") {
+    return 3;
+  }
+  return null;
 };

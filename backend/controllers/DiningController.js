@@ -9,8 +9,8 @@ var Comment = require("../models/Comment");
 var diningCourtList = [
   "windsor",
   "wiley",
-  "peteza",
-  "onebowl",
+  "pete's za",
+  "1bowl",
   "hillenbrand",
   "earhart",
   "ford"
@@ -24,27 +24,38 @@ var diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
 */
 exports.getComments = (req, res) => {
   var diningCourtName = req.query.name;
-  if (diningCourtName == null) {
+
+  //check if name is null
+  if (diningCourtName === null) {
     return res.status(500).json({
       message: "Missing diningCourtName param"
     });
+    //check if name is recognizable
   } else if (diningCourtList.indexOf(diningCourtName.toLowerCase()) == -1) {
     return res.status(500).json({
       message: "No corresponding diningCourtName is found"
     });
   }
   var diningType = req.query.type;
-
-  var whereClause = "";
-  if (diningType != null) {
+  //check if diningType is not null
+  if (diningType !== null) {
+    //check if diningTyoe is recognizable
     if (diningTypeList.indexOf(diningType.toLowerCase()) === -1) {
       return res.status(500).json({
         message: "No corresponding diningType is found"
       });
     }
-    whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}' and ofDiningTiming.diningType.name='${diningType}'`;
+    if (diningCourtName.toLowerCase() === "pete's za") {
+      var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00' and ofDiningTiming.diningType.name='${diningType.toLowerCase()}'`;
+    } else {
+      var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName.toLowerCase()}' and ofDiningTiming.diningType.name='${diningType.toLowerCase()}'`;
+    }
   } else {
-    whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}'`;
+    if (diningCourtName.toLowerCase() === "pete's za") {
+      var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
+    } else {
+      var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName.toLowerCase()}'`;
+    }
   }
   var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
     whereClause
@@ -57,7 +68,6 @@ exports.getComments = (req, res) => {
       commentList.forEach(comment => {
         //push each comment onto the Result list
         commentListResult.push({
-          //author: comment.byUser.email,
           author: comment.byUser.email,
           text: comment.text,
           rating: comment.rating,
