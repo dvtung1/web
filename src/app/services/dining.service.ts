@@ -18,6 +18,7 @@ const BACKEND_URL = environment.apiUrl + "/dining";
 export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
+  private validCommentEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
 
   /*
@@ -67,6 +68,10 @@ export class DiningService {
     return this.commentUpdateEmitter.asObservable();
   }
 
+  getValidCommentEmitter(): Observable<any> {
+    return this.validCommentEmitter.asObservable();
+  }
+
   postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
@@ -95,6 +100,7 @@ export class DiningService {
           //put the item at the first position in the list
           this.commentList.splice(0, 0, cmt);
           this.commentUpdateEmitter.next([...this.commentList]);
+          this.validCommentEmitter.next("postcomsuccess");
         },
         error => {
           console.log(error.error.message);
