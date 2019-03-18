@@ -59,10 +59,10 @@ exports.getComments = (req, res) => {
     whereClause
   );
   queryBuilder.setSortBy(["created DESC"]);
-  var commentListResult = []; //list of comments that will be return
   Backendless.Data.of(Comment)
     .find(queryBuilder)
     .then(commentList => {
+      var commentListResult = []; //list of comments that will be return
       commentList.forEach(comment => {
         //push each comment onto the Result list
         commentListResult.push({
@@ -73,10 +73,20 @@ exports.getComments = (req, res) => {
           authorId: comment.byUser.objectId
         });
       });
-      return res.status(200).json({
-        message: "Get posts successfully",
-        comments: commentListResult
-      });
+      Backendless.Data.of(Comment)
+        .getObjectCount(queryBuilder)
+        .then(count => {
+          return res.status(200).json({
+            message: "Get posts successfully",
+            comments: commentListResult,
+            count: count
+          });
+        })
+        .catch(err => {
+          return res.status(500).json({
+            message: err.message
+          });
+        });
     })
     .catch(err => {
       return res.status(500).json({
@@ -91,58 +101,51 @@ exports.postComment = (req, res) => {
   var diningType = req.body.diningType.toLowerCase();
 
   //get current user
-  Backendless.UserService.getCurrentUser()
-    .then(currentUser => {
-      var whereClause = `ofPlace.name = '${diningCourt}' and diningType.name = '${diningType}'`;
-      var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-        whereClause
-      );
-      Backendless.Data.of(DiningTiming)
-        .find(queryBuilder)
-        .then(foundDiningTimings => {
-          if (foundDiningTimings.length === 0) {
-            return res.status(500).json({
-              message: "Cannot find corresponding diningTiming"
-            });
-          }
-          //initialize comment
-          var comment = new Comment({
-            text: inputComment,
-            rating: 5
+
+  var whereClause = `ofPlace.name = '${diningCourt}' and diningType.name = '${diningType}'`;
+  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    whereClause
+  );
+  Backendless.Data.of(DiningTiming)
+    .find(queryBuilder)
+    .then(foundDiningTimings => {
+      if (foundDiningTimings.length === 0) {
+        return res.status(500).json({
+          message: "Cannot find corresponding diningTiming"
+        });
+      }
+      //initialize comment
+      var comment = new Comment({
+        text: inputComment,
+        rating: 5
+      });
+
+      //Save that comment to the database
+      comment
+        .save()
+        .then(savedComment => {
+          var currentUser = Backendless.UserService.getCurrentUser();
+          //After saving and getting comment objectId, set its relation to the user
+          savedComment.setByUser(currentUser);
+          //set relation from comment to ofDiningTiming
+          savedComment.setOfDiningTiming(foundDiningTimings[0]);
+
+          return res.status(200).json({
+            message: "add comment successfully",
+            author: currentUser.email,
+            text: savedComment.text,
+            rating: savedComment.rating,
+            objectId: savedComment.objectId,
+            authorId: currentUser.objectId
           });
-
-          //Save that comment to the database
-          comment
-            .save()
-            .then(savedComment => {
-              //After saving and getting comment objectId, set its relation to the user
-              savedComment.setByUser(currentUser);
-              //set relation from comment to ofDiningTiming
-              savedComment.setOfDiningTiming(foundDiningTimings[0]);
-
-              return res.status(200).json({
-                message: "add comment successfully",
-                author: currentUser.email,
-                text: comment.text,
-                rating: comment.rating,
-                objectId: comment.objectId,
-                authorId: currentUser.objectId
-              });
-            })
-            .catch(err => {
-              return res.status(500).json({
-                message: err.message
-              });
-            });
         })
-        //catch for DiningTiming
         .catch(err => {
           return res.status(500).json({
             message: err.message
           });
         });
     })
-    //catch for user
+    //catch for DiningTiming
     .catch(err => {
       return res.status(500).json({
         message: err.message
@@ -151,9 +154,17 @@ exports.postComment = (req, res) => {
 };
 exports.deleteComment = (req, res) => {
   var id = req.params.id;
+  var userObjectId = Backendless.LocalCache.get("current-user-id");
+
   Backendless.Data.of(Comment)
     .findById(id)
     .then(comment => {
+      //check if user is authorized to delete comment
+      if (comment.byUser.objectId !== userObjectId) {
+        return res.status(401).json({
+          message: "Unauthorized to delete comment"
+        });
+      }
       comment
         .remove()
         .then(respond => {
