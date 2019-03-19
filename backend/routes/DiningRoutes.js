@@ -12,11 +12,15 @@ router.delete(
   DiningController.deleteComment
 );
 router.get(
-  "/comment/edit/:id", 
+  "/comment/edit/:id",
   userAuthentication,
   DiningController.editComment
 );
-//get and post are different verbs so using the same route name is ok
-//thats a useful comment @tung, thank you
+
+router.get(
+  "/comment/user",
+  userAuthentication,
+  DiningController.getCommentsByUser
+);
 
 module.exports = router;

@@ -62,6 +62,8 @@ exports.getComments = (req, res) => {
   Backendless.Data.of(Comment)
     .find(queryBuilder)
     .then(commentList => {
+      //TODO can use mapping object instead
+
       var commentListResult = []; //list of comments that will be return
       commentList.forEach(comment => {
         //push each comment onto the Result list
@@ -131,13 +133,15 @@ exports.postComment = (req, res) => {
               //set relation from comment to ofDiningTiming
               savedComment.setOfDiningTiming(foundDiningTimings[0]);
 
-              return res.status(200).json({
+              return res.status(201).json({
                 message: "add comment successfully",
-                author: currentUser.email,
-                text: savedComment.text,
-                rating: savedComment.rating,
-                objectId: savedComment.objectId,
-                authorId: currentUser.objectId
+                comment: {
+                  author: currentUser.email,
+                  text: savedComment.text,
+                  rating: savedComment.rating,
+                  objectId: savedComment.objectId,
+                  authorId: currentUser.objectId
+                }
               });
             })
             //catch for user
@@ -195,5 +199,70 @@ exports.deleteComment = (req, res) => {
     });
 };
 exports.editComment = (req, res) => {
-  
-}
+  var id = req.params.id;
+  var newText = req.body.text;
+  var userObjectId = Backendless.LocalCache.get("current-user-id");
+  Backendless.Data.of(Comment)
+    .findById(id)
+    .then(comment => {
+      //check if user is authorized to edit comment
+      if (comment.byUser.objectId !== userObjectId) {
+        return res.status(401).json({
+          message: "Unauthorized to delete comment"
+        });
+      }
+      //edit comment text
+      comment.text = newText;
+      //save the change back to database
+      comment
+        .save()
+        .then(() => {
+          return res.status(200).json({
+            message: "Edit comment successfully"
+          });
+        })
+        .catch(err => {
+          return res.status(500).json({
+            message: err.message
+          });
+        });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
+//return json contain comments of the user along with info about diningCourt and diningType
+exports.getCommentsByUser = (req, res) => {
+  Backendless.UserService.getCurrentUser()
+    .then(currentUser => {
+      var commentListResult = []; //list of comments that will be return
+      currentUser.comments.forEach(comment => {
+        //push each comment onto the Result list
+        commentListResult.push({
+          diningName: comment.ofDiningTiming.ofPlace.name,
+          diningType: comment.ofDiningTiming.diningType.name,
+          comment: {
+            author: currentUser.email,
+            text: comment.text,
+            rating: comment.rating,
+            objectId: comment.objectId,
+            authorId: currentUser.objectId
+          }
+        });
+      });
+      return res.status(200).json({
+        message: "Fetch comment of the current user successfully",
+        comments: commentListResult
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
+exports.getMealTime = (req, res) => {};

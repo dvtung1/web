@@ -6,8 +6,6 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
-import { Router } from "@angular/router";
-import { error } from 'protractor';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -82,20 +80,22 @@ export class DiningService {
     this.http
       .post<{
         message: string;
-        text: string;
-        author: string;
-        rating: string;
-        objectId: string;
-        authorId: string;
+        comment: {
+          text: string;
+          author: string;
+          rating: string;
+          objectId: string;
+          authorId: string;
+        };
       }>(BACKEND_URL + "/comment", commentModel)
       .subscribe(
-        comment => {
+        respond => {
           var cmt: Comment = {
-            text: comment.text,
-            byUser: comment.author,
-            rating: comment.rating,
-            objectId: comment.objectId,
-            authorId: comment.authorId
+            text: respond.comment.text,
+            byUser: respond.comment.author,
+            rating: respond.comment.rating,
+            objectId: respond.comment.objectId,
+            authorId: respond.comment.authorId
           };
           //put the item at the first position in the list
           this.commentList.splice(0, 0, cmt);
@@ -123,10 +123,11 @@ export class DiningService {
         }
       );
   }
-  editComment(commentId: string) {
-    this.http
-    .get<{ message: string }>(BACKEND_URL + "/comment/get/" + commentId)
-    
+  editComment(commentId: string, text: string) {
+    this.http.put<{ message: string }>(
+      BACKEND_URL + "/comment/edit/" + commentId,
+      { text: text }
+    );
   }
   getCommentList(): Comment[] {
     return this.commentList;
