@@ -141,4 +141,26 @@ export class DiningService {
     }
     return diningNameFrontend;
   }
+
+
+  checkOpenClosed(){
+    this.http
+      .get<{ 
+        message: string;
+        openclosed: any;
+      }>(BACKEND_URL + "/checkopenclosed")
+      .subscribe(
+        response => {
+          console.log(response.message);
+          // need a different "emitter" to update the doc table
+          //this.authStatusListener.next("loggedinsuccess");
+        },
+        error => {
+          console.log(error.error.message);
+          //this.authStatusListener.next(error.error.message);
+        }
+      );
+
+  }
+
 }

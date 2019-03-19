@@ -19,4 +19,7 @@ router.get(
 //get and post are different verbs so using the same route name is ok
 //thats a useful comment @tung, thank you
 
+// check to see which dining courts are open or closed
+router.get("/checkOpenClosed", DiningController.checkOpenClosed);
+
 module.exports = router;

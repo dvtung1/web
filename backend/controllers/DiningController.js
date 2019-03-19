@@ -7,13 +7,13 @@ var DiningTiming = require("../models/DiningTiming");
 var Comment = require("../models/Comment");
 
 var diningCourtList = [
-  "windsor",
-  "wiley",
-  "pete's za",
   "1bowl",
-  "hillenbrand",
   "earhart",
-  "ford"
+  "ford",
+  "hillenbrand",
+  "wiley",
+  "windsor",
+  "pete's za"
 ];
 var diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
 /*
@@ -176,3 +176,30 @@ exports.deleteComment = (req, res) => {
 exports.editComment = (req, res) => {
   
 }
+
+
+exports.checkOpenClosed = (req, res) => {
+  console.log("RUNNING CORRECTLY");
+  var fulldate = new Date();
+    var date = fulldate.toLocaleDateString();
+    var timehours = fulldate.getHours();
+    var timeminutes = fulldate.getMinutes();
+    var timeseconds = fulldate.getSeconds();
+    var time = "" + timehours + ":"+timeminutes+ ":"+timeseconds; 
+    //console.log(date);
+    //console.log(time);
+
+    var datetime = date + " " + time;
+    console.log(datetime);
+    
+  diningCourtList.forEach(
+    diningcourt => {
+      console.log(diningcourt);
+      // Have to query the database
+      // using datetime to check "from" and "to" in DiningTiming Table
+      // return true or false depeding if open or not right now
+      // order matters
+    }
+  );
+}
+
