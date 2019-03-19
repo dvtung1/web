@@ -108,7 +108,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     // if (swearWords.some(function(v) {
     //   return inputComment.indexOf(v) >= 0;
     // })) {
-    //   this.diningService.postComment(inputComment, this.diningNameBackend);
+    //   this.diningService.postComment(inputComment, this.diningName, "Dinner");
     // }
     // else {
     //   switch (this.diningName) {
@@ -137,7 +137,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
     //     break;
     //     // case "pete's za":
-    //     // window.location.assign("/1bowl");
+    //     // window.location.assign("/petesza");
     //     // break;
     //   }
     // }
