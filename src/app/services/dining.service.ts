@@ -124,10 +124,24 @@ export class DiningService {
       );
   }
   editComment(commentId: string, text: string) {
-    this.http.put<{ message: string }>(
-      BACKEND_URL + "/comment/edit/" + commentId,
-      { text: text }
-    );
+    this.http
+      .put<{ message: string }>(BACKEND_URL + "/comment/edit/" + commentId, {
+        text: text
+      })
+      .subscribe(
+        respond => {
+          const updatedComments = [...this.commentList];
+          const oldCommentIndex = updatedComments.findIndex(
+            comment => comment.objectId === commentId
+          );
+          updatedComments[oldCommentIndex].text = text;
+          this.commentList = updatedComments;
+          this.commentUpdateEmitter.next([...this.commentList]);
+        },
+        error => {
+          console.log(error.error.message);
+        }
+      );
   }
   getCommentList(): Comment[] {
     return this.commentList;
@@ -141,5 +155,24 @@ export class DiningService {
       return "peteza";
     }
     return diningNameFrontend;
+  }
+
+  checkOpenClosed() {
+    this.http
+      .get<{
+        message: string;
+        openclosed: any;
+      }>(BACKEND_URL + "/checkopenclosed")
+      .subscribe(
+        response => {
+          console.log(response.message);
+          // need a different "emitter" to update the doc table
+          //this.authStatusListener.next("loggedinsuccess");
+        },
+        error => {
+          console.log(error.error.message);
+          //this.authStatusListener.next(error.error.message);
+        }
+      );
   }
 }

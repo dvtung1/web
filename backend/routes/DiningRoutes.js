@@ -11,7 +11,7 @@ router.delete(
   userAuthentication,
   DiningController.deleteComment
 );
-router.get(
+router.put(
   "/comment/edit/:id",
   userAuthentication,
   DiningController.editComment
@@ -22,5 +22,8 @@ router.get(
   userAuthentication,
   DiningController.getCommentsByUser
 );
+
+// check to see which dining courts are open or closed
+router.get("/checkOpenClosed", DiningController.checkOpenClosed);
 
 module.exports = router;

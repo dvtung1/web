@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { DiningService } from 'src/app/services/dining.service';
 
 @Component({
   selector: "app-home",
@@ -15,7 +16,27 @@ export class HomeComponent implements OnInit {
     "windsor",
     "pete's za"
   ];
-  constructor() {}
+  
+
+  //this has to be updated by backend for correctness
+  // could maybe use tuples or dictionary for implementation?
+  doc = [
+    true,
+    false,
+    true,
+    true,
+    false,
+    true,
+    false
+  ];
+
+  constructor(
+    private diningService: DiningService
+  ) {
+    //calls this on refresh
+    this.diningService.checkOpenClosed();
+
+  }
 
   ngOnInit() {}
 }

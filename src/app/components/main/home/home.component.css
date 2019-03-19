@@ -20,7 +20,7 @@ hr {
     padding-left: 80px;
     padding-top: 20px;
     display: block;
-} */
+} */  
 
 a {
   font-size: 19px;
@@ -42,4 +42,12 @@ a {
 /* Add some padding inside the card container */
 .container {
   padding: 2px 16px;
+}
+
+
+.open{
+  margin:10px;
+}
+.closed{
+  margin: 10px;
 }
