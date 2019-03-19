@@ -124,21 +124,30 @@ exports.postComment = (req, res) => {
       comment
         .save()
         .then(savedComment => {
-          var currentUser = Backendless.UserService.getCurrentUser();
-          //After saving and getting comment objectId, set its relation to the user
-          savedComment.setByUser(currentUser);
-          //set relation from comment to ofDiningTiming
-          savedComment.setOfDiningTiming(foundDiningTimings[0]);
+          Backendless.UserService.getCurrentUser()
+            .then(currentUser => {
+              //After saving and getting comment objectId, set its relation to the user
+              savedComment.setByUser(currentUser);
+              //set relation from comment to ofDiningTiming
+              savedComment.setOfDiningTiming(foundDiningTimings[0]);
 
-          return res.status(200).json({
-            message: "add comment successfully",
-            author: currentUser.email,
-            text: savedComment.text,
-            rating: savedComment.rating,
-            objectId: savedComment.objectId,
-            authorId: currentUser.objectId
-          });
+              return res.status(200).json({
+                message: "add comment successfully",
+                author: currentUser.email,
+                text: savedComment.text,
+                rating: savedComment.rating,
+                objectId: savedComment.objectId,
+                authorId: currentUser.objectId
+              });
+            })
+            //catch for user
+            .catch(err => {
+              return res.status(500).json({
+                message: err.message
+              });
+            });
         })
+        //catch for comment
         .catch(err => {
           return res.status(500).json({
             message: err.message
@@ -152,6 +161,7 @@ exports.postComment = (req, res) => {
       });
     });
 };
+
 exports.deleteComment = (req, res) => {
   var id = req.params.id;
   var userObjectId = Backendless.LocalCache.get("current-user-id");

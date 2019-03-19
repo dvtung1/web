@@ -74,7 +74,7 @@ setupQueryBuilder = place => {
   var today = new Date();
 
   //different between UTC and EST hours
-  var hourAhead = 4;
+  var hourAhead = 5;
 
   //convert from UTC to EST time zone
   today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
@@ -98,25 +98,24 @@ setupQueryBuilder = place => {
     date +
     " " +
     time +
-    ":00 EST' AND to < '" +
-    date +
-    " 23:59:59 EST'";
+    ":00 EST'";
   if (place === "pete's za") {
     whereClause +=
       " and ofPlace.objectId='72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
   } else {
     whereClause += ` and ofPlace.name='${place}'`;
   }
+  console.log(whereClause);
   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
 };
 
 convertScoreInt = rating => {
   if (rating === "excellent") {
-    return 1;
+    return 3;
   } else if (rating === "satisfactory") {
     return 2;
   } else if (rating === "poor") {
-    return 3;
+    return 1;
   }
   return null;
 };

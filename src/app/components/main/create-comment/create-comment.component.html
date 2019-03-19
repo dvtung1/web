@@ -1,0 +1,12 @@
+<h1 class="h1">{{ diningName }}</h1>
+<form (submit)="postComment(commentForm)" #commentForm="ngForm">
+  <textarea
+    rows="4"
+    cols="50"
+    name="comment"
+    placeholder="Enter a comment here!"
+    ngModel
+  ></textarea>
+  <br />
+  <button type="submit">Submit</button>
+</form>

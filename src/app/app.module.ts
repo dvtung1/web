@@ -19,6 +19,7 @@ import { NavbarComponent } from "./components/navbar/navbar.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
 import { MenuComponent } from "./components/menu/menu.component";
 import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
+import { CreateCommentComponent } from './components/main/create-comment/create-comment.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DiningCourtComponent } from "./components/main/dining-court/dining-cour
     NavbarComponent,
     ManageComponent,
     MenuComponent,
-    DiningCourtComponent
+    DiningCourtComponent,
+    CreateCommentComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [UserAuthService, DiningService],

@@ -6,6 +6,7 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
 import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
+import { CreateCommentComponent } from "./components/main/create-comment/create-comment.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: "signup", component: SignupComponent },
   { path: "recovery", component: RecoveryComponent },
   { path: "manage", component: ManageComponent },
-  { path: "dining/:diningName", component: DiningCourtComponent }
+  { path: "dining/:diningName", component: DiningCourtComponent },
+  { path: "dining/:diningName/create", component: CreateCommentComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
