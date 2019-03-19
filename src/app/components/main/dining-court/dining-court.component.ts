@@ -18,7 +18,9 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   userId: string = "";
   private authStatusSub: Subscription;
   private diningListener: Subscription;
+  private validCommentListener: Subscription;
   diningName: string; //diningName param for UI
+  commentListsize = "loading...";
 
   constructor(
     private userAuthService: UserAuthService,
@@ -51,7 +53,22 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           .getCommentUpdateEmitter()
           .subscribe((respond: Comment[]) => {
             this.commentList = respond;
+            this.commentListsize = this.commentList.length +"";
           });
+
+
+        this.validCommentListener = this.diningService
+        .getValidCommentEmitter()
+        .subscribe(message => {
+          console.log(message);
+          if ( message === "postcomsuccess" ) {
+            window.alert("Comment Posted Successfully");
+          }
+        }
+
+        );
+
+
         //FIXME
         this.diningService.getComment(this.diningName, "Dinner");
       }
@@ -60,9 +77,11 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.diningListener.unsubscribe();
     this.authStatusSub.unsubscribe();
+    this.validCommentListener.unsubscribe();
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
+    (<HTMLInputElement>document.getElementById('comspace')).value = "";
     //FIXME
     this.diningService.postComment(inputComment, this.diningName, "Dinner");
     // var swearWords =
@@ -122,6 +141,10 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //     // break;
     //   }
     // }
+    
+    //retrieve message from the server
+    
+    //window.alert("Comment posted successfully!")
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);

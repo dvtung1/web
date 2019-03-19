@@ -7,6 +7,7 @@ import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { error } from 'protractor';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -17,6 +18,7 @@ const BACKEND_URL = environment.apiUrl + "/dining";
 export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
+  private validCommentEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
 
   /*
@@ -66,6 +68,10 @@ export class DiningService {
     return this.commentUpdateEmitter.asObservable();
   }
 
+  getValidCommentEmitter(): Observable<any> {
+    return this.validCommentEmitter.asObservable();
+  }
+
   postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
@@ -94,6 +100,7 @@ export class DiningService {
           //put the item at the first position in the list
           this.commentList.splice(0, 0, cmt);
           this.commentUpdateEmitter.next([...this.commentList]);
+          this.validCommentEmitter.next("postcomsuccess");
         },
         error => {
           console.log(error.error.message);
@@ -115,6 +122,11 @@ export class DiningService {
           console.log(error.error.message);
         }
       );
+  }
+  editComment(commentId: string) {
+    this.http
+    .get<{ message: string }>(BACKEND_URL + "/comment/get/" + commentId)
+    
   }
   getCommentList(): Comment[] {
     return this.commentList;

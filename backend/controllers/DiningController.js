@@ -194,3 +194,6 @@ exports.deleteComment = (req, res) => {
       });
     });
 };
+exports.editComment = (req, res) => {
+  
+}
