@@ -265,6 +265,26 @@ exports.getCommentsByUser = (req, res) => {
     });
 };
 
+exports.getCommentById = (req, res) => {
+  const id = req.params.id;
+  Backendless.Data.of(Comment)
+    .findById(id)
+    .then(foundComment => {
+      return res.status(200).json({
+        author: foundComment.byUser.email,
+        text: foundComment.text,
+        rating: foundComment.rating,
+        objectId: foundComment.objectId,
+        authorId: foundComment.byUser.objectId
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
+
 exports.getMealTime = (req, res) => {};
 
 exports.checkOpenClosed = (req, res) => {

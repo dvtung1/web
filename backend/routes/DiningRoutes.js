@@ -7,21 +7,17 @@ const userAuthentication = require("../middlewares/userAuthentication.middleware
 router.get("/comment", DiningController.getComments);
 router.post("/comment", userAuthentication, DiningController.postComment);
 router.delete(
-  "/comment/delete/:id",
+  "/comment/:id",
   userAuthentication,
   DiningController.deleteComment
 );
-router.put(
-  "/comment/edit/:id",
-  userAuthentication,
-  DiningController.editComment
-);
-
+router.put("/comment/:id", userAuthentication, DiningController.editComment);
 router.get(
   "/comment/user",
   userAuthentication,
   DiningController.getCommentsByUser
 );
+router.get("/comment/:id", DiningController.getCommentById);
 
 // check to see which dining courts are open or closed
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);

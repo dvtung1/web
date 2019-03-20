@@ -109,7 +109,7 @@ export class DiningService {
   }
   removeComment(commentId: string) {
     this.http
-      .delete<{ message: string }>(BACKEND_URL + "/comment/delete/" + commentId)
+      .delete<{ message: string }>(BACKEND_URL + "/comment/" + commentId)
       .subscribe(
         respond => {
           const updatedCommentList = this.commentList.filter(
@@ -125,7 +125,7 @@ export class DiningService {
   }
   editComment(commentId: string, text: string) {
     this.http
-      .put<{ message: string }>(BACKEND_URL + "/comment/edit/" + commentId, {
+      .put<{ message: string }>(BACKEND_URL + "/comment/" + commentId, {
         text: text
       })
       .subscribe(
