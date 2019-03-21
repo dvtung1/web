@@ -301,8 +301,39 @@ exports.checkOpenClosed = (req, res) => {
   var datetime = date + " " + time;
   console.log(datetime);
 
+  var opendc = []; //return array with list of open dining courts
+  var closeddc = []; //reutrn array with list of closed dining courts
+  var queryBuilder = Backendless.DataQueryBuilder.create();
   diningCourtList.forEach(diningcourt => {
     console.log(diningcourt);
+    //72D126B0-8BFD-82EF-FFCD-2AC4390F4F00
+    if(diningcourt === "pete's za"){
+      var whereClause = "from <= '" + date + " " + time + " EST' and to > '" + date + " " + time + " EST' AND to < '" + date
+      + " 23:59:59 EST'" + "and ofPlace.name = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
+    }
+    else{
+      var whereClause = "from <= '" + date + " " + time + " EST' and to > '" + date + " " + time + " EST' AND to < '" + date
+      + " 23:59:59 EST'" + "and ofPlace.name = '" + diningcourt + "'";
+    }
+    var count = 0;
+    queryBuilder.setWhereClause(whereClause);
+    Backendless.Data.of(DiningTiming).
+    find(queryBuilder).
+    then(ooc => {
+      if(ooc.length == 0){
+        console.log(diningcourt + " is not open");
+        closeddc.push(diningcourt);
+        console.log("closeddc: " + closeddc);
+      }
+      else {
+        console.log(diningcourt + " is open");
+        opendc.push(diningcourt);
+        console.log("opendc: " + opendc);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
     // Have to query the database
     // using datetime to check "from" and "to" in DiningTiming Table
     // return true or false depeding if open or not right now
