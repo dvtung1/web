@@ -6,6 +6,8 @@ import { Subscription } from "rxjs";
 import { Comment } from "src/app/models/comment";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+
+import * as Filter from "bad-words";
 @Component({
   selector: "app-dining-court",
   templateUrl: "./dining-court.component.html",
@@ -82,7 +84,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
     (<HTMLInputElement>document.getElementById('comspace')).value = "";
-    var Filter = require('bad-words');
+    // var Filter = require('bad-words');
     var filter = new Filter();
     if (filter.isProfane(inputComment)) {
       switch (this.diningName) {
