@@ -119,7 +119,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     }
     else {
       this.diningService.postComment(inputComment, this.diningName, "Dinner");
-      window.alert("Comment posted successfully!")
+      //window.alert("Comment posted successfully!")
     }
     
     //retrieve message from the server
