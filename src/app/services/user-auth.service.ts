@@ -83,9 +83,9 @@ export class UserAuthService {
           // console.log("this is the user id!!!!: " + this.userId);
 
           this.router.navigate(["/"]);
-          window.alert("Successfully logged in!");
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");
+
         },
         error => {
           console.log(error.error.message);
