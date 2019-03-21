@@ -62,6 +62,31 @@ export class DiningService {
       );
   }
 
+  getCommentByUser() {
+    this.http
+      .get<{
+        message: string;
+        comments: any;
+      }>(BACKEND_URL + "/comment/user")
+      .subscribe(
+        response => {
+          var cmt = {
+            diningName: response.comments.diningName,
+            diningType: response.comments.diningType,
+            text: response.comments.comment.text,
+            byUser: response.comments.comment.author,
+            rating: response.comments.comment.rating,
+            objectId: response.comments.comment.objectId,
+            authorId: response.comments.comment.authorId
+          };
+        },
+        error => {
+          console.log(error.error.message);
+          //this.authStatusListener.next(error.error.message);
+        }
+      );
+  }
+
   getCommentUpdateEmitter(): Observable<any> {
     return this.commentUpdateEmitter.asObservable();
   }
