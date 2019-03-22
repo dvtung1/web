@@ -1,6 +1,7 @@
 /*
     File that include all the routes for User. Link to app.js
 */
+"use strict";
 
 const express = require("express");
 const router = express.Router();

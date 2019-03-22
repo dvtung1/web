@@ -14,6 +14,24 @@ var diningCourtList = [
   "ford"
 ];
 
+exports.getRating = (req, res) => {
+  var diningName = req.params.diningName;
+  var diningType = req.query.type;
+  //get rating from a particular dining court
+  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    `ofDiningTimings.ofPlace.name='${diningName}'`
+  );
+  //if there is a query diningtype, search for that
+  if (diningType != null) {
+    queryBuilder += ` and ofDiningTimings.diningType.name='${diningType}'`;
+  }
+  Backendless.Data.of(Rating)
+    .find(queryBuilder)
+    .then(foundRatings => {
+      //TODO
+    });
+};
+
 exports.postRating = (req, res) => {
   var rating = req.body.rating;
   //convert rating from string to int

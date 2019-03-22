@@ -6,6 +6,7 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
+import { OpenDining } from '../models/opendining';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 //backend api url for communication (Port 3000)
@@ -16,6 +17,9 @@ const BACKEND_URL = environment.apiUrl + "/dining";
 export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
+  private openList: OpenDining[] = [];
+  private openEmitter = new Subject<OpenDining[]>();
+  private closedEmitter = new Subject<any>();
   private validCommentEmitter = new Subject<any>();
   private tvEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
@@ -28,13 +32,16 @@ export class DiningService {
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string, diningType: string) {
+    var url = BACKEND_URL + "/comment?name=" + diningCourtName;
+
+    if (diningType !== "") {
+      url += "&type=" + diningType;
+    }
     this.http
       .get<{
         message: string;
         comments: any;
-      }>(
-        BACKEND_URL + "/comment?name=" + diningCourtName + "&type=" + diningType
-      )
+      }>(url)
       .pipe(
         map(respond => {
           return {
@@ -102,9 +109,14 @@ export class DiningService {
     return this.validCommentEmitter.asObservable();
   }
 
-  getTvEmitter(): Observable<any> {
-    return this.tvEmitter.asObservable();
+  getopenEmitter(): Observable<any> {
+    return this.openEmitter.asObservable();
   }
+
+  getclosedEmitter(): Observable<any> {
+    return this.closedEmitter.asObservable();
+  }
+
   postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
@@ -176,6 +188,44 @@ export class DiningService {
         },
         error => {
           console.log(error.error.message);
+        }
+      );
+  }
+
+  getMealTime() {
+    this.http
+      .get<{
+        message: string;
+        openDiningCourts: any;
+        closedDiningCourts: any;
+      }>(BACKEND_URL + "/mealtime")
+      .pipe(
+        map(respond => {
+          return {
+            message: respond.message,
+            opens: respond.openDiningCourts.map(open => {
+              return {
+                diningName: open.diningName,
+                diningType: open.diningType,
+                openedTime: open.openedTime,
+                closedTime: open.closedTime
+              };
+            }),
+            closedDiningCourts: respond.closedDiningCourts
+          };
+        })
+      )
+      .subscribe(
+        response => {
+          //console.log("This respond.message: "+ response.message);
+          //console.log(response.opens);
+          //console.log("sdfas: " );
+          this.openList = response.opens;
+          this.openEmitter.next([...this.openList]);
+          this.closedEmitter.next(response.closedDiningCourts);
+        },
+        err => {
+          console.log(err.message);
         }
       );
   }

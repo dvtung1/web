@@ -8,6 +8,7 @@ import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import * as Filter from "bad-words";
+import { CreateCommentComponent } from '../create-comment/create-comment.component';
 @Component({
   selector: "app-dining-court",
   templateUrl: "./dining-court.component.html",
@@ -69,7 +70,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
         );
 
         //FIXME
-        this.diningService.getComment(this.diningName, "Dinner");
+        this.diningService.getComment(this.diningName, "");
       }
     });
   }
@@ -80,49 +81,70 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
-    (<HTMLInputElement>document.getElementById('comspace')).value = "";
+    (<HTMLInputElement>document.getElementById("comspace")).value = "";
     // var Filter = require('bad-words');
     var filter = new Filter();
     if (filter.isProfane(inputComment)) {
       switch (this.diningName) {
         case "1bowl":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
         case "earhart":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
         case "ford":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          break;
         case "hillenbrand":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
         case "wiley":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
         case "windsor":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
         case "pete's za":
-        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-        form.value.comment = ' ';
-        break;
+          window.alert(
+            "Your comment contains inappropriate language and will not be posted. Please post a new comment."
+          );
+          form.value.comment = " ";
+          break;
       }
-    }
-    else {
+    } else {
+      //FIXME
       this.diningService.postComment(inputComment, this.diningName, "Dinner");
       //window.alert("Comment posted successfully!")
     }
-    
+
     //retrieve message from the server
-    
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
+  }
+  middleState(){
+    console.log("here2");
+    window.location.assign("/dining/" + this.diningName + "/create");
+  }
+  editComment(commentId: string){
+    console.log("here");
+    window.location.assign("/dining/" + this.diningName + "/create");
   }
 }
