@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UserAuthService } from "src/app/services/user-auth.service";
 import { Subscription } from "rxjs";
+import { DiningService } from "src/app/services/dining.service";
 
 @Component({
   selector: "app-manage",
@@ -23,7 +24,10 @@ export class ManageComponent implements OnInit, OnDestroy {
   commentListSize = "loading...";
   private userListener: Subscription;
 
-  constructor(private userAuthService: UserAuthService) {
+  constructor(
+    private userAuthService: UserAuthService,
+    private diningService: DiningService    
+    ) {
     // console.log("before");
     // this.isLoggedIn = userAuthService.isUserAuthenticated();
     // console.log("after");
@@ -31,6 +35,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     this.authStatusSub = new Subscription();
     this.userAuthService.checkIfUserLoggedIn();
     this.userAuthService.getCurrentUserInformation();
+    this.diningService.getCommentByUser();
   }
 
   ngOnInit() {
@@ -53,12 +58,12 @@ export class ManageComponent implements OnInit, OnDestroy {
           this.currentUserName = respond.username;
 
           //showing user's comments
-          // this.userListener = this.something
-          // .getCommentUpdateEmitter()
-          // .subscribe((respond: Comment[]) => {
-          //   this.commentList = respond;
-          //   this.commentListSize = this.commentList.length+"";
-          // })
+          this.userListener = this.diningService
+          .getCommentUpdateEmitter()
+          .subscribe((respond: Comment[]) => {
+            this.commentList = respond;
+            this.commentListSize = this.commentList.length+"";
+          })
 
           //console.log("USERNAME: "+ this.currentUserName);
           //console.log("EMAIL: "+ this.currentUserEmail);

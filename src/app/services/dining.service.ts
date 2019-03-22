@@ -121,7 +121,6 @@ export class DiningService {
           });
           this.commentUpdateEmitter.next(...array);
         },
-        //array.next put into cUE
         error => {
           console.log(error.error.message);
           //this.authStatusListener.next(error.error.message);
