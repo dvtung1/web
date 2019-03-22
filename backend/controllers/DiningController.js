@@ -238,6 +238,7 @@ exports.editComment = (req, res) => {
 
 //return json contain comments of the user along with info about diningCourt and diningType
 exports.getCommentsByUser = (req, res) => {
+  /*
   Backendless.UserService.getCurrentUser()
     .then(currentUser => {
       var commentListResult = []; //list of comments that will be return
@@ -251,6 +252,36 @@ exports.getCommentsByUser = (req, res) => {
           rating: comment.rating,
           objectId: comment.objectId,
           authorId: currentUser.objectId
+        });
+      });
+      return res.status(200).json({
+        message: "Fetch comment of the current user successfully",
+        comments: commentListResult
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+    */
+  var userObjectId = Backendless.LocalCache.get("current-user-id");
+  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    `byUser.objectId = '${userObjectId}'`
+  );
+  Backendless.Data.of(Comment)
+    .find(queryBuilder)
+    .then(foundComments => {
+      var commentListResult = [];
+      foundComments.forEach(comment => {
+        commentListResult.push({
+          diningName: comment.ofDiningTiming.ofPlace.name,
+          diningType: comment.ofDiningTiming.diningType.name,
+          author: comment.byUser.email,
+          text: comment.text,
+          rating: comment.rating,
+          objectId: comment.objectId,
+          authorId: comment.byUser.objectId
         });
       });
       return res.status(200).json({
@@ -294,7 +325,6 @@ exports.getMealTime = (req, res) => {
     .then(foundDiningTimings => {
       //contain json object, each has properties: diningName and closedTime
       var openDiningCourts = [];
-
       //temp list to filter out and get closed dining court
       var openDiningCourtsName = [];
       foundDiningTimings.forEach(diningTiming => {
@@ -314,6 +344,10 @@ exports.getMealTime = (req, res) => {
           openedTime: openedTime,
           closedTime: closedTime
         });
+        //console.log("Name: "+diningTiming.ofPlace.name.toLowerCase());
+        //console.log("Name: "+diningTiming.diningType.name.toLowerCase());
+        //console.log("OpenedTime: "+openedTime);
+        //console.log("Closedtime: "+closedTime);
 
         openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
       });
@@ -321,6 +355,8 @@ exports.getMealTime = (req, res) => {
       var closedDiningCourts = diningCourtList.filter(
         item => !openDiningCourtsName.includes(item)
       );
+      //console.log("THIS IS OPEN DINING COURTS: "+openDiningCourts);
+      //console.log("THIS IS CLOSED DINING COURTS: "+closedDiningCourts);
       return res.status(200).json({
         message:
           "Get current meal time (open/close) and specific closed time successfully",
@@ -409,7 +445,7 @@ exports.checkOpenClosed = (req, res) => {
         }
       })
       .catch(err => {
-        console.log(err);
+        //console.log(err);
       });
     // Have to query the database
     // using datetime to check "from" and "to" in DiningTiming Table
@@ -436,9 +472,10 @@ exports.checkOpenClosed = (req, res) => {
 var setupQueryBuilder = () => {
   var today = new Date();
   var dateAndTime = convertESTDateTime(today);
+  //console.log("THIS IS DATEANTIME: "+ dateAndTime);
   var whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
-  console.log(whereClause);
+  //console.log(whereClause);
   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
 };
 

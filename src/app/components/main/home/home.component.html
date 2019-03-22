@@ -5,19 +5,16 @@
 <div class="open">
     <h2>Open:</h2>
     <br>
-      <div *ngFor="let dining of diningArray; index as i">
-          <div *ngIf=doc[i] >
-            <a routerLink="/dining/{{ dining }}">{{ dining }}</a>
-          </div>
+      <div *ngFor="let open of openList;">
+          <a routerLink="/dining/{{ open.diningName }}"> {{ open.diningName }}</a>
+          <p> Closing at: {{ open.closedTime }}</p>
       </div>
   </div>
   <div class="closed">
     <h2>Closed:</h2>
     <br>
-      <div *ngFor="let dining of diningArray; index as i">
-          <div *ngIf=!doc[i]>
-            <a routerLink="/dining/{{ dining }}">{{ dining }}</a>
-          </div>
+      <div *ngFor="let closed of closedList">
+            <a routerLink="/dining/{{ closed }}">{{ closed }}</a><p></p>
       </div>
   </div>
   

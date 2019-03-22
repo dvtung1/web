@@ -139,6 +139,10 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
   }
+  middleState() {
+    console.log("here2");
+    window.location.assign("/dining/" + this.diningName + "/create");
+  }
   editComment(commentId: string) {
     console.log("here");
     window.location.assign(
