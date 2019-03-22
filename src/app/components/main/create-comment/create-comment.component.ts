@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DiningService } from "src/app/services/dining.service";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import * as Filter from "bad-words";
 
 @Component({
   selector: "app-create-comment",
@@ -32,12 +33,18 @@ export class CreateCommentComponent implements OnInit {
       return;
     }
     var inputComment = form.value.comment;
-    this.diningService.postComment(
+    var filter = new Filter();
+    if (filter.isProfane(inputComment)) {
+      window.alert("Your comment will not be posted due to the presence of obscene language, please post another comment");
+    } else{
+      var inputComment = form.value.comment;
+      this.diningService.postComment(
       inputComment,
       this.diningName,
       this.diningType
     );
-    //console.log(form.controls["diningType"].value);
+    window.location.assign("/dining/" + this.diningName);
+    }
   }
 
   getDiningType(diningType: string) {
