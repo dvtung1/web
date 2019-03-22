@@ -78,7 +78,6 @@ export class DiningService {
       }>(BACKEND_URL + "/comment/user")
       .subscribe(
         response => {
-          console.log("sdakfjahsldjf");
           var array = [];
           response.comments.forEach(comment => {
             var cmt = {
@@ -92,6 +91,7 @@ export class DiningService {
             };
             array.push(cmt);
           })  
+          console.log(response);
           this.commentUpdateEmitter.next([...array]);
         },
         error => {
