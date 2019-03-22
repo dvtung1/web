@@ -1,3 +1,5 @@
+"use strict";
+
 var Backendless = require("../utils/db.configuration"); //initialize backendless database
 var DiningTiming = require("../models/DiningTiming");
 var Rating = require("../models/Rating");
@@ -70,35 +72,12 @@ exports.postRating = (req, res) => {
     });
 };
 
-setupQueryBuilder = place => {
+var setupQueryBuilder = place => {
   var today = new Date();
-
-  //different between UTC and EST hours
-  var hourAhead = 5;
-
-  //convert from UTC to EST time zone
-  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
-  //time format = 10:00
-  var time =
-    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
-  //date format = 03/15/2018
-  var date =
-    getTwoDigits(today.getMonth() + 1) +
-    "/" +
-    getTwoDigits(today.getDate()) +
-    "/" +
-    today.getFullYear();
+  var dateAndTime = convertESTDateTime(today);
 
   var whereClause =
-    "from <= '" +
-    date +
-    " " +
-    time +
-    ":00 EST' and to > '" +
-    date +
-    " " +
-    time +
-    ":00 EST'";
+    "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
   if (place === "pete's za") {
     whereClause +=
       " and ofPlace.objectId='72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
@@ -109,7 +88,7 @@ setupQueryBuilder = place => {
   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
 };
 
-convertScoreInt = rating => {
+var convertScoreInt = rating => {
   if (rating === "excellent") {
     return 3;
   } else if (rating === "satisfactory") {
@@ -120,6 +99,25 @@ convertScoreInt = rating => {
   return null;
 };
 
-getTwoDigits = num => {
+var getTwoDigits = num => {
   return ("0" + num).slice(-2);
+};
+
+var convertESTDateTime = today => {
+  var hourAhead = 5;
+
+  //convert from UTC to EST time zone
+  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
+
+  var time =
+    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
+  //date format = 03/15/2018
+  var date =
+    getTwoDigits(today.getMonth() + 1) +
+    "/" +
+    getTwoDigits(today.getDate()) +
+    "/" +
+    today.getFullYear();
+  var str = date + " " + time + ":00";
+  return str;
 };

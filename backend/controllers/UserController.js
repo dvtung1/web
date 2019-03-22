@@ -2,6 +2,8 @@
   Controller file that contain all the logic business for User. Link to UserRoutes
 */
 
+"use strict";
+
 var Backendless = require("../utils/db.configuration"); //initialize backendless database
 /*
   Create new account.
@@ -122,7 +124,8 @@ exports.modifyEmail = (req, res) => {
   //Backendless.UserService.getCurrentUser() was not working
   // so just get the objectid and update manually
   var userobjectid = Backendless.LocalCache.get("current-user-id");
-  Backendless.Data.of("Users").findById(userobjectid)
+  Backendless.Data.of("Users")
+    .findById(userobjectid)
     .then(currentUser => {
       currentUser.email = newEmail;
       Backendless.Data.of("Users").save(currentUser);
@@ -147,16 +150,18 @@ exports.modifyEmail = (req, res) => {
 exports.modifyPassword = (req, res) => {
   var newPassword = req.body.password;
   var userobjectid = Backendless.LocalCache.get("current-user-id");
-  Backendless.Data.of("Users").findById(userobjectid)
+  Backendless.Data.of("Users")
+    .findById(userobjectid)
     .then(currentUser => {
       currentUser.password = newPassword;
-      Backendless.Data.of("Users").save(currentUser)
-      .then(savedobject =>{
-        // have to login user with the new password 
-        // only for modifying password
-        Backendless.UserService.login(currentUser.email, newPassword, true);
-        }
-      ).catch();
+      Backendless.Data.of("Users")
+        .save(currentUser)
+        .then(savedobject => {
+          // have to login user with the new password
+          // only for modifying password
+          Backendless.UserService.login(currentUser.email, newPassword, true);
+        })
+        .catch();
 
       return res.status(200).json({
         message: "Password changed successfully"
@@ -169,11 +174,11 @@ exports.modifyPassword = (req, res) => {
     });
 };
 
-
 exports.modifyUsername = (req, res) => {
   var newUsername = req.body.username;
   var userobjectid = Backendless.LocalCache.get("current-user-id");
-  Backendless.Data.of("Users").findById(userobjectid) 
+  Backendless.Data.of("Users")
+    .findById(userobjectid)
     .then(currentUser => {
       currentUser.username = newUsername;
       Backendless.Data.of("Users").save(currentUser);
@@ -208,7 +213,8 @@ exports.getCurrentUserInfo = (req, res) => {
   //Backendless.UserService.getCurrentUser() was not letting this happen
   // get objectid for cache, and find user manually
   var userobjectid = Backendless.LocalCache.get("current-user-id");
-  Backendless.Data.of("Users").findById(userobjectid) 
+  Backendless.Data.of("Users")
+    .findById(userobjectid)
     .then(result => {
       return res.status(200).json({
         // will not return or display password

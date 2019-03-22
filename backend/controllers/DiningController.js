@@ -1,6 +1,7 @@
 /*
   Controller file that contain all the logic business for DiningCourt. Link to DiningRoutes
 */
+"use strict";
 
 var Backendless = require("../utils/db.configuration"); //initialize backendless database
 var DiningTiming = require("../models/DiningTiming");
@@ -285,7 +286,49 @@ exports.getCommentById = (req, res) => {
     });
 };
 
-exports.getMealTime = (req, res) => {};
+exports.getMealTime = (req, res) => {
+  var queryBuilder = setupQueryBuilder();
+  //get all current open dining courts
+  Backendless.Data.of(DiningTiming)
+    .find(queryBuilder)
+    .then(foundDiningTimings => {
+      //contain json object, each has properties: diningName and closedTime
+      var openDiningCourts = [];
+
+      //temp list to filter out and get closed dining court
+      var openDiningCourtsName = [];
+      foundDiningTimings.forEach(diningTiming => {
+        //convert Epoch time to EST time
+        var epochTime = diningTiming.to;
+        var today = new Date(parseInt(epochTime));
+
+        var dateAndTime = convertESTDateTime(today);
+
+        openDiningCourts.push({
+          diningName: diningTiming.ofPlace.name,
+          diningType: diningTiming.diningType.name,
+          closedTime: dateAndTime
+        });
+
+        openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
+      });
+      //get all the dining courts that are closed
+      var closedDiningCourts = diningCourtList.filter(
+        item => !openDiningCourtsName.includes(item)
+      );
+      return res.status(200).json({
+        message:
+          "Get meal time (open/close) and specific closed time successfully",
+        openDiningCourts: openDiningCourts,
+        closedDiningCourts: closedDiningCourts
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
 
 exports.checkOpenClosed = (req, res) => {
   console.log("RUNNING CORRECTLY");
@@ -299,13 +342,51 @@ exports.checkOpenClosed = (req, res) => {
   //console.log(time);
 
   var datetime = date + " " + time;
-  console.log(datetime);
+  //console.log(datetime);
 
   diningCourtList.forEach(diningcourt => {
-    console.log(diningcourt);
+    //console.log(diningcourt);
     // Have to query the database
     // using datetime to check "from" and "to" in DiningTiming Table
     // return true or false depeding if open or not right now
     // order matters
   });
+};
+
+// var setupQueryBuilder = () => {
+//   return Backendless.DataQueryBuilder.create().setWhereClause(
+//     "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
+//   );
+// };
+
+var setupQueryBuilder = () => {
+  var today = new Date();
+  var dateAndTime = convertESTDateTime(today);
+  var whereClause =
+    "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
+  console.log(whereClause);
+  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+};
+
+var getTwoDigits = num => {
+  return ("0" + num).slice(-2);
+};
+
+var convertESTDateTime = today => {
+  var hourAhead = 5;
+
+  //convert from UTC to EST time zone
+  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
+
+  var time =
+    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
+  //date format = 03/15/2018
+  var date =
+    getTwoDigits(today.getMonth() + 1) +
+    "/" +
+    getTwoDigits(today.getDate()) +
+    "/" +
+    today.getFullYear();
+  var str = date + " " + time + ":00";
+  return str;
 };

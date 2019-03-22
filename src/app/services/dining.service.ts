@@ -27,7 +27,6 @@ export class DiningService {
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string, diningType: string) {
-    //diningCourtName = this.convertDiningNameBackend(diningCourtName);
     this.http
       .get<{
         message: string;
@@ -142,19 +141,6 @@ export class DiningService {
           console.log(error.error.message);
         }
       );
-  }
-  getCommentList(): Comment[] {
-    return this.commentList;
-  }
-
-  convertDiningNameBackend(diningNameFrontend): string {
-    //convert some diningName so backend can understand
-    if (diningNameFrontend === "1bowl") {
-      return "onebowl";
-    } else if (diningNameFrontend === "pete's za") {
-      return "peteza";
-    }
-    return diningNameFrontend;
   }
 
   checkOpenClosed() {

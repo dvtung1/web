@@ -1,22 +1,22 @@
-<h1 class="h1">{{ diningName }}</h1>
-<div class="dropdown">
-  <button
-    class="btn btn-secondary dropdown-toggle"
-    type="button"
-    id="dropdownMenuButton"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    Select Dining Type
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
+<h1 class="h1 text-capitalize">{{ diningName }}</h1>
+
 <form (submit)="postComment(commentForm)" #commentForm="ngForm">
+  <input
+    type="radio"
+    name="diningType"
+    value="breakfast"
+    required
+    [(ngModel)]="diningType"
+  />
+  Breakfast<br />
+  <input
+    type="radio"
+    name="diningType"
+    value="lunch"
+    required
+    [(ngModel)]="diningType"
+  />
+  Lunch<br />
   <textarea
     rows="4"
     cols="50"
