@@ -56,7 +56,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           .subscribe((respond: Comment[]) => {
             this.commentList = respond;
             this.commentListsize = this.commentList.length +"";
-          });
+          });    
 
         this.validCommentListener = this.diningService
         .getValidCommentEmitter()

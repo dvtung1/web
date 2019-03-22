@@ -71,6 +71,7 @@ export class DiningService {
       }>(BACKEND_URL + "/comment/user")
       .subscribe(
         response => {
+          console.log("sdakfjahsldjf");
           var array = [];
           response.comments.forEach(comment => {
             var cmt = {
@@ -82,11 +83,10 @@ export class DiningService {
               objectId: comment.objectId,
               authorId: comment.authorId
             };
-            array.push(cmt);
+            // array.push(cmt);
           })  
-          this.commentUpdateEmitter.next(...array);
+          this.commentUpdateEmitter.next([...array]);
         },
-        //array.next put into cUE
         error => {
           console.log(error.error.message);
           //this.authStatusListener.next(error.error.message);
