@@ -409,6 +409,12 @@ exports.checkOpenClosed = (req, res) => {
     // return true or false depeding if open or not right now
     // order matters
   });
+  return res.status(200).json({
+    message:
+      "List of open and closed dining courts retreived successfully",
+      openDiningCourts: opendc,
+      closedDiningCourts: closeddc
+  });
 };
 
 var setupQueryBuilder = () => {

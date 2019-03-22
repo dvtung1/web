@@ -147,11 +147,12 @@ export class DiningService {
     this.http
       .get<{
         message: string;
-        openclosed: any;
       }>(BACKEND_URL + "/checkopenclosed")
       .subscribe(
         response => {
+          console.log("here before");
           console.log(response.message);
+          console.log("here after");
           // need a different "emitter" to update the doc table
           //this.authStatusListener.next("loggedinsuccess");
         },
