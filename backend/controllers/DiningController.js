@@ -1,11 +1,13 @@
 /*
   Controller file that contain all the logic business for DiningCourt. Link to DiningRoutes
 */
+"use strict";
 
 var Backendless = require("../utils/db.configuration"); //initialize backendless database
 var DiningTiming = require("../models/DiningTiming");
 var Comment = require("../models/Comment");
 
+var tvdc = [];
 var diningCourtList = [
   "1bowl",
   "earhart",
@@ -283,7 +285,54 @@ exports.getCommentById = (req, res) => {
     });
 };
 
-exports.getMealTime = (req, res) => {};
+exports.getMealTime = (req, res) => {
+  var queryBuilder = setupQueryBuilder();
+  //get all current open dining courts
+  Backendless.Data.of(DiningTiming)
+    .find(queryBuilder)
+    .then(foundDiningTimings => {
+      //contain json object, each has properties: diningName and closedTime
+      var openDiningCourts = [];
+
+      //temp list to filter out and get closed dining court
+      var openDiningCourtsName = [];
+      foundDiningTimings.forEach(diningTiming => {
+        //convert Epoch time to EST time
+        var epochTimeClosed = diningTiming.to;
+        var epochTimeOpened = diningTiming.from;
+        var closedTime = convertESTDateTime(
+          new Date(parseInt(epochTimeClosed))
+        );
+        var openedTime = convertESTDateTime(
+          new Date(parseInt(epochTimeOpened))
+        );
+
+        openDiningCourts.push({
+          diningName: diningTiming.ofPlace.name,
+          diningType: diningTiming.diningType.name,
+          openedTime: openedTime,
+          closedTime: closedTime
+        });
+
+        openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
+      });
+      //get all the dining courts that are closed
+      var closedDiningCourts = diningCourtList.filter(
+        item => !openDiningCourtsName.includes(item)
+      );
+      return res.status(200).json({
+        message:
+          "Get current meal time (open/close) and specific closed time successfully",
+        openDiningCourts: openDiningCourts,
+        closedDiningCourts: closedDiningCourts
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
+};
 
 exports.checkOpenClosed = (req, res) => {
   console.log("RUNNING CORRECTLY");
@@ -297,13 +346,121 @@ exports.checkOpenClosed = (req, res) => {
   //console.log(time);
 
   var datetime = date + " " + time;
-  console.log(datetime);
+  //console.log(datetime);
 
+  //var opendc = []; //return array with list of open dining courts
+  //var closeddc = []; //reutrn array with list of closed dining courts
+  //var tvdc = [];
+  var queryBuilder = Backendless.DataQueryBuilder.create();
   diningCourtList.forEach(diningcourt => {
     console.log(diningcourt);
+    //72D126B0-8BFD-82EF-FFCD-2AC4390F4F00
+    if (diningcourt === "pete's za") {
+      var whereClause =
+        "from <= '" +
+        date +
+        " " +
+        time +
+        " EST' and to > '" +
+        date +
+        " " +
+        time +
+        " EST' AND to < '" +
+        date +
+        " 23:59:59 EST'" +
+        "and ofPlace.name = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
+    } else {
+      var whereClause =
+        "from <= '" +
+        date +
+        " " +
+        time +
+        " EST' and to > '" +
+        date +
+        " " +
+        time +
+        " EST' AND to < '" +
+        date +
+        " 23:59:59 EST'" +
+        "and ofPlace.name = '" +
+        diningcourt +
+        "'";
+    }
+    var count = 0;
+    console.log("same dining2 : "+diningcourt)
+    queryBuilder.setWhereClause(whereClause);
+    Backendless.Data.of(DiningTiming)
+      .find(queryBuilder)
+      .then(ooc => {
+        console.log("same dining3 : "+diningcourt)
+        if (ooc.length == 0) {
+          console.log(diningcourt + " is not open");
+          //closeddc.push(diningcourt);
+          //console.log("closeddc: " + closeddc);
+          tvdc.push(false);
+          console.log(tvdc);
+        } else {
+          console.log(diningcourt + " is open");
+          //opendc.push(diningcourt);
+          //console.log("opendc: " + opendc);
+          tvdc.push(true);
+          console.log(tvdc);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     // Have to query the database
     // using datetime to check "from" and "to" in DiningTiming Table
     // return true or false depeding if open or not right now
     // order matters
   });
+  console.log("TVDC B4 return: " + tvdc);
+  return res.status(200).send({
+    message:
+      "List of open and closed dining courts retreived successfully",
+    //opendc: opendc,
+    //closeddc: closeddc,
+    tv: {
+      tvdc: [false,true,true,false,true,true,false]
+    }
+  });
+};
+
+var setupQueryBuilder = () => {
+  return Backendless.DataQueryBuilder.create().setWhereClause(
+    "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
+  );
+};
+
+// var setupQueryBuilder = () => {
+//   var today = new Date();
+//   var dateAndTime = convertESTDateTime(today);
+//   var whereClause =
+//     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
+//   console.log(whereClause);
+//   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+// };
+
+var getTwoDigits = num => {
+  return ("0" + num).slice(-2);
+};
+
+var convertESTDateTime = today => {
+  var hourAhead = 5;
+
+  //convert from UTC to EST time zone
+  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
+
+  var time =
+    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
+  //date format = 03/15/2018
+  var date =
+    getTwoDigits(today.getMonth() + 1) +
+    "/" +
+    getTwoDigits(today.getDate()) +
+    "/" +
+    today.getFullYear();
+  var str = date + " " + time + ":00";
+  return str;
 };

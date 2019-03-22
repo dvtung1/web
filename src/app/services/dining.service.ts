@@ -6,6 +6,7 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -16,6 +17,7 @@ export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
   private validCommentEmitter = new Subject<any>();
+  private tvEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
 
   /*
@@ -26,7 +28,6 @@ export class DiningService {
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string, diningType: string) {
-    //diningCourtName = this.convertDiningNameBackend(diningCourtName);
     this.http
       .get<{
         message: string;
@@ -101,6 +102,9 @@ export class DiningService {
     return this.validCommentEmitter.asObservable();
   }
 
+  getTvEmitter(): Observable<any> {
+    return this.tvEmitter.asObservable();
+  }
   postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
@@ -176,35 +180,35 @@ export class DiningService {
       );
   }
 
-  getCommentList(): Comment[] {
-    return this.commentList;
-  }
-
-  convertDiningNameBackend(diningNameFrontend): string {
-    //convert some diningName so backend can understand
-    if (diningNameFrontend === "1bowl") {
-      return "onebowl";
-    } else if (diningNameFrontend === "pete's za") {
-      return "peteza";
-    }
-    return diningNameFrontend;
-  }
-
   checkOpenClosed() {
     this.http
       .get<{
-        message: string;
-        openclosed: any;
+        message: any;
+        //opendc: any;
+        //closeddc: any;
+        tvdc: any;
       }>(BACKEND_URL + "/checkopenclosed")
       .subscribe(
         response => {
+          console.log(response);
+          //var obj = JSON.parse(response.tvdc);
+          //console.log(obj);
+          console.log(response.tvdc)
+          console.log("here before");
           console.log(response.message);
+          //console.log("Checking return value open: " + response.opendc);
+          //console.log(response.opendc)
+          //console.log("Checking return value closed: " + response.closeddc);
+          //console.log(response.closeddc);
+          console.log("truth values: " + response.tvdc);
+          console.log(response.tvdc);
+          console.log("here after");
           // need a different "emitter" to update the doc table
-          //this.authStatusListener.next("loggedinsuccess");
+          this.tvEmitter.next(response);
         },
         error => {
           console.log(error.error.message);
-          //this.authStatusListener.next(error.error.message);
+          this.tvEmitter.next(error.error.message);
         }
       );
   }

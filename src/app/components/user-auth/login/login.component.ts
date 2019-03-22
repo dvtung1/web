@@ -22,7 +22,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatusSub.add(
       this.userAuthService.getAuthStatusListener().subscribe(respond => {
         if (respond === "authenticated") {
-          this.authStatusListener.next("authenticated");
+          //this.authStatusListener.next("authenticated");
+          window.alert("Successfully logged in!");
+
         } else {
           this.errMsg = respond;
         }

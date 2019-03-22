@@ -10,6 +10,7 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 })
 export class CreateCommentComponent implements OnInit {
   diningName: string;
+  diningType: string;
   constructor(
     private diningService: DiningService,
     private route: ActivatedRoute
@@ -26,8 +27,20 @@ export class CreateCommentComponent implements OnInit {
   }
 
   postComment(form: NgForm) {
+    if (form.invalid) {
+      console.log("Invalid");
+      return;
+    }
     var inputComment = form.value.comment;
-    //FIXME
-    this.diningService.postComment(inputComment, this.diningName, "Dinner");
+    this.diningService.postComment(
+      inputComment,
+      this.diningName,
+      this.diningType
+    );
+    //console.log(form.controls["diningType"].value);
+  }
+
+  getDiningType(diningType: string) {
+    this.diningType = diningType;
   }
 }
