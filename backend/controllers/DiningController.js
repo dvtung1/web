@@ -7,6 +7,7 @@ var Backendless = require("../utils/db.configuration"); //initialize backendless
 var DiningTiming = require("../models/DiningTiming");
 var Comment = require("../models/Comment");
 
+//var tvdc = [];
 var diningCourtList = [
   "1bowl",
   "earhart",
@@ -245,13 +246,11 @@ exports.getCommentsByUser = (req, res) => {
         commentListResult.push({
           diningName: comment.ofDiningTiming.ofPlace.name,
           diningType: comment.ofDiningTiming.diningType.name,
-          comment: {
-            author: currentUser.email,
-            text: comment.text,
-            rating: comment.rating,
-            objectId: comment.objectId,
-            authorId: currentUser.objectId
-          }
+          author: currentUser.email,
+          text: comment.text,
+          rating: comment.rating,
+          objectId: comment.objectId,
+          authorId: currentUser.objectId
         });
       });
       return res.status(200).json({
@@ -354,8 +353,9 @@ exports.checkOpenClosed = (req, res) => {
   var datetime = date + " " + time;
   //console.log(datetime);
 
-  var opendc = []; //return array with list of open dining courts
-  var closeddc = []; //reutrn array with list of closed dining courts
+  //var opendc = []; //return array with list of open dining courts
+  //var closeddc = []; //reutrn array with list of closed dining courts
+  var tvdc = [];
   var queryBuilder = Backendless.DataQueryBuilder.create();
   diningCourtList.forEach(diningcourt => {
     //console.log(diningcourt);
@@ -392,18 +392,24 @@ exports.checkOpenClosed = (req, res) => {
         "'";
     }
     var count = 0;
+    console.log("same dining2 : "+diningcourt)
     queryBuilder.setWhereClause(whereClause);
     Backendless.Data.of(DiningTiming)
       .find(queryBuilder)
       .then(ooc => {
+        console.log("same dining3 : "+diningcourt)
         if (ooc.length == 0) {
-          //console.log(diningcourt + " is not open");
-          closeddc.push(diningcourt);
+          console.log(diningcourt + " is not open");
+          //closeddc.push(diningcourt);
           //console.log("closeddc: " + closeddc);
+          tvdc.push(false);
+          console.log(tvdc);
         } else {
-          //console.log(diningcourt + " is open");
-          opendc.push(diningcourt);
+          console.log(diningcourt + " is open");
+          //opendc.push(diningcourt);
           //console.log("opendc: " + opendc);
+          tvdc.push(true);
+          console.log(tvdc);
         }
       })
       .catch(err => {
@@ -413,7 +419,17 @@ exports.checkOpenClosed = (req, res) => {
     // using datetime to check "from" and "to" in DiningTiming Table
     // return true or false depeding if open or not right now
     // order matters
-  })
+  });
+  console.log("TVDC B4 return: " + tvdc);
+  return res.status(200).send({
+    message:
+      "List of open and closed dining courts retreived successfully",
+    //opendc: opendc,
+    //closeddc: closeddc,
+    tv: {
+      tvdc: [false,true,true,false,true,true,false]
+    }
+  });
 };
 
 // var setupQueryBuilder = () => {

@@ -19,6 +19,9 @@ export class ManageComponent implements OnInit, OnDestroy {
   isUNSuccess: boolean = false; // if username change was successful
   currentUserEmail: string = ""; // contains the current user email
   currentUserName: string = ""; // contains the current user email
+  commentList: Comment[];
+  commentListSize = "loading...";
+  private userListener: Subscription;
 
   constructor(private userAuthService: UserAuthService) {
     // console.log("before");
@@ -48,6 +51,15 @@ export class ManageComponent implements OnInit, OnDestroy {
           //console.log("Tdsfljdsal;fkj");
           this.currentUserEmail = respond.email;
           this.currentUserName = respond.username;
+
+          //showing user's comments
+          // this.userListener = this.something
+          // .getCommentUpdateEmitter()
+          // .subscribe((respond: Comment[]) => {
+          //   this.commentList = respond;
+          //   this.commentListSize = this.commentList.length+"";
+          // })
+
           //console.log("USERNAME: "+ this.currentUserName);
           //console.log("EMAIL: "+ this.currentUserEmail);
         }
@@ -57,6 +69,8 @@ export class ManageComponent implements OnInit, OnDestroy {
       })
     );
   }
+
+  //get the cUE inside ngOnInit then call subscribe then listen to response
 
   editEmailToggle() {
     this.editEmail = !this.editEmail;
@@ -84,7 +98,6 @@ export class ManageComponent implements OnInit, OnDestroy {
     var newUsername = value;
     this.userAuthService.changeUserUsername(newUsername);
   }
-
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();

@@ -1,6 +1,8 @@
+"use strict";
 const express = require("express");
 const router = express.Router();
 const DiningController = require("../controllers/DiningController");
+const RPIController = require("../controllers/RPIController");
 const userAuthentication = require("../middlewares/userAuthentication.middleware");
 //middleware to check user has logged in or not
 
@@ -23,5 +25,7 @@ router.get("/mealtime", DiningController.getMealTime);
 
 // check to see which dining courts are open or closed
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);
+
+router.get("/:diningName/rating", RPIController.getRating);
 
 module.exports = router;

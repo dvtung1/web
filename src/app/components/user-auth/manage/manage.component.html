@@ -85,7 +85,23 @@
         <p>Password Successfully Changed</p>
         </div>   
     </div>
+    <div class="comments">
+        <h1><strong>Your comments:</strong></h1>
+        <p>Total number of comments: {{ commentListsize }}</p>
+        <div *ngFor="let comment of commentList">
+            <p class="diningName">{{ comment.diningName }}</p>
+            <p class="diningType">{{ comment.diningType }}</p>
+            <p>{{ comment.text }}</p>
+            <p>Rating: {{ comment.rating }}</p>
+            <br />
+            <div>
+              <button (click)="editComment(comment.objectId)">Edit</button
+              ><button (click)="deleteComment(comment.objectId)">Delete</button>
+            </div>
+        </div>        
+    </div>
 </div>
+
 
   
 
