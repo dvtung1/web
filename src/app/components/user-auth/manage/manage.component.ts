@@ -61,7 +61,7 @@ export class ManageComponent implements OnInit, OnDestroy {
           this.userListener = this.diningService
           .getCommentUpdateEmitter()
           .subscribe((respond: Comment[]) => {
-            this.commentList = respond.slice();
+            this.commentList = respond;
             this.commentListSize = this.commentList.length+"";
           })
 
