@@ -244,8 +244,10 @@ exports.getCommentsByUser = (req, res) => {
       currentUser.comments.forEach(comment => {
         //push each comment onto the Result list
         commentListResult.push({
-          diningName: comment.ofDiningTiming.ofPlace.name,
-          diningType: comment.ofDiningTiming.diningType.name,
+          //diningName: comment.ofDiningTiming.ofPlace.name,
+          diningName: "",
+          //diningType: comment.ofDiningTiming.diningType.name,
+          diningType: "",
           author: currentUser.email,
           text: comment.text,
           rating: comment.rating,

@@ -83,7 +83,7 @@ export class DiningService {
               objectId: comment.objectId,
               authorId: comment.authorId
             };
-            // array.push(cmt);
+            array.push(cmt);
           })  
           this.commentUpdateEmitter.next([...array]);
         },
