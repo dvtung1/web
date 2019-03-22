@@ -4,18 +4,9 @@
     <strong>{{ diningName }}</strong>
   </header>
   <div *ngIf="loggedIn">
-    <form (submit)="postComment(commentForm)" #commentForm="ngForm">
-      <textarea id="comspace"
-        rows="4"
-        cols="50"
-        name="comment"
-        placeholder="Enter a comment here!"
-        ngModel
-      ></textarea>
       <br />
-      <button type="submit">Submit</button>
+      <button (click)="middleState()">Post a Comment!</button>
       <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
-    </form>
     <br />
   </div>
   <div class="commentSection">

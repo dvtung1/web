@@ -60,15 +60,6 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           });
 
         this.validCommentListener = this.diningService
-<<<<<<< HEAD
-          .getValidCommentEmitter()
-          .subscribe(message => {
-            console.log(message);
-            if (message === "postcomsuccess") {
-              window.alert("Comment Posted Successfully");
-            }
-          });
-=======
         .getValidCommentEmitter()
         .subscribe(message => {
           console.log(message);
@@ -77,7 +68,6 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           }
         }
         );
->>>>>>> 08787d00922c578b4a97359429cfb58db4a39083
 
         //FIXME
         this.diningService.getComment(this.diningName, "");
@@ -148,6 +138,10 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
+  }
+  middleState(){
+    console.log("here2");
+    window.location.assign("/dining/" + this.diningName + "/create");
   }
   editComment(commentId: string){
     console.log("here");

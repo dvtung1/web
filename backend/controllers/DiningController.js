@@ -394,15 +394,6 @@ exports.checkOpenClosed = (req, res) => {
       .then(ooc => {
         console.log("same dining3 : "+diningcourt)
         if (ooc.length == 0) {
-<<<<<<< HEAD
-          //console.log(diningcourt + " is not open");
-          closeddc.push(diningcourt);
-          //console.log("closeddc: " + closeddc);
-        } else {
-          //console.log(diningcourt + " is open");
-          opendc.push(diningcourt);
-          //console.log("opendc: " + opendc);
-=======
           console.log(diningcourt + " is not open");
           //closeddc.push(diningcourt);
           //console.log("closeddc: " + closeddc);
@@ -414,7 +405,6 @@ exports.checkOpenClosed = (req, res) => {
           //console.log("opendc: " + opendc);
           tvdc.push(true);
           console.log(tvdc);
->>>>>>> 08787d00922c578b4a97359429cfb58db4a39083
         }
       })
       .catch(err => {
