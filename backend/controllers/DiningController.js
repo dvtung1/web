@@ -336,7 +336,7 @@ exports.getMealTime = (req, res) => {
 };
 
 exports.checkOpenClosed = (req, res) => {
-  console.log("RUNNING CORRECTLY");
+  //console.log("RUNNING CORRECTLY");
   var fulldate = new Date();
   var date = fulldate.toLocaleDateString();
   var timehours = fulldate.getHours();
@@ -353,7 +353,7 @@ exports.checkOpenClosed = (req, res) => {
   var closeddc = []; //reutrn array with list of closed dining courts
   var queryBuilder = Backendless.DataQueryBuilder.create();
   diningCourtList.forEach(diningcourt => {
-    console.log(diningcourt);
+    //console.log(diningcourt);
     //72D126B0-8BFD-82EF-FFCD-2AC4390F4F00
     if (diningcourt === "pete's za") {
       var whereClause =
@@ -392,13 +392,13 @@ exports.checkOpenClosed = (req, res) => {
       .find(queryBuilder)
       .then(ooc => {
         if (ooc.length == 0) {
-          console.log(diningcourt + " is not open");
+          //console.log(diningcourt + " is not open");
           closeddc.push(diningcourt);
-          console.log("closeddc: " + closeddc);
+          //console.log("closeddc: " + closeddc);
         } else {
-          console.log(diningcourt + " is open");
+          //console.log(diningcourt + " is open");
           opendc.push(diningcourt);
-          console.log("opendc: " + opendc);
+          //console.log("opendc: " + opendc);
         }
       })
       .catch(err => {
@@ -411,20 +411,20 @@ exports.checkOpenClosed = (req, res) => {
   });
 };
 
-var setupQueryBuilder = () => {
-  return Backendless.DataQueryBuilder.create().setWhereClause(
-    "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
-  );
-};
-
 // var setupQueryBuilder = () => {
-//   var today = new Date();
-//   var dateAndTime = convertESTDateTime(today);
-//   var whereClause =
-//     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
-//   console.log(whereClause);
-//   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+//   return Backendless.DataQueryBuilder.create().setWhereClause(
+//     "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
+//   );
 // };
+
+var setupQueryBuilder = () => {
+  var today = new Date();
+  var dateAndTime = convertESTDateTime(today);
+  var whereClause =
+    "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
+  console.log(whereClause);
+  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+};
 
 var getTwoDigits = num => {
   return ("0" + num).slice(-2);

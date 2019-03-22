@@ -27,13 +27,16 @@ export class DiningService {
     @return comments list which contain params (author, text, rating, objectId). Ex: comment.author
   */
   getComment(diningCourtName: string, diningType: string) {
+    var url = BACKEND_URL + "/comment?name=" + diningCourtName;
+
+    if (diningType !== "") {
+      url += "&type=" + diningType;
+    }
     this.http
       .get<{
         message: string;
         comments: any;
-      }>(
-        BACKEND_URL + "/comment?name=" + diningCourtName + "&type=" + diningType
-      )
+      }>(url)
       .pipe(
         map(respond => {
           return {
