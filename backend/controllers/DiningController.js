@@ -7,7 +7,7 @@ var Backendless = require("../utils/db.configuration"); //initialize backendless
 var DiningTiming = require("../models/DiningTiming");
 var Comment = require("../models/Comment");
 
-var tvdc = [];
+//var tvdc = [];
 var diningCourtList = [
   "1bowl",
   "earhart",
@@ -352,7 +352,7 @@ exports.checkOpenClosed = (req, res) => {
 
   //var opendc = []; //return array with list of open dining courts
   //var closeddc = []; //reutrn array with list of closed dining courts
-  //var tvdc = [];
+  var tvdc = [];
   var queryBuilder = Backendless.DataQueryBuilder.create();
   diningCourtList.forEach(diningcourt => {
     console.log(diningcourt);

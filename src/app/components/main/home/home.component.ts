@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit {
     //calls this on refresh
     this.tvStatusSub = new Subscription;
     this.diningService.checkOpenClosed();
-
   }
 
   ngOnInit() {

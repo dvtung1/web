@@ -8,6 +8,7 @@ import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import * as Filter from "bad-words";
+import { CreateCommentComponent } from '../create-comment/create-comment.component';
 @Component({
   selector: "app-dining-court",
   templateUrl: "./dining-court.component.html",
@@ -127,5 +128,9 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
+  }
+  editComment(commentId: string){
+    console.log("here");
+    window.location.assign("/dining/" + this.diningName + "/create");
   }
 }
