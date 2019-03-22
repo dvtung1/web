@@ -299,15 +299,20 @@ exports.getMealTime = (req, res) => {
       var openDiningCourtsName = [];
       foundDiningTimings.forEach(diningTiming => {
         //convert Epoch time to EST time
-        var epochTime = diningTiming.to;
-        var today = new Date(parseInt(epochTime));
-
-        var dateAndTime = convertESTDateTime(today);
+        var epochTimeClosed = diningTiming.to;
+        var epochTimeOpened = diningTiming.from;
+        var closedTime = convertESTDateTime(
+          new Date(parseInt(epochTimeClosed))
+        );
+        var openedTime = convertESTDateTime(
+          new Date(parseInt(epochTimeOpened))
+        );
 
         openDiningCourts.push({
           diningName: diningTiming.ofPlace.name,
           diningType: diningTiming.diningType.name,
-          closedTime: dateAndTime
+          openedTime: openedTime,
+          closedTime: closedTime
         });
 
         openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
@@ -318,7 +323,7 @@ exports.getMealTime = (req, res) => {
       );
       return res.status(200).json({
         message:
-          "Get meal time (open/close) and specific closed time successfully",
+          "Get current meal time (open/close) and specific closed time successfully",
         openDiningCourts: openDiningCourts,
         closedDiningCourts: closedDiningCourts
       });
@@ -406,20 +411,20 @@ exports.checkOpenClosed = (req, res) => {
   });
 };
 
-// var setupQueryBuilder = () => {
-//   return Backendless.DataQueryBuilder.create().setWhereClause(
-//     "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
-//   );
-// };
-
 var setupQueryBuilder = () => {
-  var today = new Date();
-  var dateAndTime = convertESTDateTime(today);
-  var whereClause =
-    "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
-  console.log(whereClause);
-  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+  return Backendless.DataQueryBuilder.create().setWhereClause(
+    "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
+  );
 };
+
+// var setupQueryBuilder = () => {
+//   var today = new Date();
+//   var dateAndTime = convertESTDateTime(today);
+//   var whereClause =
+//     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
+//   console.log(whereClause);
+//   return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+// };
 
 var getTwoDigits = num => {
   return ("0" + num).slice(-2);
