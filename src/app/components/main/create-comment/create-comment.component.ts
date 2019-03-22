@@ -10,7 +10,9 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 })
 export class CreateCommentComponent implements OnInit {
   diningName: string;
+  textMessage: string;
   diningType: string;
+  commentId: string;
   constructor(
     private diningService: DiningService,
     private route: ActivatedRoute
@@ -23,6 +25,15 @@ export class CreateCommentComponent implements OnInit {
         //get diningName from the param route
         this.diningName = paramMap.get("diningName");
       }
+      if (paramMap.has("id")) {
+        this.commentId = paramMap.get("id");
+
+        this.diningService.getCommentByIdEmitter().subscribe(comment => {
+          this.diningType = comment.diningType.toLowerCase();
+          this.textMessage = comment.text;
+        });
+        this.diningService.getCommentById(this.commentId);
+      }
     });
   }
 
@@ -32,15 +43,14 @@ export class CreateCommentComponent implements OnInit {
       return;
     }
     var inputComment = form.value.comment;
-    this.diningService.postComment(
-      inputComment,
-      this.diningName,
-      this.diningType
-    );
-    //console.log(form.controls["diningType"].value);
-  }
-
-  getDiningType(diningType: string) {
-    this.diningType = diningType;
+    if (this.commentId == null) {
+      this.diningService.postComment(
+        inputComment,
+        this.diningName,
+        this.diningType
+      );
+    } else {
+      this.diningService.editComment(this.commentId, this.textMessage);
+    }
   }
 }

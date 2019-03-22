@@ -6,7 +6,7 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { Variable } from "@angular/compiler/src/render3/r3_ast";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -14,9 +14,10 @@ const BACKEND_URL = environment.apiUrl + "/dining";
   providedIn: "root"
 })
 export class DiningService {
-  private commentUpdateEmitter = new Subject<Comment[]>();
+  private commentUpdateEmitter = new Subject<any[]>();
   private commentList: Comment[] = [];
   private validCommentEmitter = new Subject<any>();
+  private commentByIdEmitter = new Subject<any>();
   private tvEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
 
@@ -66,6 +67,34 @@ export class DiningService {
       );
   }
 
+  getCommentById(commentId: string) {
+    this.http
+      .get<{
+        author: string;
+        text: string;
+        rating: string;
+        objectId: string;
+        authorId: string;
+        diningType: string;
+      }>(BACKEND_URL + "/comment/" + commentId)
+      .subscribe(
+        response => {
+          var cmt = {
+            diningType: response.diningType,
+            text: response.text
+          };
+          this.commentByIdEmitter.next(cmt);
+        },
+        err => {
+          console.log(err.error.message);
+        }
+      );
+  }
+
+  getCommentByIdEmitter() {
+    return this.commentByIdEmitter.asObservable();
+  }
+
   getCommentByUser() {
     this.http
       .get<{
@@ -86,7 +115,7 @@ export class DiningService {
               authorId: comment.authorId
             };
             array.push(cmt);
-          })  
+          });
           this.commentUpdateEmitter.next(...array);
         },
         //array.next put into cUE
@@ -196,7 +225,7 @@ export class DiningService {
           console.log(response);
           //var obj = JSON.parse(response.tvdc);
           //console.log(obj);
-          console.log(response.tvdc)
+          console.log(response.tvdc);
           console.log("here before");
           console.log(response.message);
           //console.log("Checking return value open: " + response.opendc);

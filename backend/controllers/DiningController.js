@@ -275,7 +275,8 @@ exports.getCommentById = (req, res) => {
         text: foundComment.text,
         rating: foundComment.rating,
         objectId: foundComment.objectId,
-        authorId: foundComment.byUser.objectId
+        authorId: foundComment.byUser.objectId,
+        diningType: foundComment.ofDiningTiming.diningType.name
       });
     })
     .catch(err => {
@@ -387,22 +388,13 @@ exports.checkOpenClosed = (req, res) => {
         "'";
     }
     var count = 0;
-    console.log("same dining2 : "+diningcourt)
+    console.log("same dining2 : " + diningcourt);
     queryBuilder.setWhereClause(whereClause);
     Backendless.Data.of(DiningTiming)
       .find(queryBuilder)
       .then(ooc => {
-        console.log("same dining3 : "+diningcourt)
+        console.log("same dining3 : " + diningcourt);
         if (ooc.length == 0) {
-<<<<<<< HEAD
-          //console.log(diningcourt + " is not open");
-          closeddc.push(diningcourt);
-          //console.log("closeddc: " + closeddc);
-        } else {
-          //console.log(diningcourt + " is open");
-          opendc.push(diningcourt);
-          //console.log("opendc: " + opendc);
-=======
           console.log(diningcourt + " is not open");
           //closeddc.push(diningcourt);
           //console.log("closeddc: " + closeddc);
@@ -414,7 +406,6 @@ exports.checkOpenClosed = (req, res) => {
           //console.log("opendc: " + opendc);
           tvdc.push(true);
           console.log(tvdc);
->>>>>>> 08787d00922c578b4a97359429cfb58db4a39083
         }
       })
       .catch(err => {
@@ -427,12 +418,11 @@ exports.checkOpenClosed = (req, res) => {
   });
   console.log("TVDC B4 return: " + tvdc);
   return res.status(200).send({
-    message:
-      "List of open and closed dining courts retreived successfully",
+    message: "List of open and closed dining courts retreived successfully",
     //opendc: opendc,
     //closeddc: closeddc,
     tv: {
-      tvdc: [false,true,true,false,true,true,false]
+      tvdc: [false, true, true, false, true, true, false]
     }
   });
 };
