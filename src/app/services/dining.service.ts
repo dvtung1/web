@@ -9,7 +9,6 @@ import { map } from "rxjs/operators";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
-
 @Injectable({
   providedIn: "root"
 })
@@ -41,6 +40,7 @@ export class DiningService {
             message: respond.message,
             comments: respond.comments.map(comment => {
               return {
+                //diningName: re
                 text: comment.text,
                 byUser: comment.author,
                 rating: comment.rating,
@@ -70,16 +70,22 @@ export class DiningService {
       }>(BACKEND_URL + "/comment/user")
       .subscribe(
         response => {
-          var cmt = {
-            diningName: response.comments.diningName,
-            diningType: response.comments.diningType,
-            text: response.comments.comment.text,
-            byUser: response.comments.comment.author,
-            rating: response.comments.comment.rating,
-            objectId: response.comments.comment.objectId,
-            authorId: response.comments.comment.authorId
-          };
+          var array = [];
+          response.comments.forEach(comment => {
+            var cmt = {
+              diningName: comment.diningName,
+              diningType: comment.diningType,
+              text: comment.text,
+              byUser: comment.author,
+              rating: comment.rating,
+              objectId: comment.objectId,
+              authorId: comment.authorId
+            };
+            array.push(cmt);
+          })  
+          this.commentUpdateEmitter.next(...array);
         },
+        //array.next put into cUE
         error => {
           console.log(error.error.message);
           //this.authStatusListener.next(error.error.message);
@@ -132,6 +138,7 @@ export class DiningService {
         }
       );
   }
+
   removeComment(commentId: string) {
     this.http
       .delete<{ message: string }>(BACKEND_URL + "/comment/" + commentId)
@@ -168,6 +175,7 @@ export class DiningService {
         }
       );
   }
+
   getCommentList(): Comment[] {
     return this.commentList;
   }
