@@ -10,7 +10,6 @@ import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
-
 @Injectable({
   providedIn: "root"
 })
@@ -42,6 +41,7 @@ export class DiningService {
             message: respond.message,
             comments: respond.comments.map(comment => {
               return {
+                //diningName: re
                 text: comment.text,
                 byUser: comment.author,
                 rating: comment.rating,
@@ -59,6 +59,37 @@ export class DiningService {
         },
         err => {
           console.log(err.error.message);
+        }
+      );
+  }
+
+  getCommentByUser() {
+    this.http
+      .get<{
+        message: string;
+        comments: any;
+      }>(BACKEND_URL + "/comment/user")
+      .subscribe(
+        response => {
+          var array = [];
+          response.comments.forEach(comment => {
+            var cmt = {
+              diningName: comment.diningName,
+              diningType: comment.diningType,
+              text: comment.text,
+              byUser: comment.author,
+              rating: comment.rating,
+              objectId: comment.objectId,
+              authorId: comment.authorId
+            };
+            array.push(cmt);
+          })  
+          this.commentUpdateEmitter.next(...array);
+        },
+        //array.next put into cUE
+        error => {
+          console.log(error.error.message);
+          //this.authStatusListener.next(error.error.message);
         }
       );
   }
@@ -111,6 +142,7 @@ export class DiningService {
         }
       );
   }
+
   removeComment(commentId: string) {
     this.http
       .delete<{ message: string }>(BACKEND_URL + "/comment/" + commentId)

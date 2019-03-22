@@ -246,13 +246,11 @@ exports.getCommentsByUser = (req, res) => {
         commentListResult.push({
           diningName: comment.ofDiningTiming.ofPlace.name,
           diningType: comment.ofDiningTiming.diningType.name,
-          comment: {
-            author: currentUser.email,
-            text: comment.text,
-            rating: comment.rating,
-            objectId: comment.objectId,
-            authorId: currentUser.objectId
-          }
+          author: currentUser.email,
+          text: comment.text,
+          rating: comment.rating,
+          objectId: comment.objectId,
+          authorId: currentUser.objectId
         });
       });
       return res.status(200).json({

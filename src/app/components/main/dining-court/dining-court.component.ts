@@ -59,7 +59,6 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
             this.commentListsize = this.commentList.length +"";
           });
 
-
         this.validCommentListener = this.diningService
         .getValidCommentEmitter()
         .subscribe(message => {
@@ -68,9 +67,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
             window.alert("Comment Posted Successfully");
           }
         }
-
         );
-
 
         //FIXME
         this.diningService.getComment(this.diningName, "Dinner");
