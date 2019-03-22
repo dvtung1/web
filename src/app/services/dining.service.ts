@@ -119,6 +119,8 @@ export class DiningService {
             };
             array.push(cmt);
           });
+          // console.log("HI");
+          // console.log(array);
           this.commentUpdateEmitter.next(...array);
         },
         error => {

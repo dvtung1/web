@@ -53,17 +53,18 @@ export class ManageComponent implements OnInit, OnDestroy {
           this.isUNSuccess = true;
         }
         else if (typeof respond == 'object'){
+          // console.log(respond);
           //console.log("Tdsfljdsal;fkj");
           this.currentUserEmail = respond.email;
           this.currentUserName = respond.username;
 
           //showing user's comments
-          this.userListener = this.diningService
-          .getCommentUpdateEmitter()
-          .subscribe((respond: Comment[]) => {
-            this.commentList = respond;
-            this.commentListSize = this.commentList.length+"";
-          })
+          // this.userListener = this.diningService
+          // .getCommentUpdateEmitter()
+          // .subscribe((respond: Comment[]) => {
+          //   this.commentList = respond;
+          //   this.commentListSize = this.commentList.length+"";
+          // })
 
           //console.log("USERNAME: "+ this.currentUserName);
           //console.log("EMAIL: "+ this.currentUserEmail);
@@ -73,6 +74,15 @@ export class ManageComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+      //showing user's comments
+      this.userListener = this.diningService
+      .getCommentUpdateEmitter()
+      .subscribe((respond: any) => {
+        console.log("asdas");
+        this.commentList = respond;
+        this.commentListSize = this.commentList.length+"";
+      })
   }
 
   //get the cUE inside ngOnInit then call subscribe then listen to response
