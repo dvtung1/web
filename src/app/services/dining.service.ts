@@ -6,10 +6,10 @@ import { Comment } from "../models/comment";
 import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
-
 @Injectable({
   providedIn: "root"
 })
@@ -17,6 +17,7 @@ export class DiningService {
   private commentUpdateEmitter = new Subject<Comment[]>();
   private commentList: Comment[] = [];
   private validCommentEmitter = new Subject<any>();
+  private tvEmitter = new Subject<any>();
   constructor(private http: HttpClient, private location: Location) {}
 
   /*
@@ -43,6 +44,7 @@ export class DiningService {
             message: respond.message,
             comments: respond.comments.map(comment => {
               return {
+                //diningName: re
                 text: comment.text,
                 byUser: comment.author,
                 rating: comment.rating,
@@ -64,6 +66,37 @@ export class DiningService {
       );
   }
 
+  getCommentByUser() {
+    this.http
+      .get<{
+        message: string;
+        comments: any;
+      }>(BACKEND_URL + "/comment/user")
+      .subscribe(
+        response => {
+          var array = [];
+          response.comments.forEach(comment => {
+            var cmt = {
+              diningName: comment.diningName,
+              diningType: comment.diningType,
+              text: comment.text,
+              byUser: comment.author,
+              rating: comment.rating,
+              objectId: comment.objectId,
+              authorId: comment.authorId
+            };
+            array.push(cmt);
+          })  
+          this.commentUpdateEmitter.next(...array);
+        },
+        //array.next put into cUE
+        error => {
+          console.log(error.error.message);
+          //this.authStatusListener.next(error.error.message);
+        }
+      );
+  }
+
   getCommentUpdateEmitter(): Observable<any> {
     return this.commentUpdateEmitter.asObservable();
   }
@@ -72,6 +105,9 @@ export class DiningService {
     return this.validCommentEmitter.asObservable();
   }
 
+  getTvEmitter(): Observable<any> {
+    return this.tvEmitter.asObservable();
+  }
   postComment(inputComment: string, diningCourt: string, diningType: string) {
     var commentModel: postComment = {
       inputComment: inputComment,
@@ -109,6 +145,7 @@ export class DiningService {
         }
       );
   }
+
   removeComment(commentId: string) {
     this.http
       .delete<{ message: string }>(BACKEND_URL + "/comment/" + commentId)
@@ -149,18 +186,32 @@ export class DiningService {
   checkOpenClosed() {
     this.http
       .get<{
-        message: string;
-        openclosed: any;
+        message: any;
+        //opendc: any;
+        //closeddc: any;
+        tvdc: any;
       }>(BACKEND_URL + "/checkopenclosed")
       .subscribe(
         response => {
+          console.log(response);
+          //var obj = JSON.parse(response.tvdc);
+          //console.log(obj);
+          console.log(response.tvdc)
+          console.log("here before");
           console.log(response.message);
+          //console.log("Checking return value open: " + response.opendc);
+          //console.log(response.opendc)
+          //console.log("Checking return value closed: " + response.closeddc);
+          //console.log(response.closeddc);
+          console.log("truth values: " + response.tvdc);
+          console.log(response.tvdc);
+          console.log("here after");
           // need a different "emitter" to update the doc table
-          //this.authStatusListener.next("loggedinsuccess");
+          this.tvEmitter.next(response);
         },
         error => {
           console.log(error.error.message);
-          //this.authStatusListener.next(error.error.message);
+          this.tvEmitter.next(error.error.message);
         }
       );
   }

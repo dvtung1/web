@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { DiningService } from 'src/app/services/dining.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-home",
@@ -7,6 +8,7 @@ import { DiningService } from 'src/app/services/dining.service';
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
+  private tvStatusSub: Subscription;
   diningArray = [
     "1bowl",
     "earhart",
@@ -34,9 +36,19 @@ export class HomeComponent implements OnInit {
     private diningService: DiningService
   ) {
     //calls this on refresh
+    this.tvStatusSub = new Subscription;
     this.diningService.checkOpenClosed();
-
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.tvStatusSub.add(
+      this.diningService.getTvEmitter().subscribe(respond => {
+        console.log("This is in home comp: " + respond);
+        console.log(respond);
+        this.doc = respond.tv.tvdc;
+        console.log("doc");
+        console.log(this.doc);
+      })
+    )
+  }
 }

@@ -1,34 +1,35 @@
 <br />
-<header class="text-capitalize">
-  <strong>{{ diningName }}</strong>
-</header>
-
-<div *ngIf="loggedIn">
-  <form (submit)="postComment(commentForm)" #commentForm="ngForm">
-    <textarea id="comspace"
-      rows="4"
-      cols="50"
-      name="comment"
-      placeholder="Enter a comment here!"
-      ngModel
-    ></textarea>
+<div class="commentDetails">
+  <header class="text-capitalize">
+    <strong>{{ diningName }}</strong>
+  </header>
+  <div *ngIf="loggedIn">
+    <form (submit)="postComment(commentForm)" #commentForm="ngForm">
+      <textarea id="comspace"
+        rows="4"
+        cols="50"
+        name="comment"
+        placeholder="Enter a comment here!"
+        ngModel
+      ></textarea>
+      <br />
+      <button type="submit">Submit</button>
+      <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
+    </form>
     <br />
-    <button type="submit">Submit</button>
-    <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
-  </form>
-  <br />
-</div>
-<div class="commentSection">
-  <br /><br />
-  <p>Total number of comments: {{ commentListsize }}</p>
-  <div *ngFor="let comment of commentList">
-    <p class="username">{{ comment.byUser }}</p>
-    <p>{{ comment.text }}</p>
-    <p>Rating: {{ comment.rating }}</p>
-    <br />
-    <div>
-      <button (click)="editComment(comment.objectId)">Edit</button
-      ><button (click)="deleteComment(comment.objectId)">Delete</button>
+  </div>
+  <div class="commentSection">
+    <br /><br />
+    <p>Total number of comments: {{ commentListsize }}</p>
+    <div *ngFor="let comment of commentList">
+      <p class="username">{{ comment.byUser }}</p>
+      <p>{{ comment.text }}</p>
+      <p>Rating: {{ comment.rating }}</p>
+      <br />
+      <div>
+        <button (click)="editComment(comment.objectId)">Edit</button
+        ><button (click)="deleteComment(comment.objectId)">Delete</button>
+      </div>
     </div>
   </div>
 </div>
