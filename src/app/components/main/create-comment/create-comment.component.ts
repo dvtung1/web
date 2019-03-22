@@ -43,7 +43,8 @@ export class CreateCommentComponent implements OnInit {
       this.diningName,
       this.diningType
     );
-    setTimeout(function(){ console.log("hm") }, 3000);
+    //setTimeout(function(){ window.alert("valid comment")}, 3000);
+    window.alert("valid comment posted");
     window.location.assign("/dining/" + this.diningName);
     }
   }
