@@ -17,7 +17,7 @@ import { LoginComponent } from "./components/user-auth/login/login.component";
 import { HomeComponent } from "./components/main/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { ManageComponent } from "./components/user-auth/manage/manage.component";
-import { MenuComponent } from "./components/menu/menu.component";
+import { MenuComponent } from "./components/main/menu/menu.component";
 import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
 import { CreateCommentComponent } from './components/main/create-comment/create-comment.component';
 

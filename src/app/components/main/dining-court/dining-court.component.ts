@@ -6,6 +6,8 @@ import { Subscription } from "rxjs";
 import { Comment } from "src/app/models/comment";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+
+import * as Filter from "bad-words";
 @Component({
   selector: "app-dining-court",
   templateUrl: "./dining-court.component.html",
@@ -82,69 +84,46 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   postComment(form: NgForm) {
     var inputComment = form.value.comment;
     (<HTMLInputElement>document.getElementById('comspace')).value = "";
-    //FIXME
-    this.diningService.postComment(inputComment, this.diningName, "Dinner");
-    // var swearWords =
-    // ["anal", "anus", "arsehole", "ass", "asshole",
-    // "bastard", "bastardo", "bbc", "bdsm", "bitch", "bitches", "blowjob", "bondage", "boner", "boob", "boobs", "booty", "bullshit", "butt", "buttcheeks", "butthole",
-    // "camel toe", "cameltoe", "clit", "clitoris", "clusterfuck", "cock", "cocks", "creampie", "cum", "cunt",
-    // "deepthroat", "dick", "dildo", "doggystyle", "doggy style",
-    // "ejaculate", "ejaculation", "erotic", "erotism",
-    // "faggot", "fingering", "fisting", "fuck", "fucker", "fucking", "fucked", "fucktard",
-    // "gangbang", "genital", "genitalia", "genitals",
-    // "handjob", "hand job", "hentai", "homoerotic", "hump", "humped", "humping",
-    // "incest", "intercourse",
-    // "jack off", "jerk off", "jizz",
-    // "kink", "kinky",
-    // "masturbate", "milf", "motherfucker",
-    // "negro", "nigger", "nigga", "nipple", "nipples",
-    // "orgasm", "orgasmic", "orgy",
-    // "penis", "porn", "porno", "pornography", "pube", "pubes", "pubic", "pussy",
-    // "queef", "rape", "raped", "raping",
-    // "scat", "scrotum", "semen", "sex", "sexy", "sext", "sexting", "shit", "shitty", "shat", "slut",
-    // "threesome", "tit", "tits", "titties", "titty",
-    // "vagina", "vibrator",
-    // "wank"];
-    // if (swearWords.some(function(v) {
-    //   return inputComment.indexOf(v) >= 0;
-    // })) {
-    //   this.diningService.postComment(inputComment, this.diningName, "Dinner");
-    // }
-    // else {
-    //   switch (this.diningName) {
-    //     case "1bowl":
-    //     window.location.assign("/1bowl");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     case "earhart":
-    //     window.location.assign("/earhart");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     case "ford":
-    //     window.location.assign("/ford");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     case "hillenbrand":
-    //     window.location.assign("/hillenbrand");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     case "wiley":
-    //     window.location.assign("/wiley");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     case "windsor":
-    //     window.location.assign("/windsor");
-    //     window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
-    //     break;
-    //     // case "pete's za":
-    //     // window.location.assign("/petesza");
-    //     // break;
-    //   }
-    // }
+    // var Filter = require('bad-words');
+    var filter = new Filter();
+    if (filter.isProfane(inputComment)) {
+      switch (this.diningName) {
+        case "1bowl":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+        case "earhart":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+        case "ford":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        break;
+        case "hillenbrand":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+        case "wiley":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+        case "windsor":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+        case "pete's za":
+        window.alert("Your comment contains inappropriate language and will not be posted. Please post a new comment.");
+        form.value.comment = ' ';
+        break;
+      }
+    }
+    else {
+      this.diningService.postComment(inputComment, this.diningName, "Dinner");
+      //window.alert("Comment posted successfully!")
+    }
     
     //retrieve message from the server
     
-    //window.alert("Comment posted successfully!")
   }
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
