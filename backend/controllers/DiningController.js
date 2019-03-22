@@ -238,6 +238,7 @@ exports.editComment = (req, res) => {
 
 //return json contain comments of the user along with info about diningCourt and diningType
 exports.getCommentsByUser = (req, res) => {
+  /*
   Backendless.UserService.getCurrentUser()
     .then(currentUser => {
       var commentListResult = []; //list of comments that will be return
@@ -263,6 +264,36 @@ exports.getCommentsByUser = (req, res) => {
         message: err.message
       });
     });
+    */
+  var userObjectId = Backendless.LocalCache.get("current-user-id");
+  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    `byUser.objectId = '${userObjectId}'`
+  );
+  Backendless.Data.of(Comment)
+    .find(queryBuilder)
+    .then(foundComments => {
+      var commentListResult = [];
+      foundComments.forEach(comment => {
+        commentListResult.push({
+          diningName: comment.ofDiningTiming.ofPlace.name,
+          diningType: comment.ofDiningTiming.diningType.name,
+          author: comment.byUser.email,
+          text: comment.text,
+          rating: comment.rating,
+          objectId: comment.objectId,
+          authorId: comment.byUser.objectId
+        });
+      });
+      return res.status(200).json({
+        message: "Fetch comment of the current user successfully",
+        comments: commentListResult
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message
+      });
+    });
 };
 
 exports.getCommentById = (req, res) => {
@@ -275,7 +306,8 @@ exports.getCommentById = (req, res) => {
         text: foundComment.text,
         rating: foundComment.rating,
         objectId: foundComment.objectId,
-        authorId: foundComment.byUser.objectId
+        authorId: foundComment.byUser.objectId,
+        diningType: foundComment.ofDiningTiming.diningType.name
       });
     })
     .catch(err => {
@@ -316,7 +348,7 @@ exports.getMealTime = (req, res) => {
         //console.log("Name: "+diningTiming.diningType.name.toLowerCase());
         //console.log("OpenedTime: "+openedTime);
         //console.log("Closedtime: "+closedTime);
-        
+
         openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
       });
       //get all the dining courts that are closed
@@ -392,12 +424,12 @@ exports.checkOpenClosed = (req, res) => {
         "'";
     }
     var count = 0;
-    console.log("same dining2 : "+diningcourt)
+    console.log("same dining2 : " + diningcourt);
     queryBuilder.setWhereClause(whereClause);
     Backendless.Data.of(DiningTiming)
       .find(queryBuilder)
       .then(ooc => {
-        console.log("same dining3 : "+diningcourt)
+        console.log("same dining3 : " + diningcourt);
         if (ooc.length == 0) {
           console.log(diningcourt + " is not open");
           //closeddc.push(diningcourt);
@@ -422,12 +454,11 @@ exports.checkOpenClosed = (req, res) => {
   });
   console.log("TVDC B4 return: " + tvdc);
   return res.status(200).send({
-    message:
-      "List of open and closed dining courts retreived successfully",
+    message: "List of open and closed dining courts retreived successfully",
     //opendc: opendc,
     //closeddc: closeddc,
     tv: {
-      tvdc: [false,true,true,false,true,true,false]
+      tvdc: [false, true, true, false, true, true, false]
     }
   });
 };

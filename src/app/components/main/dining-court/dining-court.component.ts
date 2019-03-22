@@ -5,10 +5,10 @@ import { DiningService } from "src/app/services/dining.service";
 import { Subscription } from "rxjs";
 import { Comment } from "src/app/models/comment";
 import { NgForm } from "@angular/forms";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 
 import * as Filter from "bad-words";
-import { CreateCommentComponent } from '../create-comment/create-comment.component';
+import { CreateCommentComponent } from "../create-comment/create-comment.component";
 @Component({
   selector: "app-dining-court",
   templateUrl: "./dining-court.component.html",
@@ -28,7 +28,8 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   constructor(
     private userAuthService: UserAuthService,
     private diningService: DiningService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.userAuthService.checkIfUserLoggedIn();
   }
@@ -60,14 +61,13 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           });
 
         this.validCommentListener = this.diningService
-        .getValidCommentEmitter()
-        .subscribe(message => {
-          console.log(message);
-          if ( message === "postcomsuccess" ) {
-            window.alert("Comment Posted Successfully");
-          }
-        }
-        );
+          .getValidCommentEmitter()
+          .subscribe(message => {
+            console.log(message);
+            if (message === "postcomsuccess") {
+              window.alert("Comment Posted Successfully");
+            }
+          });
 
         //FIXME
         this.diningService.getComment(this.diningName, "");
@@ -139,12 +139,17 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
   deleteComment(commentId: string) {
     this.diningService.removeComment(commentId);
   }
-  middleState(){
+  middleState() {
     console.log("here2");
     window.location.assign("/dining/" + this.diningName + "/create");
   }
-  editComment(commentId: string){
+  editComment(commentId: string) {
     console.log("here");
-    window.location.assign("/dining/" + this.diningName + "/create");
+    window.location.assign(
+      "/dining/" + this.diningName + "/create/" + commentId
+    );
+    // this.router.navigate([
+    //   "/dining/" + this.diningName + "/create?id=" + commentId
+    // ]);
   }
 }

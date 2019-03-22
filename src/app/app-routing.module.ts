@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: "recovery", component: RecoveryComponent },
   { path: "manage", component: ManageComponent },
   { path: "dining/:diningName", component: DiningCourtComponent },
+  { path: "dining/:diningName/create/:id", component: CreateCommentComponent },
   { path: "dining/:diningName/create", component: CreateCommentComponent }
 ];
 @NgModule({

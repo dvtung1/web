@@ -35,7 +35,7 @@ export class CreateCommentComponent implements OnInit {
     var inputComment = form.value.comment;
     var filter = new Filter();
     if (filter.isProfane(inputComment)) {
-      window.alert("Your comment will not be posted due to the presence of obscene language, please post another comment");
+      window.alert("Your comment will not be posted due to the presence of obscene language, please");
     } else{
       var inputComment = form.value.comment;
       this.diningService.postComment(
@@ -43,6 +43,7 @@ export class CreateCommentComponent implements OnInit {
       this.diningName,
       this.diningType
     );
+    setTimeout(function(){ console.log("hm") }, 3000);
     window.location.assign("/dining/" + this.diningName);
     }
   }

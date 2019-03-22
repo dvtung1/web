@@ -30,7 +30,8 @@
     cols="50"
     name="comment"
     placeholder="Enter a comment here!"
-    ngModel
+    required
+    [(ngModel)]="textMessage"
   ></textarea>
   <br />
   <button type="submit">Submit</button>
