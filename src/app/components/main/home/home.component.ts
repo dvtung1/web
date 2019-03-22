@@ -1,26 +1,18 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DiningService } from 'src/app/services/dining.service';
 import { Subscription } from 'rxjs';
-<<<<<<< HEAD
 import { OpenDining } from 'src/app/models/opendining';
-=======
->>>>>>> 9da0d3d5920e5a73342da05a16d193a0c34fae1c
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.css"]
 })
-<<<<<<< HEAD
 export class HomeComponent implements OnInit, OnDestroy {
   
   private diningListener: Subscription;
   openList: OpenDining[];
   closedList: String[];
-=======
-export class HomeComponent implements OnInit {
-  private tvStatusSub: Subscription;
->>>>>>> 9da0d3d5920e5a73342da05a16d193a0c34fae1c
   diningArray = [
     "1bowl",
     "earhart",
