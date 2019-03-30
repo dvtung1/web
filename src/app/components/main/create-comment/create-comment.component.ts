@@ -12,6 +12,8 @@ import * as Filter from "bad-words";
 export class CreateCommentComponent implements OnInit {
   diningName: string;
   diningType: string;
+  textMessage: string;
+  commentId: string;
   constructor(
     private diningService: DiningService,
     private route: ActivatedRoute
@@ -24,6 +26,15 @@ export class CreateCommentComponent implements OnInit {
         //get diningName from the param route
         this.diningName = paramMap.get("diningName");
       }
+      if (paramMap.has("id")) {
+        this.commentId = paramMap.get("id");
+
+        this.diningService.getCommentByIdEmitter().subscribe(comment => {
+          this.diningType = comment.diningType.toLowerCase();
+          this.textMessage = comment.text;
+        });
+        this.diningService.getCommentById(this.commentId);
+      }
     });
   }
 
@@ -35,17 +46,23 @@ export class CreateCommentComponent implements OnInit {
     var inputComment = form.value.comment;
     var filter = new Filter();
     if (filter.isProfane(inputComment)) {
-      window.alert("Your comment will not be posted due to the presence of obscene language, please");
-    } else{
+      window.alert(
+        "Your comment will not be posted due to the presence of obscene language, please"
+      );
+    } else {
       var inputComment = form.value.comment;
-      this.diningService.postComment(
-      inputComment,
-      this.diningName,
-      this.diningType
-    );
-    //setTimeout(function(){ window.alert("valid comment")}, 3000);
-    window.alert("valid comment posted");
-    window.location.assign("/dining/" + this.diningName);
+      if (this.commentId == null) {
+        this.diningService.postComment(
+          inputComment,
+          this.diningName,
+          this.diningType
+        );
+      } else {
+        this.diningService.editComment(this.commentId, this.textMessage);
+      }
+      //setTimeout(function(){ window.alert("valid comment")}, 3000);
+      window.alert("valid comment posted");
+      window.location.assign("/dining/" + this.diningName);
     }
   }
 
