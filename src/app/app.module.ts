@@ -20,7 +20,7 @@ import { ManageComponent } from "./components/user-auth/manage/manage.component"
 import { MenuComponent } from "./components/main/menu/menu.component";
 import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
 import { CreateCommentComponent } from './components/main/create-comment/create-comment.component';
-import { FeedbackFormComponent } from './components/main/feedback-form/feedback-form.component';
+import { FeedbackFormComponent } from './components/user-auth/feedback-form/feedback-form.component';
 
 @NgModule({
   declarations: [
