@@ -1,3 +1,9 @@
 <!--SPA where all the components are here-->
 <app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<button *ngIf="isFirstTime" (click)="onAccept()">Click me</button>
+
+<div *ngIf="isFirstTime">
+  First Time
+  <!--Add paragraph-->
+</div>
+<router-outlet *ngIf="!isFirstTime"></router-outlet>
