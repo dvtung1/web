@@ -1,6 +1,6 @@
 <div class="container">
   <div class="headers">
-    <h1>Feedback form</h1>
+    <h1><strong>Feedback form</strong></h1>
     <p>
       Please enter your details and then describe the issue you would like to
       report OR the improvement you would like to suggest.
@@ -10,9 +10,20 @@
         <label for="type"
           >Would you like to report a bug or make a suggestion?</label
         >
-        <input type="type" />
+        <input type="text" />
       </div>
-      <div class="description"></div>
+      <div class="description">
+        <label for="description"
+          >Please describe your issue in the box below</label
+        >
+        <input
+          type="description"
+          placeholder="Enter description here"
+          name="description"
+          class="descriptionBox"
+          required
+        />
+      </div>
 
       <button
         [disabled]="feedbackForm.form.invalid"
