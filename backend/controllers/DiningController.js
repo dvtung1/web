@@ -18,6 +18,10 @@ var diningCourtList = [
   "pete's za"
 ];
 var diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
+
+//for converting EST time
+const HOUR_AHEAD = 5;
+
 /*
   Get comments along with author name and rating.
   @queryParam name dining court name
@@ -435,7 +439,20 @@ exports.checkOpenClosed = (req, res) => {
 exports.getMenu = async (req, res) => {
   try {
     let place = req.params.place;
-    let date = convertESTDateTime(new Date());
+    //check if param place is available
+    if (diningCourtList.indexOf(place) == -1) {
+      return res.status(500).json({
+        message: "No corresponding diningCourtName is found"
+      });
+    }
+
+    let date = req.params.date;
+    if (date == null) {
+      date = convertESTDateTime(new Date());
+    } else {
+      date = convertESTDateTime(new Date(date + ` ${HOUR_AHEAD}:00:00`));
+    }
+
     let dateWOtime = date.split(" ")[0];
     let whereClause = `from >= '${dateWOtime} 00:00:00 EST' and to < '${dateWOtime} 23:59:59 EST' and ofPlace.name='${place}'`;
     let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
@@ -494,10 +511,10 @@ var getTwoDigits = num => {
 };
 
 var convertESTDateTime = today => {
-  var hourAhead = 5;
-
   //convert from UTC to EST time zone
-  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
+  today.setHours(
+    today.getHours() + today.getTimezoneOffset() / 60 - HOUR_AHEAD
+  );
 
   var time =
     getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
