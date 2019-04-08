@@ -23,6 +23,8 @@ router.get("/comment/:id", DiningController.getCommentById);
 
 router.get("/mealtime", DiningController.getMealTime);
 
+router.get("/menu/:place", DiningController.getMenu);
+
 // check to see which dining courts are open or closed
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);
 

@@ -238,36 +238,6 @@ exports.editComment = (req, res) => {
 
 //return json contain comments of the user along with info about diningCourt and diningType
 exports.getCommentsByUser = (req, res) => {
-  /*
-  Backendless.UserService.getCurrentUser()
-    .then(currentUser => {
-      var commentListResult = []; //list of comments that will be return
-      console.log(currentUser.comments);
-      currentUser.comments.forEach(comment => {
-        //push each comment onto the Result list
-        commentListResult.push({
-          //diningName: comment.ofDiningTiming.ofPlace.name,
-          diningName: "",
-          //diningType: comment.ofDiningTiming.diningType.name,
-          diningType: "",
-          author: currentUser.email,
-          text: comment.text,
-          rating: comment.rating,
-          objectId: comment.objectId,
-          authorId: currentUser.objectId
-        });
-      });
-      return res.status(200).json({
-        message: "Fetch comment of the current user successfully",
-        comments: commentListResult
-      });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
-    });
-    */
   var userObjectId = Backendless.LocalCache.get("current-user-id");
   var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
     `byUser.objectId = '${userObjectId}'`
@@ -321,7 +291,9 @@ exports.getCommentById = (req, res) => {
 };
 
 exports.getMealTime = (req, res) => {
-  var queryBuilder = setupQueryBuilder();
+  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    setupWhereClause()
+  );
   //get all current open dining courts
   Backendless.Data.of(DiningTiming)
     .find(queryBuilder)
@@ -466,20 +438,61 @@ exports.checkOpenClosed = (req, res) => {
   });
 };
 
+/*
+ * Given Place
+ */
+exports.getMenu = async (req, res) => {
+  try {
+    let place = req.params.place;
+    let date = convertESTDateTime(new Date());
+    let dateWOtime = date.split(" ")[0];
+    let whereClause = `from >= '${dateWOtime} 00:00:00 EST' and to < '${dateWOtime} 23:59:59 EST' and ofPlace.name='${place}'`;
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      whereClause
+    );
+    let foundDiningTimings = await Backendless.Data.of(DiningTiming).find(
+      queryBuilder
+    );
+
+    //TODO
+    let obj = {};
+    for (let diningTiming of foundDiningTimings) {
+      let diningType = diningTiming.diningType.name;
+      //iterate through each menu section
+      var objInner = {};
+      for (let menuSection of diningTiming.menuSections) {
+        var menuSectionName = menuSection.name;
+        var menuItemList = [];
+        //iterate thorugh each menu item
+        for (let menuItem of menuSection.menuItems) {
+          var menuItemName = menuItem.name;
+          menuItemList.push(menuItemName);
+        }
+        console.log(menuSectionName);
+        objInner[menuSectionName] = menuItemList;
+      }
+      console.log(objInner);
+      obj[diningType] = objInner;
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
 // var setupQueryBuilder = () => {
 //   return Backendless.DataQueryBuilder.create().setWhereClause(
 //     "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
 //   );
 // };
 
-var setupQueryBuilder = () => {
-  var today = new Date();
-  var dateAndTime = convertESTDateTime(today);
-  //console.log("THIS IS DATEANTIME: "+ dateAndTime);
+var setupWhereClause = () => {
+  var dateAndTime = convertESTDateTime(new Date());
   var whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
-  //console.log(whereClause);
-  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+  //return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+  return whereClause;
 };
 
 var getTwoDigits = num => {
