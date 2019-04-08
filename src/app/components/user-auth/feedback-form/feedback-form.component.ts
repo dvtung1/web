@@ -12,4 +12,8 @@ export class FeedbackFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit() {
+    console.log("Submitted!");
+  }
+
 }

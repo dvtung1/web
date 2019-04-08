@@ -1,115 +1,113 @@
 <!-- This will redirect the user to the login page if not logged in -->
-<div class="text-center" *ngIf=!isLoggedIn>
-    <h1> You're not Logged In </h1>
-    <div><span>Don't have an account? <a routerLink="/signup">Sign up!</a></span></div>
-    <div><span>Already have an account? <a routerLink="/login">Login</a></span></div>
-    <div><span>Don't want an account? <a routerLink="/">Homepage</a></span></div>
-    
+<div class="text-center" *ngIf="!isLoggedIn">
+  <h1>You're not Logged In</h1>
+  <div>
+    <span>Don't have an account? <a routerLink="/signup">Sign up!</a></span>
+  </div>
+  <div>
+    <span>Already have an account? <a routerLink="/login">Login</a></span>
+  </div>
+  <div>
+    <span>Don't want an account? <a routerLink="/">Homepage</a></span>
+  </div>
 </div>
-
 
 <!-- Manage account will only work when the user is logged in-->
-<div class="text-center" *ngIf=isLoggedIn>
-    
-    <h1>Manage Account</h1>
-    <p>Manage Your Account Information</p>
-    <p>This is your current username: {{ currentUserName }}</p>
-    <p>This is your current email: {{ currentUserEmail }}</p>
-    <br>
-    <button (click)="editUsernameToggle()">Edit Username</button>
-    <div *ngIf=editUsername>
-
-        <!-- <form> -->
-        <div *ngIf=!isUNSuccess>
-        <label for="username"><b>Change Username: </b></label>
-        <input 
-            type="text" 
-            placeholder="Enter New Username" 
-            name="username"
-            class="usernameField" 
-            required 
-            autofocus
-            #newUsername
-            />
-        <button (click)="changeUsername(newUsername.value)">Submit New Username</button>
-        <!-- </form> -->
-        </div>
-        <div *ngIf=isUNSuccess>
-            <p>Username Successfully Changed</p>
-        </div>
-    </div>
-    <br>
-    <button (click)="editEmailToggle()">Edit Email</button>
-    <div *ngIf=editEmail>
-
-        <!-- <form> -->
-        <div *ngIf=!isESuccess>
-        <label for="email"><b>Change Email: </b></label>
-        <input 
-            type="email" 
-            placeholder="Enter New Email" 
-            name="email"
-            class="emailField" 
-            required 
-            autofocus
-            #newEmail
-            />
-        <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
-        <!-- </form> -->
-        </div>
-        <div *ngIf=isESuccess>
-            <p>Email Successfully Changed</p>
-        </div>
-    </div>
-    <br>
-
-    <button (click)="editPasswordToggle()">Edit Password</button>
-    <div *ngIf=editPassword>
-
+<div class="text-center" *ngIf="isLoggedIn">
+  <h1>Manage Account</h1>
+  <p>Manage Your Account Information</p>
+  <p>This is your current username: {{ currentUserName }}</p>
+  <p>This is your current email: {{ currentUserEmail }}</p>
+  <br />
+  <button (click)="editUsernameToggle()">Edit Username</button>
+  <div *ngIf="editUsername">
     <!-- <form> -->
-        <div *ngIf=!isPSuccess>
-        <label for="password"><b>Change Password: </b></label>
-            <input 
-                type="password" 
-                placeholder="Enter New Password" 
-                name="password" 
-                class="passwordField"
-                required
-                autofocus
-                #newPassword
-                />
-        <button (click)="changePassword(newPassword.value)">Submit New Password</button>
-    <!-- </form> -->
-        </div>
-        <div *ngIf=isPSuccess>
-        <p>Password Successfully Changed</p>
-        </div>   
+    <div *ngIf="!isUNSuccess">
+      <label for="username"><b>Change Username: </b></label>
+      <input
+        type="text"
+        placeholder="Enter New Username"
+        name="username"
+        class="usernameField"
+        required
+        autofocus
+        #newUsername
+      />
+      <button (click)="changeUsername(newUsername.value)">
+        Submit New Username
+      </button>
+      <!-- </form> -->
     </div>
-
-    <!-- <div class="reportForm">
-        <br>
-        <p>Have you noticed a bug or would like to make a suggestion?</p>
-        <button routerLink="/feedbackform">Click here!</button>
-    </div> -->
-
-    <div class="comments">
-        <h1><strong>Your comments:</strong></h1>
-        <p>Total number of comments: {{ commentListsize }}</p>
-        <div *ngFor="let comment of commentList">
-            <p class="diningName">{{ comment.diningName }}</p>
-            <p class="diningType">{{ comment.diningType }}</p>
-            <p>{{ comment.text }}</p>
-            <p>Rating: {{ comment.rating }}</p>
-            <br />
-            <div>
-              <button (click)="editComment(comment.objectId)">Edit</button
-              ><button (click)="deleteComment(comment.objectId)">Delete</button>
-            </div>
-        </div>        
+    <div *ngIf="isUNSuccess">
+      <p>Username Successfully Changed</p>
     </div>
+  </div>
+  <br />
+  <button (click)="editEmailToggle()">Edit Email</button>
+  <div *ngIf="editEmail">
+    <!-- <form> -->
+    <div *ngIf="!isESuccess">
+      <label for="email"><b>Change Email: </b></label>
+      <input
+        type="email"
+        placeholder="Enter New Email"
+        name="email"
+        class="emailField"
+        required
+        autofocus
+        #newEmail
+      />
+      <button (click)="changeEmail(newEmail.value)">Submit New Email</button>
+      <!-- </form> -->
+    </div>
+    <div *ngIf="isESuccess">
+      <p>Email Successfully Changed</p>
+    </div>
+  </div>
+  <br />
+
+  <button (click)="editPasswordToggle()">Edit Password</button>
+  <div *ngIf="editPassword">
+    <!-- <form> -->
+    <div *ngIf="!isPSuccess">
+      <label for="password"><b>Change Password: </b></label>
+      <input
+        type="password"
+        placeholder="Enter New Password"
+        name="password"
+        class="passwordField"
+        required
+        autofocus
+        #newPassword
+      />
+      <button (click)="changePassword(newPassword.value)">
+        Submit New Password
+      </button>
+      <!-- </form> -->
+    </div>
+    <div *ngIf="isPSuccess">
+      <p>Password Successfully Changed</p>
+    </div>
+  </div>
+
+  <div class="reportForm">
+    <p>Have you noticed a bug or would like to make a suggestion?</p>
+    <button target="_blank" routerLink="/feedbackform">Click here!</button>
+  </div>
+
+  <div class="comments">
+    <h1><strong>Your comments:</strong></h1>
+    <p>Total number of comments: {{ commentListsize }}</p>
+    <div *ngFor="let comment of commentList">
+      <p class="diningName">{{ comment.diningName }}</p>
+      <p class="diningType">{{ comment.diningType }}</p>
+      <p>{{ comment.text }}</p>
+      <p>Rating: {{ comment.rating }}</p>
+      <br />
+      <div>
+        <button (click)="editComment(comment.objectId)">Edit</button
+        ><button (click)="deleteComment(comment.objectId)">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-  
-
-

@@ -1,3 +1,37 @@
-<p>
-  feedback-form works!
-</p>
+<div class="container">
+  <div class="headers">
+    <h1><strong>Feedback form</strong></h1>
+    <p>
+      Please enter your details and then describe the issue you would like to
+      report OR the improvement you would like to suggest.
+    </p>
+    <form (ngSubmit)="onSubmit(feedbackForm)" #feedbackForm="ngForm">
+      <div class="typeOfFOrm">
+        <label for="type"
+          >Would you like to report a bug or make a suggestion?</label
+        >
+        <input type="text" />
+      </div>
+      <div class="description">
+        <label for="description"
+          >Please describe your issue in the box below</label
+        >
+        <input
+          type="description"
+          placeholder="Enter description here"
+          name="description"
+          class="descriptionBox"
+          required
+        />
+      </div>
+
+      <button
+        [disabled]="feedbackForm.form.invalid"
+        type="submit"
+        class="submitButton"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
