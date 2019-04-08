@@ -3,12 +3,12 @@
 */
 "use strict";
 
-var Backendless = require("../utils/db.configuration"); //initialize backendless database
-var DiningTiming = require("../models/DiningTiming");
-var Comment = require("../models/Comment");
+const Backendless = require("../utils/db.configuration"); //initialize backendless database
+const DiningTiming = require("../models/DiningTiming");
+const Comment = require("../models/Comment");
 
 //var tvdc = [];
-var diningCourtList = [
+const diningCourtList = [
   "1bowl",
   "earhart",
   "ford",
@@ -17,302 +17,287 @@ var diningCourtList = [
   "windsor",
   "pete's za"
 ];
-var diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
+const diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
 
 //for converting EST time
 const HOUR_AHEAD = 5;
 
 /*
   Get comments along with author name and rating.
-  @queryParam name dining court name
-  @queryParam type dining timing type. Ex: breakfast, dinner
+  @query name dining court name
+  @query type dining timing type. Ex: breakfast, dinner
   @return json with comment text, author name, and comment rating
 */
-exports.getComments = (req, res) => {
-  var diningCourtName = req.query.name;
+exports.getComments = async (req, res) => {
+  try {
+    let diningCourtName = req.query.name;
 
-  if (diningCourtName != null) {
-    diningCourtName = diningCourtName.toLowerCase();
-  }
+    if (diningCourtName != null) {
+      diningCourtName = diningCourtName.toLowerCase();
+    }
 
-  if (diningCourtList.indexOf(diningCourtName) === -1) {
-    return res.status(500).json({
-      message: "No corresponding diningCourtName is found"
-    });
-  }
-
-  //if dining court is "pete's za", use objectId instead
-  if (diningCourtName === "pete's za") {
-    var whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
-  } else {
-    var whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}'`;
-  }
-
-  var diningType = req.query.type;
-  //check if diningType is not null
-  if (diningType != null) {
-    //check if diningTyoe is recognizable or not
-    diningType = diningType.toLowerCase();
-    if (diningTypeList.indexOf(diningType) === -1) {
+    if (diningCourtList.indexOf(diningCourtName) === -1) {
       return res.status(500).json({
-        message: "No corresponding diningType is found"
+        message: "No corresponding diningCourtName is found"
       });
     }
-    whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
-  }
 
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    whereClause
-  );
-  queryBuilder.setSortBy(["created DESC"]);
-  Backendless.Data.of(Comment)
-    .find(queryBuilder)
-    .then(commentList => {
-      //TODO can use mapping object instead
+    //if dining court is "pete's za", use objectId instead
+    let whereClause = "";
+    if (diningCourtName === "pete's za") {
+      whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
+    } else {
+      whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}'`;
+    }
 
-      var commentListResult = []; //list of comments that will be return
-      commentList.forEach(comment => {
-        //push each comment onto the Result list
-        commentListResult.push({
-          author: comment.byUser.email,
-          text: comment.text,
-          rating: comment.rating,
-          objectId: comment.objectId,
-          authorId: comment.byUser.objectId
-        });
-      });
-      Backendless.Data.of(Comment)
-        .getObjectCount(queryBuilder)
-        .then(count => {
-          return res.status(200).json({
-            message: "Get posts successfully",
-            comments: commentListResult,
-            count: count
-          });
-        })
-        .catch(err => {
-          return res.status(500).json({
-            message: err.message
-          });
-        });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
-    });
-};
-
-exports.postComment = (req, res) => {
-  var inputComment = req.body.inputComment;
-  var diningCourt = req.body.diningCourt.toLowerCase();
-  var diningType = req.body.diningType.toLowerCase();
-
-  //get current user
-
-  var whereClause = `ofPlace.name = '${diningCourt}' and diningType.name = '${diningType}'`;
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    whereClause
-  );
-  Backendless.Data.of(DiningTiming)
-    .find(queryBuilder)
-    .then(foundDiningTimings => {
-      if (foundDiningTimings.length === 0) {
+    let diningType = req.query.type;
+    //check if diningType is not null
+    if (diningType != null) {
+      //check if diningTyoe is recognizable or not
+      diningType = diningType.toLowerCase();
+      if (diningTypeList.indexOf(diningType) === -1) {
         return res.status(500).json({
-          message: "Cannot find corresponding diningTiming"
+          message: "No corresponding diningType is found"
         });
       }
-      //initialize comment
-      var comment = new Comment({
-        text: inputComment,
-        rating: 5
-      });
+      whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
+    }
 
-      //Save that comment to the database
-      comment
-        .save()
-        .then(savedComment => {
-          Backendless.UserService.getCurrentUser()
-            .then(currentUser => {
-              //After saving and getting comment objectId, set its relation to the user
-              savedComment.setByUser(currentUser);
-              //set relation from comment to ofDiningTiming
-              savedComment.setOfDiningTiming(foundDiningTimings[0]);
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      whereClause
+    );
+    queryBuilder.setSortBy(["created DESC"]);
 
-              return res.status(201).json({
-                message: "add comment successfully",
-                comment: {
-                  author: currentUser.email,
-                  text: savedComment.text,
-                  rating: savedComment.rating,
-                  objectId: savedComment.objectId,
-                  authorId: currentUser.objectId
-                }
-              });
-            })
-            //catch for user
-            .catch(err => {
-              return res.status(500).json({
-                message: err.message
-              });
-            });
-        })
-        //catch for comment
-        .catch(err => {
-          return res.status(500).json({
-            message: err.message
-          });
-        });
-    })
-    //catch for DiningTiming
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
+    let commentList = await Backendless.Data.of(Comment).find(queryBuilder);
+    let commentListResult = []; //list of comments that will be return
+    commentList.forEach(comment => {
+      //push each comment onto the Result list
+      commentListResult.push({
+        author: comment.byUser.email,
+        text: comment.text,
+        rating: comment.rating,
+        objectId: comment.objectId,
+        authorId: comment.byUser.objectId,
+        diningType: comment.ofDiningTiming.diningType.name
       });
     });
-};
-
-exports.deleteComment = (req, res) => {
-  var id = req.params.id;
-  var userObjectId = Backendless.LocalCache.get("current-user-id");
-
-  Backendless.Data.of(Comment)
-    .findById(id)
-    .then(comment => {
-      //check if user is authorized to delete comment
-      if (comment.byUser.objectId !== userObjectId) {
-        return res.status(401).json({
-          message: "Unauthorized to delete comment"
-        });
-      }
-      comment
-        .remove()
-        .then(respond => {
-          return res.status(200).json({
-            message: "Delete comment successfully"
-          });
-        })
-        .catch(err => {
-          return res.status(500).json({
-            message: err.message
-          });
-        });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
+    let count = await Backendless.Data.of(Comment).getObjectCount(queryBuilder);
+    return res.status(200).json({
+      message: "Get posts successfully",
+      comments: commentListResult,
+      count: count
     });
-};
-exports.editComment = (req, res) => {
-  var id = req.params.id;
-  var newText = req.body.text;
-  var userObjectId = Backendless.LocalCache.get("current-user-id");
-  Backendless.Data.of(Comment)
-    .findById(id)
-    .then(comment => {
-      //check if user is authorized to edit comment
-      if (comment.byUser.objectId !== userObjectId) {
-        return res.status(401).json({
-          message: "Unauthorized to delete comment"
-        });
-      }
-      //edit comment text
-      comment.text = newText;
-      //save the change back to database
-      comment
-        .save()
-        .then(() => {
-          return res.status(200).json({
-            message: "Edit comment successfully"
-          });
-        })
-        .catch(err => {
-          return res.status(500).json({
-            message: err.message
-          });
-        });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
     });
+  }
 };
 
-//return json contain comments of the user along with info about diningCourt and diningType
-exports.getCommentsByUser = (req, res) => {
-  var userObjectId = Backendless.LocalCache.get("current-user-id");
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    `byUser.objectId = '${userObjectId}'`
-  );
-  Backendless.Data.of(Comment)
-    .find(queryBuilder)
-    .then(foundComments => {
-      var commentListResult = [];
-      foundComments.forEach(comment => {
-        commentListResult.push({
-          diningName: comment.ofDiningTiming.ofPlace.name,
-          diningType: comment.ofDiningTiming.diningType.name,
-          author: comment.byUser.email,
-          text: comment.text,
-          rating: comment.rating,
-          objectId: comment.objectId,
-          authorId: comment.byUser.objectId
-        });
-      });
-      return res.status(200).json({
-        message: "Fetch comment of the current user successfully",
-        comments: commentListResult
-      });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
-    });
-};
-
-exports.getCommentById = (req, res) => {
-  const id = req.params.id;
-  Backendless.Data.of(Comment)
-    .findById(id)
-    .then(foundComment => {
-      return res.status(200).json({
-        author: foundComment.byUser.email,
-        text: foundComment.text,
-        rating: foundComment.rating,
-        objectId: foundComment.objectId,
-        authorId: foundComment.byUser.objectId,
-        diningType: foundComment.ofDiningTiming.diningType.name
-      });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
-    });
-};
-
-exports.getMealTime = async (req, res) => {
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    setupWhereClause()
-  );
-  //get all current open dining courts
+/*
+ * Post a comment to database
+ * @body inputComment a text of comment
+ * @body diningCourt name of the dining court
+ * @body diningType type of meal
+ * @body rating TODO
+ * @return JSON with comment info
+ */
+exports.postComment = async (req, res) => {
   try {
-    var foundDiningTimings = await Backendless.Data.of(DiningTiming).find(
+    let inputComment = req.body.inputComment;
+    //initialize comment
+    //TODO rating
+    let comment = new Comment({
+      text: inputComment,
+      rating: 5
+    });
+
+    let diningCourt = req.body.diningCourt.toLowerCase();
+    let diningType = req.body.diningType.toLowerCase();
+    let whereClause = `ofPlace.name = '${diningCourt}' and diningType.name = '${diningType}'`;
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      whereClause
+    );
+
+    //concurrently get savedComment, currentUser, and diningTiming from database
+    let [savedComment, currentUser, foundDiningTiming] = await Promise.all([
+      comment.save(),
+      Backendless.UserService.getCurrentUser(),
+      Backendless.Data.of(DiningTiming)
+        .find(queryBuilder)
+        .then(foundDiningTimings => {
+          if (foundDiningTimings.length == 0) {
+            throw new Error("Cannot find corresponding diningTiming");
+          }
+          return foundDiningTimings[0];
+        })
+    ]);
+
+    //After saving and getting comment objectId, set its relation to the user
+    savedComment.setByUser(currentUser);
+    //set relation from comment to ofDiningTiming
+    savedComment.setOfDiningTiming(foundDiningTiming);
+
+    return res.status(201).json({
+      message: "add comment successfully",
+      comment: {
+        author: currentUser.email,
+        text: savedComment.text,
+        rating: savedComment.rating,
+        objectId: savedComment.objectId,
+        authorId: currentUser.objectId,
+        diningType: diningType
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+/*
+ * Delete a specific comment.
+ * @param id id of the comment that need to be deleted
+ * @return JSON with successful message
+ */
+exports.deleteComment = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let userObjectId = Backendless.LocalCache.get("current-user-id");
+
+    let comment = await Backendless.Data.of(Comment).findById(id);
+    //check if user is authorized to delete comment
+    if (comment.byUser.objectId !== userObjectId) {
+      return res.status(401).json({
+        message: "Unauthorized to delete comment"
+      });
+    }
+    await comment.remove();
+    return res.status(200).json({
+      message: "Delete comment successfully"
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+/*
+ * Edit a specific comment
+ * @param id id of the comment that needs to be edited
+ * @return JSON with successful message
+ */
+exports.editComment = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let newText = req.body.text;
+    let userObjectId = Backendless.LocalCache.get("current-user-id");
+
+    let comment = await Backendless.Data.of(Comment).findById(id);
+    //check if user is authorized to edit comment
+    if (comment.byUser.objectId !== userObjectId) {
+      return res.status(401).json({
+        message: "Unauthorized to delete comment"
+      });
+    }
+    //edit comment text
+    comment.text = newText;
+    //save the change back to database
+    await comment.save();
+    return res.status(200).json({
+      message: "Edit comment successfully"
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+/*
+ * Get all comments of the current user.
+ * @return JSON with message and comments, which is a list of object (diningName, diningType,
+ * author, text, rating, objectId, authorId)
+ */
+exports.getCommentsByUser = async (req, res) => {
+  try {
+    let userObjectId = Backendless.LocalCache.get("current-user-id");
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      `byUser.objectId = '${userObjectId}'`
+    );
+    let foundComments = await Backendless.Data.of(Comment).find(queryBuilder);
+    let commentListResult = [];
+    foundComments.forEach(comment => {
+      commentListResult.push({
+        diningName: comment.ofDiningTiming.ofPlace.name,
+        diningType: comment.ofDiningTiming.diningType.name,
+        author: comment.byUser.email,
+        text: comment.text,
+        rating: comment.rating,
+        objectId: comment.objectId,
+        authorId: comment.byUser.objectId
+      });
+    });
+    return res.status(200).json({
+      message: "Fetch comment of the current user successfully",
+      comments: commentListResult
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+/*
+ * Get a specific comment by id.
+ * @param id id of the comment
+ * @return JSON with author, text, rating, objectId, authorId, and diningType
+ */
+exports.getCommentById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let foundComment = await Backendless.Data.of(Comment).findById(id);
+    return res.status(200).json({
+      author: foundComment.byUser.email,
+      text: foundComment.text,
+      rating: foundComment.rating,
+      objectId: foundComment.objectId,
+      authorId: foundComment.byUser.objectId,
+      diningType: foundComment.ofDiningTiming.diningType.name
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+/*
+ * Get all current opened dining courts (with time of opening and closing) and closed dining courts
+ * @return JSON with message, openedDiningCourts, and closedDiningCourts
+ */
+exports.getMealTime = async (req, res) => {
+  try {
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      whereClauseCurrentTime()
+    );
+    //get all current open dining courts
+    let foundDiningTimings = await Backendless.Data.of(DiningTiming).find(
       queryBuilder
     );
     //contain json object, each has properties: diningName and closedTime
-    var openDiningCourts = [];
+    let openDiningCourts = [];
     //temp list to filter out and get closed dining court
-    var openDiningCourtsName = [];
+    let openDiningCourtsName = [];
     foundDiningTimings.forEach(diningTiming => {
       //convert Epoch time to EST time
-      var epochTimeClosed = diningTiming.to;
-      var epochTimeOpened = diningTiming.from;
-      var closedTime = convertESTDateTime(new Date(parseInt(epochTimeClosed)));
-      var openedTime = convertESTDateTime(new Date(parseInt(epochTimeOpened)));
+      let epochTimeClosed = diningTiming.to;
+      let epochTimeOpened = diningTiming.from;
+      let closedTime = convertESTDateTime(new Date(parseInt(epochTimeClosed)));
+      let openedTime = convertESTDateTime(new Date(parseInt(epochTimeOpened)));
 
       openDiningCourts.push({
         diningName: diningTiming.ofPlace.name,
@@ -324,7 +309,7 @@ exports.getMealTime = async (req, res) => {
       openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
     });
     //get all the dining courts that are closed
-    var closedDiningCourts = diningCourtList.filter(
+    let closedDiningCourts = diningCourtList.filter(
       item => !openDiningCourtsName.includes(item)
     );
 
@@ -434,13 +419,17 @@ exports.checkOpenClosed = (req, res) => {
 };
 
 /*
- * Given Place
+ * Get menu of a specific dining court.
+ * @param place the specific place that is in the diningCourtList array
+ * @param date (OPTIONAL) with format: yyyy-mm-dd. More info in DiningRoutes
+ * @return JSON with a message and menu object, which have format: diningType -> menuSections -> menuItems
+ * @throws error when place is not exist, when date is in incorrect format, problem with database
  */
 exports.getMenu = async (req, res) => {
   try {
     let place = req.params.place;
-    //check if param place is available
-    if (diningCourtList.indexOf(place) == -1) {
+    //check if param place is exist
+    if (diningCourtList.indexOf(place) === -1) {
       return res.status(500).json({
         message: "No corresponding diningCourtName is found"
       });
@@ -453,6 +442,7 @@ exports.getMenu = async (req, res) => {
       date = convertESTDateTime(new Date(date + ` ${HOUR_AHEAD}:00:00`));
     }
 
+    //extract the time (hh:mm:ss) and get the date only
     let dateWOtime = date.split(" ")[0];
     let whereClause = `from >= '${dateWOtime} 00:00:00 EST' and to < '${dateWOtime} 23:59:59 EST' and ofPlace.name='${place}'`;
     let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
@@ -482,7 +472,7 @@ exports.getMenu = async (req, res) => {
       menu[diningType] = objInner;
     }
     return res.status(200).json({
-      message: `Fetch menu of ${place} successfully`,
+      message: `Fetch menu of ${place} on ${dateWOtime} successfully`,
       menu
     });
   } catch (err) {
@@ -498,33 +488,47 @@ exports.getMenu = async (req, res) => {
 //   );
 // };
 
-var setupWhereClause = () => {
-  var dateAndTime = convertESTDateTime(new Date());
-  var whereClause =
+/*
+ * Set up where clause for backendless to get the SQL clause based on current time.
+ * @return whereClause string of whereClause
+ */
+let whereClauseCurrentTime = () => {
+  let dateAndTime = convertESTDateTime(new Date());
+  let whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
   //return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
   return whereClause;
 };
 
-var getTwoDigits = num => {
+/*
+ * Get two didgits for each number. Ex: 8 => 08
+ * @param num 1-digit or 2-digit number
+ * @return a 2-digit number
+ */
+let getTwoDigits = num => {
   return ("0" + num).slice(-2);
 };
 
-var convertESTDateTime = today => {
+/*
+ * Convert the current UTC time to EST formated date time
+ * @param today a Date object
+ * @return EST formated date time: mm/dd/yyyy hh:mm:ss
+ */
+let convertESTDateTime = today => {
   //convert from UTC to EST time zone
   today.setHours(
     today.getHours() + today.getTimezoneOffset() / 60 - HOUR_AHEAD
   );
 
-  var time =
+  let time =
     getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
   //date format = 03/15/2018
-  var date =
+  let date =
     getTwoDigits(today.getMonth() + 1) +
     "/" +
     getTwoDigits(today.getDate()) +
     "/" +
     today.getFullYear();
-  var str = date + " " + time + ":00";
+  let str = date + " " + time + ":00";
   return str;
 };
