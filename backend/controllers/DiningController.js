@@ -445,26 +445,29 @@ exports.getMenu = async (req, res) => {
       queryBuilder
     );
 
-    //TODO
-    let obj = {};
+    let menu = {};
     for (let diningTiming of foundDiningTimings) {
-      let diningType = diningTiming.diningType.name;
       //iterate through each menu section
-      var objInner = {};
+      let objInner = {};
       for (let menuSection of diningTiming.menuSections) {
-        var menuSectionName = menuSection.name;
-        var menuItemList = [];
+        let menuItemList = [];
         //iterate thorugh each menu item
         for (let menuItem of menuSection.menuItems) {
-          var menuItemName = menuItem.name;
+          let menuItemName = menuItem.name;
           menuItemList.push(menuItemName);
         }
-        console.log(menuSectionName);
+        //replace all space with _
+        let menuSectionName = menuSection.name.replace(/ /g, "_");
         objInner[menuSectionName] = menuItemList;
       }
-      console.log(objInner);
-      obj[diningType] = objInner;
+      //replace all space with _
+      let diningType = diningTiming.diningType.name.replace(/ /g, "_");
+      menu[diningType] = objInner;
     }
+    return res.status(200).json({
+      message: `Fetch menu of ${place} successfully`,
+      menu
+    });
   } catch (err) {
     return res.status(500).json({
       message: err.message
