@@ -290,60 +290,51 @@ exports.getCommentById = (req, res) => {
     });
 };
 
-exports.getMealTime = (req, res) => {
+exports.getMealTime = async (req, res) => {
   var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
     setupWhereClause()
   );
   //get all current open dining courts
-  Backendless.Data.of(DiningTiming)
-    .find(queryBuilder)
-    .then(foundDiningTimings => {
-      //contain json object, each has properties: diningName and closedTime
-      var openDiningCourts = [];
-      //temp list to filter out and get closed dining court
-      var openDiningCourtsName = [];
-      foundDiningTimings.forEach(diningTiming => {
-        //convert Epoch time to EST time
-        var epochTimeClosed = diningTiming.to;
-        var epochTimeOpened = diningTiming.from;
-        var closedTime = convertESTDateTime(
-          new Date(parseInt(epochTimeClosed))
-        );
-        var openedTime = convertESTDateTime(
-          new Date(parseInt(epochTimeOpened))
-        );
+  try {
+    var foundDiningTimings = await Backendless.Data.of(DiningTiming).find(
+      queryBuilder
+    );
+    //contain json object, each has properties: diningName and closedTime
+    var openDiningCourts = [];
+    //temp list to filter out and get closed dining court
+    var openDiningCourtsName = [];
+    foundDiningTimings.forEach(diningTiming => {
+      //convert Epoch time to EST time
+      var epochTimeClosed = diningTiming.to;
+      var epochTimeOpened = diningTiming.from;
+      var closedTime = convertESTDateTime(new Date(parseInt(epochTimeClosed)));
+      var openedTime = convertESTDateTime(new Date(parseInt(epochTimeOpened)));
 
-        openDiningCourts.push({
-          diningName: diningTiming.ofPlace.name,
-          diningType: diningTiming.diningType.name,
-          openedTime: openedTime,
-          closedTime: closedTime
-        });
-        //console.log("Name: "+diningTiming.ofPlace.name.toLowerCase());
-        //console.log("Name: "+diningTiming.diningType.name.toLowerCase());
-        //console.log("OpenedTime: "+openedTime);
-        //console.log("Closedtime: "+closedTime);
+      openDiningCourts.push({
+        diningName: diningTiming.ofPlace.name,
+        diningType: diningTiming.diningType.name,
+        openedTime: openedTime,
+        closedTime: closedTime
+      });
 
-        openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
-      });
-      //get all the dining courts that are closed
-      var closedDiningCourts = diningCourtList.filter(
-        item => !openDiningCourtsName.includes(item)
-      );
-      //console.log("THIS IS OPEN DINING COURTS: "+openDiningCourts);
-      //console.log("THIS IS CLOSED DINING COURTS: "+closedDiningCourts);
-      return res.status(200).json({
-        message:
-          "Get current meal time (open/close) and specific closed time successfully",
-        openDiningCourts: openDiningCourts,
-        closedDiningCourts: closedDiningCourts
-      });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: err.message
-      });
+      openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
     });
+    //get all the dining courts that are closed
+    var closedDiningCourts = diningCourtList.filter(
+      item => !openDiningCourtsName.includes(item)
+    );
+
+    return res.status(200).json({
+      message:
+        "Get current meal time (open/close) and specific closed time successfully",
+      openDiningCourts: openDiningCourts,
+      closedDiningCourts: closedDiningCourts
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
 };
 
 exports.checkOpenClosed = (req, res) => {
