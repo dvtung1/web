@@ -13,7 +13,7 @@ router.delete(
   userAuthentication,
   DiningController.deleteComment
 );
-router.put("/comment/:id", userAuthentication, DiningController.editComment);
+router.patch("/comment/:id", userAuthentication, DiningController.editComment);
 router.get(
   "/comment/user",
   userAuthentication,
@@ -31,6 +31,6 @@ router.get("/menu/:place/:date", DiningController.getMenu);
 // check to see which dining courts are open or closed
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);
 
-router.get("/:diningName/rating", RPIController.getRating);
+router.get("/rating/:diningName", RPIController.getRating);
 
 module.exports = router;

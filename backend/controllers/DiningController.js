@@ -6,18 +6,8 @@
 const Backendless = require("../utils/db.configuration"); //initialize backendless database
 const DiningTiming = require("../models/DiningTiming");
 const Comment = require("../models/Comment");
-
-//var tvdc = [];
-const diningCourtList = [
-  "1bowl",
-  "earhart",
-  "ford",
-  "hillenbrand",
-  "wiley",
-  "windsor",
-  "pete's za"
-];
-const diningTypeList = ["breakfast", "lunch", "late lunch", "dinner"];
+const diningCourtList = require("./DiningInfo").diningCourtList;
+const diningTypeList = require("./DiningInfo").diningTypeList;
 
 //for converting EST time
 const HOUR_AHEAD = 5;

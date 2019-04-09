@@ -1,35 +1,59 @@
 "use strict";
 
-var Backendless = require("../utils/db.configuration"); //initialize backendless database
-var DiningTiming = require("../models/DiningTiming");
-var Rating = require("../models/Rating");
+const Backendless = require("../utils/db.configuration"); //initialize backendless database
+const DiningTiming = require("../models/DiningTiming");
+const Rating = require("../models/Rating");
+const diningCourtList = require("./DiningInfo").diningCourtList;
+const diningTypeList = require("./DiningInfo").diningTypeList;
 
-var diningCourtList = [
-  "windsor",
-  "wiley",
-  "pete's za",
-  "1bowl",
-  "hillenbrand",
-  "earhart",
-  "ford"
-];
+/*
+ * Query ratings based on dining court.
+ * @param diningName name of the dining court
+ * @query type (OPTIONAL) diningType such as breakfast
+ */
+exports.getRating = async (req, res) => {
+  try {
+    let diningName = req.params.diningName;
+    let diningType = req.query.type;
 
-exports.getRating = (req, res) => {
-  var diningName = req.params.diningName;
-  var diningType = req.query.type;
-  //get rating from a particular dining court
-  var queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-    `ofDiningTimings.ofPlace.name='${diningName}'`
-  );
-  //if there is a query diningtype, search for that
-  if (diningType != null) {
-    queryBuilder += ` and ofDiningTimings.diningType.name='${diningType}'`;
-  }
-  Backendless.Data.of(Rating)
-    .find(queryBuilder)
-    .then(foundRatings => {
-      //TODO
+    if (diningCourtList.indexOf(diningName) === -1) {
+      return res.status(500).json({
+        message: "No corresponding diningCourt is found"
+      });
+    }
+
+    //get rating from a particular dining court
+    let whereClause = `ofDiningTiming.ofPlace.name='${diningName}'`;
+
+    //if there is a query diningtype, search for that
+    if (diningType != null) {
+      if (diningTypeList.indexOf(diningType) === -1) {
+        return res.status(500).json({
+          message: "No corresponding diningType is found"
+        });
+      }
+      whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
+    }
+    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+      whereClause
+    );
+
+    let foundRatings = await Backendless.Data.of(Rating).find(queryBuilder);
+    let ratings = foundRatings.map(rating => {
+      return {
+        score: rating.rating,
+        diningType: rating.ofDiningTiming.diningType.name
+      };
     });
+    return res.status(200).json({
+      message: `Fetch rating of ${diningName} successfully`,
+      ratings
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
 };
 
 exports.postRating = (req, res) => {

@@ -202,7 +202,7 @@ export class DiningService {
   }
   editComment(commentId: string, text: string) {
     this.http
-      .put<{ message: string }>(BACKEND_URL + "/comment/" + commentId, {
+      .patch<{ message: string }>(BACKEND_URL + "/comment/" + commentId, {
         text: text
       })
       .subscribe(
