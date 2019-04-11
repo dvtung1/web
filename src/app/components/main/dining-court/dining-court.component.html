@@ -14,7 +14,8 @@
     <p>Total number of comments: {{ commentListsize }}</p>
     <div *ngFor="let comment of commentList">
       <p class="username">{{ comment.byUser }}</p>
-      <p>{{ comment.text }}</p>
+      <p>{{ comment.text }} </p>
+      <button (click)="likeComment(comment.objectId)">Like</button>
       <p>Rating: {{ comment.rating }}</p>
       <br />
       <div>

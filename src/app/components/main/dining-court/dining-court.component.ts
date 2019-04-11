@@ -152,4 +152,9 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //   "/dining/" + this.diningName + "/create?id=" + commentId
     // ]);
   }
+
+  likeComment(commentId: string){
+    console.log("likeComment call: "+ commentId);
+  }
+
 }
