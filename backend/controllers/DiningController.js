@@ -530,7 +530,7 @@ exports.likeComment = async (req, res) => {
     comment.likes += 1;
     await comment.save();
     return res.status(200).send({
-      message: "Like data updated successfully, the new count is: " + comment.likes,
+      message: comment.likes,
     });
   }
   catch(err) {
