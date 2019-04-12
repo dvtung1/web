@@ -522,3 +522,9 @@ let convertESTDateTime = today => {
   let str = date + " " + time + ":00";
   return str;
 };
+
+exports.likeComment = async (req, res) => {
+  return res.status(200).send({
+    message: "Like data updated successfully!",
+  });
+};

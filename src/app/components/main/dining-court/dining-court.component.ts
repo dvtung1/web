@@ -155,6 +155,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
 
   likeComment(commentId: string){
     console.log("likeComment call: "+ commentId);
+    this.diningService.likeComment(commentId);
   }
 
 }

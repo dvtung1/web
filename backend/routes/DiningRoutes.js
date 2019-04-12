@@ -33,4 +33,7 @@ router.get("/checkOpenClosed", DiningController.checkOpenClosed);
 
 router.get("/rating/:diningName", RPIController.getRating);
 
+//update like data to backend
+router.post("/like", DiningController.likeComment);
+
 module.exports = router;

@@ -291,4 +291,18 @@ export class DiningService {
         }
       );
   }
+  likeComment(commentId: string){
+    this.http.
+    get<{
+      message: any;
+    }>(BACKEND_URL + "/like")
+    .subscribe(
+      response => {
+        console.log("here");
+      },
+      error => {
+        console.log("error");
+      }
+    );
+  }
 }
