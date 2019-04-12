@@ -17,6 +17,7 @@
       <p>{{ comment.text }} </p>
       <button (click)="likeComment(comment.objectId)">Like</button>
       <p>Rating: {{ comment.rating }}</p>
+      <p>Number of likes: {{ comment.likes }} </p>
       <br />
       <div>
         <button (click)="editComment(comment.objectId)">Edit</button

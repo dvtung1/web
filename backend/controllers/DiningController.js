@@ -68,7 +68,8 @@ exports.getComments = async (req, res) => {
         rating: comment.rating,
         objectId: comment.objectId,
         authorId: comment.byUser.objectId,
-        diningType: comment.ofDiningTiming.diningType.name
+        diningType: comment.ofDiningTiming.diningType.name,
+        likes: comment.likes
       });
     });
     let count = await Backendless.Data.of(Comment).getObjectCount(queryBuilder);

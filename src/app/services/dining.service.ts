@@ -54,7 +54,8 @@ export class DiningService {
                 byUser: comment.author,
                 rating: comment.rating,
                 objectId: comment.objectId,
-                authorId: comment.authorId
+                authorId: comment.authorId,
+                likes: comment.likes
               };
             })
           };
