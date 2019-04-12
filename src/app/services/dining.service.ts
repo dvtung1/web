@@ -7,6 +7,7 @@ import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
 import { OpenDining } from "../models/opendining";
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -295,10 +296,11 @@ export class DiningService {
     this.http.
     get<{
       message: any;
-    }>(BACKEND_URL + "/like")
+    }>(BACKEND_URL + "/like/" + commentId)
     .subscribe(
       response => {
         console.log("here");
+        console.log(response.message);
       },
       error => {
         console.log("error");

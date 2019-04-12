@@ -524,7 +524,18 @@ let convertESTDateTime = today => {
 };
 
 exports.likeComment = async (req, res) => {
-  return res.status(200).send({
-    message: "Like data updated successfully!",
-  });
+  try{
+    let id = req.params.id;
+    let comment = await Backendless.Data.of(Comment).findById(id);
+    comment.likes += 1;
+    await comment.save();
+    return res.status(200).send({
+      message: "Like data updated successfully, the new count is: " + comment.likes,
+    });
+  }
+  catch(err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
 };
