@@ -3,8 +3,11 @@
 const Backendless = require("../utils/db.configuration"); //initialize backendless database
 const DiningTiming = require("../models/DiningTiming");
 const Rating = require("../models/Rating");
-const diningCourtList = require("./DiningInfo").diningCourtList;
-const diningTypeList = require("./DiningInfo").diningTypeList;
+const diningCourtList = require("../utils/ControllerHelper").diningCourtList;
+const diningTypeList = require("../utils/ControllerHelper").diningTypeList;
+const convertESTDateTime = require("../utils/ControllerHelper")
+  .convertESTDateTime;
+const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
 
 /*
  * Query ratings based on dining court.
@@ -17,9 +20,7 @@ exports.getRating = async (req, res) => {
     let diningType = req.query.type;
 
     if (diningCourtList.indexOf(diningName) === -1) {
-      return res.status(500).json({
-        message: "No corresponding diningCourt is found"
-      });
+      throw new Error("No corresponding diningCourt is found");
     }
 
     //get rating from a particular dining court
@@ -28,9 +29,7 @@ exports.getRating = async (req, res) => {
     //if there is a query diningtype, search for that
     if (diningType != null) {
       if (diningTypeList.indexOf(diningType) === -1) {
-        return res.status(500).json({
-          message: "No corresponding diningType is found"
-        });
+        throw new Error("No corresponding diningType is found");
       }
       whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
     }
@@ -57,7 +56,7 @@ exports.getRating = async (req, res) => {
 };
 
 exports.postRating = (req, res) => {
-  var rating = req.body.rating;
+  let rating = req.body.rating;
   //convert rating from string to int
   rating = convertScoreInt(rating);
   if (rating == null) {
@@ -66,7 +65,7 @@ exports.postRating = (req, res) => {
     });
   }
 
-  var place = req.body.place;
+  let place = req.body.place;
   if (place != null) {
     place = place.toLowerCase();
   }
@@ -76,7 +75,10 @@ exports.postRating = (req, res) => {
     });
   }
 
-  var queryBuilder = setupQueryBuilder(place);
+  let whereClause = whereClauseCurrentTime(place);
+  let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    whereClause
+  );
 
   Backendless.Data.of(DiningTiming)
     .find(queryBuilder)
@@ -114,23 +116,20 @@ exports.postRating = (req, res) => {
     });
 };
 
-var setupQueryBuilder = place => {
-  var today = new Date();
-  var dateAndTime = convertESTDateTime(today);
+let whereClauseCurrentTime = place => {
+  let dateAndTime = convertESTDateTime(new Date());
 
-  var whereClause =
+  let whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
   if (place === "pete's za") {
-    whereClause +=
-      " and ofPlace.objectId='72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
+    whereClause += ` and ofPlace.objectId='${PETEZA_ID}'`;
   } else {
     whereClause += ` and ofPlace.name='${place}'`;
   }
-  console.log(whereClause);
-  return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+  return whereClause;
 };
 
-var convertScoreInt = rating => {
+let convertScoreInt = rating => {
   if (rating === "excellent") {
     return 3;
   } else if (rating === "satisfactory") {
@@ -139,27 +138,4 @@ var convertScoreInt = rating => {
     return 1;
   }
   return null;
-};
-
-var getTwoDigits = num => {
-  return ("0" + num).slice(-2);
-};
-
-var convertESTDateTime = today => {
-  var hourAhead = 5;
-
-  //convert from UTC to EST time zone
-  today.setHours(today.getHours() + today.getTimezoneOffset() / 60 - hourAhead);
-
-  var time =
-    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
-  //date format = 03/15/2018
-  var date =
-    getTwoDigits(today.getMonth() + 1) +
-    "/" +
-    getTwoDigits(today.getDate()) +
-    "/" +
-    today.getFullYear();
-  var str = date + " " + time + ":00";
-  return str;
 };

@@ -6,12 +6,11 @@
 const Backendless = require("../utils/db.configuration"); //initialize backendless database
 const DiningTiming = require("../models/DiningTiming");
 const Comment = require("../models/Comment");
-const diningCourtList = require("./DiningInfo").diningCourtList;
-const diningTypeList = require("./DiningInfo").diningTypeList;
-
-//for converting EST time
-const HOUR_AHEAD = 5;
-
+const diningCourtList = require("../utils/ControllerHelper").diningCourtList;
+const diningTypeList = require("../utils/ControllerHelper").diningTypeList;
+const convertESTDateTime = require("../utils/ControllerHelper")
+  .convertESTDateTime;
+const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
 /*
   Get comments along with author name and rating.
   @query name dining court name
@@ -27,15 +26,13 @@ exports.getComments = async (req, res) => {
     }
 
     if (diningCourtList.indexOf(diningCourtName) === -1) {
-      return res.status(500).json({
-        message: "No corresponding diningCourtName is found"
-      });
+      throw new Error("No corresponding diningCourtName is found");
     }
 
     //if dining court is "pete's za", use objectId instead
     let whereClause = "";
     if (diningCourtName === "pete's za") {
-      whereClause = `ofDiningTiming.ofPlace.objectId = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'`;
+      whereClause = `ofDiningTiming.ofPlace.objectId = '${PETEZA_ID}'`;
     } else {
       whereClause = `ofDiningTiming.ofPlace.name = '${diningCourtName}'`;
     }
@@ -46,9 +43,7 @@ exports.getComments = async (req, res) => {
       //check if diningTyoe is recognizable or not
       diningType = diningType.toLowerCase();
       if (diningTypeList.indexOf(diningType) === -1) {
-        return res.status(500).json({
-          message: "No corresponding diningType is found"
-        });
+        throw new Error("No corresponding diningType is found");
       }
       whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
     }
@@ -350,7 +345,7 @@ exports.checkOpenClosed = (req, res) => {
         " EST' AND to < '" +
         date +
         " 23:59:59 EST'" +
-        "and ofPlace.name = '72D126B0-8BFD-82EF-FFCD-2AC4390F4F00'";
+        `and ofPlace.name = '${PETEZA_ID}'`;
     } else {
       var whereClause =
         "from <= '" +
@@ -420,9 +415,7 @@ exports.getMenu = async (req, res) => {
     let place = req.params.place;
     //check if param place is exist
     if (diningCourtList.indexOf(place) === -1) {
-      return res.status(500).json({
-        message: "No corresponding diningCourtName is found"
-      });
+      throw new Error("No corresponding diningCourtName is found");
     }
 
     let date = req.params.date;
@@ -472,12 +465,6 @@ exports.getMenu = async (req, res) => {
   }
 };
 
-// var setupQueryBuilder = () => {
-//   return Backendless.DataQueryBuilder.create().setWhereClause(
-//     "from <= '03/21/2019 19:00:00 EST' and to > '03/21/2019 19:00:00 EST'"
-//   );
-// };
-
 /*
  * Set up where clause for backendless to get the SQL clause based on current time.
  * @return whereClause string of whereClause
@@ -486,39 +473,5 @@ let whereClauseCurrentTime = () => {
   let dateAndTime = convertESTDateTime(new Date());
   let whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
-  //return Backendless.DataQueryBuilder.create().setWhereClause(whereClause);
   return whereClause;
-};
-
-/*
- * Get two didgits for each number. Ex: 8 => 08
- * @param num 1-digit or 2-digit number
- * @return a 2-digit number
- */
-let getTwoDigits = num => {
-  return ("0" + num).slice(-2);
-};
-
-/*
- * Convert the current UTC time to EST formated date time
- * @param today a Date object
- * @return EST formated date time: mm/dd/yyyy hh:mm:ss
- */
-let convertESTDateTime = today => {
-  //convert from UTC to EST time zone
-  today.setHours(
-    today.getHours() + today.getTimezoneOffset() / 60 - HOUR_AHEAD
-  );
-
-  let time =
-    getTwoDigits(today.getHours()) + ":" + getTwoDigits(today.getMinutes());
-  //date format = 03/15/2018
-  let date =
-    getTwoDigits(today.getMonth() + 1) +
-    "/" +
-    getTwoDigits(today.getDate()) +
-    "/" +
-    today.getFullYear();
-  let str = date + " " + time + ":00";
-  return str;
 };
