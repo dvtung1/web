@@ -8,6 +8,7 @@ class Comment {
     this.ofDiningTiming;
     this.byUser;
     this.objectId;
+    this.likes;
   }
 
   //save instance to database

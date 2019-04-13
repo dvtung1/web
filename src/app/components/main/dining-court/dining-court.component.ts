@@ -152,4 +152,18 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     //   "/dining/" + this.diningName + "/create?id=" + commentId
     // ]);
   }
+
+  likeComment(commentId: string){
+    //console.log("is user logged in");
+    //var stat = this.userAuthService.checkIfUserLoggedIn;
+    //console.log;
+    if(this.loggedIn){
+      console.log("likeComment call: "+ commentId);
+      this.diningService.likeComment(commentId);
+    }
+    else{
+      console.log("Error Unauthorized: need to be logged in to like comment");
+    }
+  }
+
 }

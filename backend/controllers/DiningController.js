@@ -63,7 +63,8 @@ exports.getComments = async (req, res) => {
         rating: comment.rating,
         objectId: comment.objectId,
         authorId: comment.byUser.objectId,
-        diningType: comment.ofDiningTiming.diningType.name
+        diningType: comment.ofDiningTiming.diningType.name,
+        likes: comment.likes
       });
     });
     let count = await Backendless.Data.of(Comment).getObjectCount(queryBuilder);
@@ -99,7 +100,12 @@ exports.postComment = async (req, res) => {
 
     let diningCourt = req.body.diningCourt.toLowerCase();
     let diningType = req.body.diningType.toLowerCase();
-    let whereClause = `ofPlace.name = '${diningCourt}' and diningType.name = '${diningType}'`;
+    let whereClause = `diningType.name = '${diningType}'`;
+    if (diningCourt === "pete's za") {
+      whereClause += ` and ofPlace.objectId = '${PETEZA_ID}'`;
+    } else {
+      whereClause += ` and ofPlace.name = '${diningCourt}'`;
+    }
     let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
       whereClause
     );
@@ -412,7 +418,7 @@ exports.checkOpenClosed = (req, res) => {
  */
 exports.getMenu = async (req, res) => {
   try {
-    let place = req.params.place;
+    let place = req.params.place.toLowerCase();
     //check if param place is exist
     if (diningCourtList.indexOf(place) === -1) {
       throw new Error("No corresponding diningCourtName is found");
@@ -427,7 +433,12 @@ exports.getMenu = async (req, res) => {
 
     //extract the time (hh:mm:ss) and get the date only
     let dateWOtime = date.split(" ")[0];
-    let whereClause = `from >= '${dateWOtime} 00:00:00 EST' and to < '${dateWOtime} 23:59:59 EST' and ofPlace.name='${place}'`;
+    let whereClause = `from >= '${dateWOtime} 00:00:00 EST' and to < '${dateWOtime} 23:59:59 EST'`;
+    if (place === "pete's za") {
+      whereClause += ` and ofPlace.objectId='${PETEZA_ID}'`;
+    } else {
+      whereClause += ` and ofPlace.name='${place}'`;
+    }
     let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
       whereClause
     );
@@ -474,4 +485,20 @@ let whereClauseCurrentTime = () => {
   let whereClause =
     "from <= '" + dateAndTime + " EST' and to > '" + dateAndTime + " EST'";
   return whereClause;
+};
+
+exports.likeComment = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let comment = await Backendless.Data.of(Comment).findById(id);
+    comment.likes += 1;
+    await comment.save();
+    return res.status(200).send({
+      message: comment.likes
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
 };

@@ -16,7 +16,7 @@ const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
  */
 exports.getRating = async (req, res) => {
   try {
-    let diningName = req.params.diningName;
+    let diningName = req.params.diningName.toLowerCase();
     let diningType = req.query.type;
 
     if (diningCourtList.indexOf(diningName) === -1) {
@@ -24,10 +24,16 @@ exports.getRating = async (req, res) => {
     }
 
     //get rating from a particular dining court
-    let whereClause = `ofDiningTiming.ofPlace.name='${diningName}'`;
+    let whereClause = "";
+    if (diningName === "pete's za") {
+      whereClause = `ofDiningTiming.ofPlace.objectId='${PETEZA_ID}'`;
+    } else {
+      whereClause = `ofDiningTiming.ofPlace.name='${diningName}'`;
+    }
 
     //if there is a query diningtype, search for that
     if (diningType != null) {
+      diningType = diningType.toLowerCase();
       if (diningTypeList.indexOf(diningType) === -1) {
         throw new Error("No corresponding diningType is found");
       }
@@ -55,6 +61,10 @@ exports.getRating = async (req, res) => {
   }
 };
 
+/**
+ * @body rating REQUIRED
+ * @body place REQUIRED
+ */
 exports.postRating = (req, res) => {
   let rating = req.body.rating;
   //convert rating from string to int
