@@ -1,30 +1,26 @@
+<div class="headers">
+  <h1><strong>Feedback form</strong></h1>
+</div>
 <div class="container">
-  <div class="headers">
-    <h1><strong>Feedback form</strong></h1>
-    <p>
-      Please enter your details and then describe the issue you would like to
-      report OR the improvement you would like to suggest.
-    </p>
-    <form (ngSubmit)="onSubmit(feedbackForm)" #feedbackForm="ngForm">
-      <div class="typeOfFOrm">
-        <label for="type"
-          >Would you like to report a bug or make a suggestion?</label
-        >
-        <input type="text" />
-      </div>
-      <div class="description">
-        <label for="description"
-          >Please describe your issue in the box below</label
-        >
-        <input
-          type="description"
-          placeholder="Enter description here"
-          name="description"
-          class="descriptionBox"
-          required
-        />
-      </div>
-
+  <form (ngSubmit)="onSubmit(feedbackForm)" #feedbackForm="ngForm">
+    <div class="typeOfForm">
+      <label for="type"
+        >Would you like to report a bug or make a suggestion?</label
+      >
+      <input type="text" class="firstBox" />
+    </div>
+    <div class="description">
+      <label for="description"
+        >Please describe your issue in the box below</label
+      >
+      <input
+        type="description"
+        name="description"
+        class="descriptionBox"
+        required
+      />
+    </div>
+    <div class="buttonHolder">
       <button
         [disabled]="feedbackForm.form.invalid"
         type="submit"
@@ -32,6 +28,6 @@
       >
         Submit
       </button>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
