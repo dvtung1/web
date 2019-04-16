@@ -16,6 +16,7 @@
 
 .description {
   margin-bottom: 30px;
+  margin-top: 90px;
 }
 
 .firstBox {
@@ -23,7 +24,7 @@
 }
 
 .descriptionBox {
-  height: 100px;
+  /* height: 100px; */
   /* line-height: 10em;
   padding: 0 0 300px 0; */
   width: 100%;

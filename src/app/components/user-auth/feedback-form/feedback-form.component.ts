@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-feedback-form',
@@ -12,8 +13,12 @@ export class FeedbackFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit() {
-    console.log("Submitted!");
+  onSubmit(form: NgForm) {
+    window.alert(
+      "Your feedback form details have been emailed to the developers of PUrfect Dining. Thank you!"
+    );
+    form.reset();
+    console.log(form);
   }
 
 }
