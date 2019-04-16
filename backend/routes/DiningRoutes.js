@@ -32,6 +32,6 @@ router.get("/menu/:place/:date", DiningController.getMenu);
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);
 
 //update like data to backend
-router.get("/like/:id", DiningController.likeComment);
+router.post("/like/:id", userAuthentication, DiningController.postLikeComment);
 
 module.exports = router;

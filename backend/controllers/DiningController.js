@@ -487,14 +487,14 @@ let whereClauseCurrentTime = () => {
   return whereClause;
 };
 
-exports.likeComment = async (req, res) => {
+exports.postLikeComment = async (req, res) => {
   try {
-    let id = req.params.id;
+    let id = req.params.id; //id of the comment
     let comment = await Backendless.Data.of(Comment).findById(id);
     comment.likes += 1;
     await comment.save();
     return res.status(200).send({
-      message: comment.likes
+      message: "Save like successfully"
     });
   } catch (err) {
     return res.status(500).json({
