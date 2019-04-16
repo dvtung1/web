@@ -125,7 +125,7 @@ export class DiningService {
           });
           // console.log("HI");
           // console.log(array);
-          this.commentUpdateEmitter.next(...array);
+          this.commentUpdateEmitter.next([...array]);
         },
         error => {
           console.log(error.error.message);

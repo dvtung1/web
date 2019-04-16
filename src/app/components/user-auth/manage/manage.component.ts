@@ -26,8 +26,8 @@ export class ManageComponent implements OnInit, OnDestroy {
 
   constructor(
     private userAuthService: UserAuthService,
-    private diningService: DiningService    
-    ) {
+    private diningService: DiningService
+  ) {
     // console.log("before");
     // this.isLoggedIn = userAuthService.isUserAuthenticated();
     // console.log("after");
@@ -49,40 +49,38 @@ export class ManageComponent implements OnInit, OnDestroy {
           this.isESuccess = true;
         } else if (respond === "Psuccess") {
           this.isPSuccess = true;
-        } else if(respond === "UNsuccess"){
+        } else if (respond === "UNsuccess") {
           this.isUNSuccess = true;
-        }
-        else if (typeof respond == 'object'){
+        } else if (typeof respond == "object") {
           // console.log(respond);
           //console.log("Tdsfljdsal;fkj");
           this.currentUserEmail = respond.email;
           this.currentUserName = respond.username;
 
-          //showing user's comments
-          // this.userListener = this.diningService
-          // .getCommentUpdateEmitter()
-          // .subscribe((respond: Comment[]) => {
-          //   this.commentList = respond;
-          //   this.commentListSize = this.commentList.length+"";
-          // })
+          // showing user's comments
+          this.userListener = this.diningService
+            .getCommentUpdateEmitter()
+            .subscribe((respond: Comment[]) => {
+              this.commentList = respond;
+              this.commentListSize = this.commentList.length + "";
+            });
 
           //console.log("USERNAME: "+ this.currentUserName);
           //console.log("EMAIL: "+ this.currentUserEmail);
-        }
-        else {
+        } else {
           this.errMsg = respond;
         }
       })
     );
 
-      //showing user's comments
-      this.userListener = this.diningService
+    //showing user's comments
+    this.userListener = this.diningService
       .getCommentUpdateEmitter()
       .subscribe((respond: any) => {
         console.log(respond);
         this.commentList = respond;
-        this.commentListSize = this.commentList.length+"";
-      })
+        this.commentListSize = this.commentList.length + "";
+      });
   }
 
   //get the cUE inside ngOnInit then call subscribe then listen to response
