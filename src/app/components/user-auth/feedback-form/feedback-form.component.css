@@ -1,0 +1,35 @@
+.container {
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.headers {
+  font-size: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.typeOfForm {
+  margin-bottom: 30px;
+}
+
+.description {
+  margin-bottom: 30px;
+  margin-top: 90px;
+}
+
+.firstBox {
+  width: 100%;
+}
+
+.descriptionBox {
+  /* height: 100px; */
+  /* line-height: 10em;
+  padding: 0 0 300px 0; */
+  width: 100%;
+}
+
+.buttonHolder {
+  text-align: center;
+}
