@@ -7,25 +7,65 @@
   </button> -->
 
   <!-- Modal -->
-  <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <!-- <div
+    class="modal fade"
+    id="exampleModalCenter"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            Welcome to PUrfect Dining!
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <p>
+            Currently, Purdue doesn’t have a system for students, faculty, and
+            the general public to rate their experience at dining courts, or to
+            make informed decisions about where they wish to dine on campus
+            based on real-time statistics of other users’ dining experiences.
+          </p>
+          <p>
+            PUrfect Dining utilizes a 3-button rating system to enable users,
+            while exiting dining courts, to rate their dining experience on a
+            scale of 1-3: Poor, Satisfactory, or Excellent, respectively.
+          </p>
+          <p>
+            The <strong>home page</strong> displays real time information about
+            which dining courts are open, and which ones are closed. The ratings
+            that you see beside them represent the average rating of the dining
+            court for the current meal time.<br />
+            Clicking a dining court's name on the home page will lead you to the
+            <strong>individual dining court's page</strong>, which displays
+            information about the respective dining court. This includes the
+            average rating and the menu for the current meal time, the comments
+            by users on the dining courts, and most importantly, the graph
+            representing all ratings for the dining court for the current meal
+            time.<br />
+            Commenting is available for users who have created an account.
+            Additionally, they also have the option of reporting a big/providing
+            feedback using the feedback form that can be accessed on the
+            settings page.<br />
+            Thank you for your patience. Click the button below to be redirected to the home page!
+          </p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button *ngIf="isFirstTime" (click)="onAccept()">Click me</button>
         </div>
       </div>
     </div>
   </div> -->
-  <button *ngIf="isFirstTime" (click)="onAccept()">Click me</button>
 </div>
 <router-outlet *ngIf="!isFirstTime"></router-outlet>
