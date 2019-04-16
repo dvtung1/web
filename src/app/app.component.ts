@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import * as $ from "jquery";
 
 @Component({
   selector: "app-root",
@@ -11,9 +12,13 @@ export class AppComponent {
   ngOnInit(): void {
     //firstTime as the key
     let isFirstTime = localStorage.getItem("firstTime");
-    console.log(isFirstTime);
+    // console.log(isFirstTime);
+
     if (isFirstTime !== "false") {
       this.isFirstTime = true;
+      // $(document).ready(function() {
+      //   $("#popup").modal("show");
+      // });
     }
   }
   onAccept() {

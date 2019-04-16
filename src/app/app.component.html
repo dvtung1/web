@@ -1,15 +1,10 @@
 <!--SPA where all the components are here-->
 <app-navbar></app-navbar>
 <div *ngIf="isFirstTime">
-  <!-- Button trigger modal -->
-  <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Launch demo modal
-  </button> -->
-
   <!-- Modal -->
-  <!-- <div
-    class="modal fade"
-    id="exampleModalCenter"
+  <div
+    class="popup"
+    id="popup"
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalCenterTitle"
@@ -19,7 +14,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle">
-            Welcome to PUrfect Dining!
+            <strong>Welcome to PUrfect Dining!</strong>
           </h5>
           <button
             type="button"
@@ -58,7 +53,8 @@
             Additionally, they also have the option of reporting a big/providing
             feedback using the feedback form that can be accessed on the
             settings page.<br />
-            Thank you for your patience. Click the button below to be redirected to the home page!
+            Thank you for your patience. Click the button below to be redirected
+            to the home page!
           </p>
         </div>
         <div class="modal-footer">
@@ -66,6 +62,6 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </div>
 <router-outlet *ngIf="!isFirstTime"></router-outlet>
