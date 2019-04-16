@@ -4,4 +4,5 @@ export interface Comment {
   rating: string;
   text: string;
   authorId: string;
+  likes: number;
 }

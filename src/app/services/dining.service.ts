@@ -7,7 +7,7 @@ import { postComment } from "src/app/models/post-comment";
 import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
 import { OpenDining } from "../models/opendining";
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Message } from "@angular/compiler/src/i18n/i18n_ast";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -72,6 +72,7 @@ export class DiningService {
       );
   }
 
+  //TODO missing likes
   getCommentById(commentId: string) {
     this.http
       .get<{
@@ -100,6 +101,7 @@ export class DiningService {
     return this.commentByIdEmitter.asObservable();
   }
 
+  //TODO missing likes
   getCommentByUser() {
     this.http
       .get<{
@@ -173,7 +175,8 @@ export class DiningService {
             byUser: respond.comment.author,
             rating: respond.comment.rating,
             objectId: respond.comment.objectId,
-            authorId: respond.comment.authorId
+            authorId: respond.comment.authorId,
+            likes: 0
           };
           //put the item at the first position in the list
           this.commentList.splice(0, 0, cmt);
@@ -293,19 +296,24 @@ export class DiningService {
         }
       );
   }
-  likeComment(commentId: string){
-    this.http.
-    get<{
-      message: any;
-    }>(BACKEND_URL + "/like/" + commentId)
-    .subscribe(
-      response => {
-        console.log("here");
-        console.log(response.message);
-      },
-      error => {
-        console.log("error");
-      }
-    );
+  likeComment(commentId: string) {
+    this.http
+      .post<{
+        message: string;
+      }>(BACKEND_URL + "/like/" + commentId, {})
+      .subscribe(
+        respond => {
+          const updatedComments = [...this.commentList];
+          const oldCommentIndex = updatedComments.findIndex(
+            comment => comment.objectId === commentId
+          );
+          updatedComments[oldCommentIndex].likes++;
+          this.commentList = updatedComments;
+          this.commentUpdateEmitter.next([...this.commentList]);
+        },
+        error => {
+          console.log(error.error.message);
+        }
+      );
   }
 }

@@ -57,8 +57,8 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
           .getCommentUpdateEmitter()
           .subscribe((respond: Comment[]) => {
             this.commentList = respond;
-            this.commentListsize = this.commentList.length +"";
-          });    
+            this.commentListsize = this.commentList.length + "";
+          });
 
         this.validCommentListener = this.diningService
           .getValidCommentEmitter()
@@ -153,17 +153,15 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     // ]);
   }
 
-  likeComment(commentId: string){
-    //console.log("is user logged in");
-    //var stat = this.userAuthService.checkIfUserLoggedIn;
-    //console.log;
-    if(this.loggedIn){
-      console.log("likeComment call: "+ commentId);
+  likeComment(commentId: string) {
+    /*
+    if (this.loggedIn) {
+      console.log("likeComment call: " + commentId);
       this.diningService.likeComment(commentId);
-    }
-    else{
+    } else {
       console.log("Error Unauthorized: need to be logged in to like comment");
     }
+    */
+    this.diningService.likeComment(commentId);
   }
-
 }
