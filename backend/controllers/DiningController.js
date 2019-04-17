@@ -219,6 +219,7 @@ exports.getCommentsByUser = async (req, res) => {
     let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
       `byUser.objectId = '${userObjectId}'`
     );
+    queryBuilder.setSortBy(["created DESC"]);
     let foundComments = await Backendless.Data.of(Comment).find(queryBuilder);
     let commentListResult = [];
     foundComments.forEach(comment => {
