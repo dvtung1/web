@@ -96,14 +96,14 @@
   </div>
 
   <div class="comments">
+    <br />
     <h1><strong>Your comments:</strong></h1>
-    <p>Total number of comments: {{ commentListsize }}</p>
+    <p>Total number of comments: {{ commentListSize }}</p>
     <div *ngFor="let comment of commentList">
-      <p class="diningName">{{ comment.diningName }}</p>
-      <p class="diningType">{{ comment.diningType }}</p>
-      <p>{{ comment.text }}</p>
+      <p class="diningName">Dining court: {{ comment.diningName }}</p>
+      <p class="diningType">Meal time: {{ comment.diningType }}</p>
       <p>Rating: {{ comment.rating }}</p>
-      <br />
+      <p>{{ comment.text }}</p>
       <div>
         <button (click)="editComment(comment.objectId)">Edit</button
         ><button (click)="deleteComment(comment.objectId)">Delete</button>
