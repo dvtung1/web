@@ -96,7 +96,7 @@
   </div>
 
   <div class="comments">
-    <br />
+    <br /><br />
     <h1><strong>Your comments:</strong></h1>
     <p>Total number of comments: {{ commentListSize }}</p>
     <div *ngFor="let comment of commentList">
@@ -108,6 +108,7 @@
         <button (click)="editComment(comment.objectId)">Edit</button
         ><button (click)="deleteComment(comment.objectId)">Delete</button>
       </div>
+      <!-- <br /> -->
     </div>
   </div>
 </div>

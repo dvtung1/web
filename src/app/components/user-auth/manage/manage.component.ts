@@ -23,6 +23,7 @@ export class ManageComponent implements OnInit, OnDestroy {
   commentList: Comment[];
   commentListSize = "loading...";
   private userListener: Subscription;
+  private menuListener: Subscription;
 
   constructor(
     private userAuthService: UserAuthService,

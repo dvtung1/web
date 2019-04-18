@@ -4,9 +4,9 @@
     <strong>{{ diningName }}</strong>
   </header>
   <div *ngIf="loggedIn">
-      <br />
-      <button (click)="middleState()">Post a Comment!</button>
-      <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
+    <br />
+    <button (click)="middleState()">Post a Comment!</button>
+    <!-- <p (click)="postComment(inputComment.value)">Post</p> -->
     <br />
   </div>
   <div class="commentSection">
@@ -14,10 +14,10 @@
     <p>Total number of comments: {{ commentListsize }}</p>
     <div *ngFor="let comment of commentList">
       <p class="username">{{ comment.byUser }}</p>
-      <p>{{ comment.text }} </p>
+      <p>{{ comment.text }}</p>
       <button (click)="likeComment(comment.objectId)">Like</button>
       <p>Rating: {{ comment.rating }}</p>
-      <p>Number of likes: {{ comment.likes }} </p>
+      <p>Number of likes: {{ comment.likes }}</p>
       <br />
       <div>
         <button (click)="editComment(comment.objectId)">Edit</button
