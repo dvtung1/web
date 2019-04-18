@@ -9,6 +9,41 @@ const convertESTDateTime = require("../utils/ControllerHelper")
   .convertESTDateTime;
 const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
 
+let getRatingHelper = async (diningName, diningType) => {
+  if (diningCourtList.indexOf(diningName) === -1) {
+    throw new Error("No corresponding diningCourt is found");
+  }
+
+  //get rating from a particular dining court
+  let whereClause = "";
+  if (diningName === "pete's za") {
+    whereClause = `ofDiningTiming.ofPlace.objectId='${PETEZA_ID}'`;
+  } else {
+    whereClause = `ofDiningTiming.ofPlace.name='${diningName}'`;
+  }
+
+  //if there is a query diningtype, search for that
+  if (diningType != null) {
+    diningType = diningType.toLowerCase();
+    if (diningTypeList.indexOf(diningType) === -1) {
+      throw new Error("No corresponding diningType is found");
+    }
+    whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
+  }
+  let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
+    whereClause
+  );
+
+  let foundRatings = await Backendless.Data.of(Rating).find(queryBuilder);
+  let ratings = foundRatings.map(rating => {
+    return {
+      score: rating.rating,
+      diningType: rating.ofDiningTiming.diningType.name
+    };
+  });
+  return ratings;
+};
+
 /*
  * Query ratings based on dining court.
  * @param diningName name of the dining court
@@ -18,41 +53,61 @@ exports.getRating = async (req, res) => {
   try {
     let diningName = req.params.diningName.toLowerCase();
     let diningType = req.query.type;
-
-    if (diningCourtList.indexOf(diningName) === -1) {
-      throw new Error("No corresponding diningCourt is found");
-    }
-
-    //get rating from a particular dining court
-    let whereClause = "";
-    if (diningName === "pete's za") {
-      whereClause = `ofDiningTiming.ofPlace.objectId='${PETEZA_ID}'`;
-    } else {
-      whereClause = `ofDiningTiming.ofPlace.name='${diningName}'`;
-    }
-
-    //if there is a query diningtype, search for that
-    if (diningType != null) {
-      diningType = diningType.toLowerCase();
-      if (diningTypeList.indexOf(diningType) === -1) {
-        throw new Error("No corresponding diningType is found");
-      }
-      whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
-    }
-    let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
-      whereClause
-    );
-
-    let foundRatings = await Backendless.Data.of(Rating).find(queryBuilder);
-    let ratings = foundRatings.map(rating => {
-      return {
-        score: rating.rating,
-        diningType: rating.ofDiningTiming.diningType.name
-      };
-    });
+    let ratings = await getRatingHelper(diningName, diningType);
     return res.status(200).json({
       message: `Fetch rating of ${diningName} successfully`,
       ratings
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+let calculateAverageRating = async diningName => {
+  let ratings = await getRatingHelper(diningName, null);
+  let scoreArray = [];
+  for (let rating of ratings) {
+    scoreArray.push(rating.score);
+  }
+  let numExcellent = scoreArray.filter(x => {
+    return x === 3;
+  }).length;
+  let numSatisfactory = scoreArray.filter(x => {
+    return x === 2;
+  }).length;
+  let numPoor = scoreArray.filter(x => {
+    return x === 1;
+  }).length;
+
+  //calculate the mean score and format it to 2 digit float
+  let averageScore = (
+    scoreArray.reduce((total, c) => total + c, 0) /
+    parseFloat(scoreArray.length)
+  ).toFixed(2);
+
+  return [numExcellent, numSatisfactory, numPoor, averageScore];
+};
+
+exports.getAverageRating = async (req, res) => {
+  try {
+    let diningName = req.params.diningName.toLowerCase();
+    let [
+      numExcellent,
+      numSatisfactory,
+      numPoor,
+      averageScore
+    ] = await calculateAverageRating(diningName);
+
+    return res.status(200).json({
+      message: "Get average rating successfully",
+      ratings: {
+        numExcellent,
+        numSatisfactory,
+        numPoor,
+        averageScore
+      }
     });
   } catch (err) {
     return res.status(500).json({

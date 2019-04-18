@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DiningService } from 'src/app/services/dining.service';
+import { GraphService } from 'src/app/services/graph.service';
 import { Subscription } from 'rxjs';
 import { OpenDining } from 'src/app/models/opendining';
 
@@ -11,6 +12,9 @@ import { OpenDining } from 'src/app/models/opendining';
 export class HomeComponent implements OnInit, OnDestroy {
   
   private diningListener: Subscription;
+  private graphListener: Subscription;
+  private graphListenerq: any;
+
   openList: OpenDining[];
   closedList: String[];
   diningArray = [
@@ -37,7 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private diningService: DiningService
+    private diningService: DiningService,
+    private graphService: GraphService
   ) {
     //calls this on refresh
     //this.diningService.checkOpenClosed();
@@ -62,10 +67,17 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.closedList = respond;
             //console.log(this.closedList);
           });
+
+
+    this.graphListener = this.graphService.getAverageRatings("ford").
+    subscribe( response => {
+      console.log(response);
+    });
   }
 
   ngOnDestroy(){
     this.diningListener.unsubscribe();
+    this.graphListener.unsubscribe();
   }
 
 }

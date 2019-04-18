@@ -11,6 +11,7 @@ const diningTypeList = require("../utils/ControllerHelper").diningTypeList;
 const convertESTDateTime = require("../utils/ControllerHelper")
   .convertESTDateTime;
 const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
+const HOUR_AHEAD = require("../utils/ControllerHelper").HOUR_AHEAD;
 /*
   Get comments along with author name and rating.
   @query name dining court name

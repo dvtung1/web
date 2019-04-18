@@ -5,6 +5,7 @@ const router = express.Router();
 const RatingController = require("../controllers/RatingController");
 
 router.get("/:diningName", RatingController.getRating);
+router.get("/:diningName/average", RatingController.getAverageRating);
 router.post("", RatingController.postRating);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
+import { ChartsModule } from "ng2-charts";
 
 //Services
 import { UserAuthService } from "./services/user-auth.service";
@@ -21,6 +22,7 @@ import { MenuComponent } from "./components/main/menu/menu.component";
 import { DiningCourtComponent } from "./components/main/dining-court/dining-court.component";
 import { CreateCommentComponent } from "./components/main/create-comment/create-comment.component";
 import { FeedbackFormComponent } from "./components/user-auth/feedback-form/feedback-form.component";
+import { GraphComponent } from './components/main/graph/graph.component';
 
 @NgModule({
   declarations: [
@@ -34,9 +36,16 @@ import { FeedbackFormComponent } from "./components/user-auth/feedback-form/feed
     MenuComponent,
     DiningCourtComponent,
     CreateCommentComponent,
-    FeedbackFormComponent
+    FeedbackFormComponent,
+    GraphComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ChartsModule
+  ],
   providers: [UserAuthService, DiningService],
   bootstrap: [AppComponent]
 })

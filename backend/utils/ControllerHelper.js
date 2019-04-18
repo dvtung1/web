@@ -1,6 +1,6 @@
 //for converting EST time
 const HOUR_AHEAD = 5;
-
+exports.HOUR_AHEAD;
 //Pete's za backendless ObjectID
 exports.PETEZA_ID = "98648DA5-C244-DC76-FF11-CA1DE1609100";
 

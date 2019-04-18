@@ -104,8 +104,7 @@
       <p class="diningType">Meal time: {{ comment.diningType }}</p>
       <p>Rating: {{ comment.rating }}</p>
       <p>{{ comment.text }}</p>
-      <br />
-      <div class="please">
+      <div>
         <button (click)="editComment(comment.objectId)">Edit</button
         ><button (click)="deleteComment(comment.objectId)">Delete</button>
       </div>
