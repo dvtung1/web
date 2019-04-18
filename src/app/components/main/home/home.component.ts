@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private graphListenerq: any;
 
   openList: OpenDining[];
+  sortedopenList: OpenDining[];
   closedList: String[];
   diningArray = [
     "1bowl",
@@ -59,20 +60,36 @@ export class HomeComponent implements OnInit, OnDestroy {
               //console.log(openddc.closedTime.substring(11, 16));
               openddc.closedTime = openddc.closedTime.substring(11, 16);
             });
-            //console.log(this.openList);
+            console.log("open: "+this.openList);
+
+            for(let dc of this.openList){
+              this.graphListener = this.graphService.getAverageRatings(dc.diningName)
+              .subscribe( response => {
+                //console.log("for: "+dc.diningName);
+                //console.log(response);
+                //console.log(response.ratings.averageScore);
+                // will set the average score to zero if there is no data
+                if(isNaN(response.ratings.averageScore) == false){
+                  dc.avgScore = response.ratings.averageScore;
+                }
+                else{
+                  dc.avgScore = 0;
+                }
+
+                // now have to sort the openList
+                this.openList.sort(function(a: OpenDining, b:OpenDining){
+                  return b.avgScore - a.avgScore;
+                });
+              });
+            }
           });
+
     this.diningListener = this.diningService
           .getclosedEmitter()
           .subscribe(respond => {
             this.closedList = respond;
-            //console.log(this.closedList);
+            console.log("closed: "+this.closedList);
           });
-
-
-    this.graphListener = this.graphService.getAverageRatings("ford").
-    subscribe( response => {
-      console.log(response);
-    });
   }
 
   ngOnDestroy(){
