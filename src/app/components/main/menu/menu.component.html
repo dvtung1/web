@@ -1,13 +1,26 @@
 <div class="menuContainer">
-    <div class="details">
-        <header class="text-capitalize">
-            <strong>Menu</strong>
-            <!-- <hr> -->
-        </header>
+  <div class="details">
+    <header class="text-capitalize">
+      <strong>Menu</strong>
+      <!-- <hr> -->
+    </header>
 
-        <!-- WINDSOR -->
-        
-        <aside class="menu">
+    <!-- from server -->
+    <li *ngFor="let diningType of (tempMenu | keyvalue)">
+      <strong>{{ diningType.key | json }}</strong>
+      <br />
+      {{ diningType.value | json }}
+      <br />
+      <!-- <div *ngFor="let section of (diningType | keyvalue)">
+            <div *ngFor="let item of (section | keyvalue)">
+          <p>Testing: {{ item }}</p>
+          </div>
+      </div>
+      </div> -->
+    </li>
+
+    <!-- WINDSOR -->
+    <!-- <aside class="menu">
             <h2>Portobello Road - Vegetarian</h2>
             <ul class="menu-list">
                 <li><a>Tofu Pepper Scramble</a></li>
@@ -52,55 +65,6 @@
                 <li><a>Peach Cobbler</a></li>
                 <li><a>Shortbread Cookie</a></li>
             </ul>
-        </aside>    
-
-        <!-- FORD -->
-<!--         
-        <aside class="menu">
-            <h2>BoilerQ</h2>
-            <ul class="menu-list">
-                <li><a>Hamburgers</a></li>
-                <li><a>Austin Blues Pulled Pork</a></li>
-                <li><a>Grilled Pineapple Wedge</a></li>
-                <li><a>Crinkle Cut Fries</a></li>
-            </ul>    
-            <h2>Potāto, Potäto</h2>
-            <ul class="menu-list">
-                <li><a>Seafood Topped Salmon</a></li>
-                <li><a>Turkey Tetrazzini</a></li>
-                <li><a>Lemon Wedges</a></li>
-                <li><a>Vegetarian Baked Ziti</a></li>
-                <li><a>Flame Roasted Sweet Potatoes</a></li>
-                <li><a>California Vegetables</a></li>
-                <li><a>Herbed Green Beans</a></li>
-            </ul>
-            <h2>International Market</h2>
-            <ul class="menu-list">
-                <li><a>Vietnamese Noodle Soup</a></li>
-                <li><a>Stir Fry Bok Choy</a></li>
-                <li><a>Pork Potstickers</a></li>
-                <li><a>Potsticker Sauce</a></li>
-            </ul>
-            <h2>Parmesan Tomato</h2>
-            <ul class="menu-list">
-                <li><a>Chicken Bacon Ranch Pizza</a></li>
-                <li><a>Pepperoni Pizza</a></li>
-                <li><a>Cheese Pizza</a></li>
-            </ul> 
-            <h2>Salami and Swiss</h2>
-            <ul class="menu-list">
-                <li><a>Deli & Fresh Baked Breads</a></li>
-                <li><a>Mexican Pasta Salad</a></li>
-                <li><a>Zesty Mediterranean Couscous</a></li>
-            </ul>  
-            <h2>Sugar Hill</h2>
-            <ul class="menu-list">
-                <li><a>Chocolate Chip Cookie</a></li>
-                <li><a>Strawberry Shortcake Cookie</a></li>
-                <li><a>Pecan Pie</a></li>
-                <li><a>Yellow Cake With Wellesley Frosting</a></li>
-                <li><a>Berry Blue Gelatin</a></li>
-            </ul> 
-        </aside> -->
-    </div>
+        </aside>     -->
+  </div>
 </div>
