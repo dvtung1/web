@@ -122,11 +122,19 @@ exports.getTrendingRating = async (req, res) => {
     for (let diningCourt of diningCourtList) {
       let result = await calculateAverageRating(diningCourt, null);
       let averageScore = result[3];
+
+      //if no rating for the dining court yet, set it to 0
+      if (isNaN(averageScore)) {
+        averageScore = "0";
+      }
       scoreArray.push({
         diningName: diningCourt,
         averageScore
       });
     }
+    //sort the array
+    scoreArray.sort((a, b) => (a.averageScore < b.averageScore ? 1 : -1));
+
     return res.status(200).json({
       message: "Top trending dining courts",
       scoreArray
