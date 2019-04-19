@@ -15,15 +15,17 @@ import { CreateCommentComponent } from "../create-comment/create-comment.compone
   styleUrls: ["./dining-court.component.css"]
 })
 export class DiningCourtComponent implements OnInit, OnDestroy {
-  commentList: Comment[];
+  private authStatusSub: Subscription;
+  private diningListener: Subscription;
+  // private menuListener: Subscription;
+  private validCommentListener: Subscription;
   loggedIn = false;
   ifDeleted = false;
   userId: string = "";
-  private authStatusSub: Subscription;
-  private diningListener: Subscription;
-  private validCommentListener: Subscription;
   diningName: string; //diningName param for UI
+  commentList: Comment[];
   commentListsize = "loading...";
+  // menuList: Comment[];
 
   constructor(
     private userAuthService: UserAuthService,
@@ -78,6 +80,7 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     this.diningListener.unsubscribe();
     this.authStatusSub.unsubscribe();
     this.validCommentListener.unsubscribe();
+    // this.menuListener.unsubscribe();
   }
   postComment(form: NgForm) {
     var inputComment = form.value.comment;

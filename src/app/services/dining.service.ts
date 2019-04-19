@@ -8,6 +8,7 @@ import { Location } from "@angular/common";
 import { map } from "rxjs/operators";
 import { OpenDining } from "../models/opendining";
 import { Message } from "@angular/compiler/src/i18n/i18n_ast";
+import { analyzeAndValidateNgModules } from "@angular/compiler";
 
 //backend api url for communication (Port 3000)
 const BACKEND_URL = environment.apiUrl + "/dining";
@@ -23,6 +24,7 @@ export class DiningService {
   private validCommentEmitter = new Subject<any>();
   private commentByIdEmitter = new Subject<any>();
   private tvEmitter = new Subject<any>();
+  private menuUpdateEmitter = new Subject<any[]>();
   constructor(private http: HttpClient, private location: Location) {}
 
   /*
@@ -70,6 +72,46 @@ export class DiningService {
           console.log(err.error.message);
         }
       );
+  }
+
+  // Get the menu for the respective dining court for the current day
+  getMenus(diningCourtName: string) {
+    // console.log(BACKEND_URL + "/menu/" + diningCourtName);
+    this.http
+      .get<{
+        message: string;
+        menu: any;
+      }>(BACKEND_URL + "/menu/" + diningCourtName)
+      .subscribe(response => {
+        // var array = [];
+        // // iterate through dining types
+        // console.log("fuck");
+        // // console.log(Object.keys(response.menu).length);
+        // var length = Object.keys(response.menu).length;
+        // for (var i = 0; i < length; i++) {
+        //   var diningType = Object.keys(response.menu)[i];
+        //   console.log(diningType);
+        // }
+        // console.log(response.menu);
+        // for (var dT in response.menu) {
+        //   // console.log("hello2");
+        //   console.log(dT);
+        //   // diningType holds meal type
+        //   var diningTypeArray = dT;
+        //   array.push(diningTypeArray);
+        // sect iterates through section in menu
+        // for (var sect in diningType) {
+        //   var section = diningType[sect];
+        //   array.push(section);
+        // }
+        // }
+        // for (var diningType of array) {
+        //   for(var section of ) {
+
+        //   }
+        // }
+        this.menuUpdateEmitter.next(response.menu);
+      });
   }
 
   //TODO missing likes
@@ -123,7 +165,6 @@ export class DiningService {
             };
             array.push(cmt);
           });
-          // console.log("HI");
           // console.log(array);
           this.commentUpdateEmitter.next([...array]);
         },
@@ -136,6 +177,10 @@ export class DiningService {
 
   getCommentUpdateEmitter(): Observable<any> {
     return this.commentUpdateEmitter.asObservable();
+  }
+
+  getMenuUpdateEmitter(): Observable<any> {
+    return this.menuUpdateEmitter.asObservable();
   }
 
   getValidCommentEmitter(): Observable<any> {

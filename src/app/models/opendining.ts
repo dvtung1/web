@@ -3,4 +3,5 @@ export interface OpenDining {
     diningType: string;
     openedTime: string;
     closedTime: string;
+    avgScore: any;
   }
