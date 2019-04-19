@@ -10,15 +10,14 @@ import { OpenDining } from 'src/app/models/opendining';
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  
+
   private diningListener: Subscription;
   private graphListener: Subscription;
-  private graphListenerq: any;
 
   openList: OpenDining[];
   sortedopenList: OpenDining[];
   closedList: String[];
-  diningArray = [
+  /* diningArray = [
     "1bowl",
     "earhart",
     "ford",
@@ -26,20 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     "wiley",
     "windsor",
     "pete's za"
-  ];
-  
-
-  //this has to be updated by backend for correctness
-  // could maybe use tuples or dictionary for implementation?
-  doc = [
-    true,
-    false,
-    true,
-    true,
-    false,
-    true,
-    false
-  ];
+  ];*/
 
   constructor(
     private diningService: DiningService,
@@ -92,7 +78,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.diningListener.unsubscribe();
-    this.graphListener.unsubscribe();
+    if(this.graphListener){
+      this.graphListener.unsubscribe();
+    }
   }
 
 }
