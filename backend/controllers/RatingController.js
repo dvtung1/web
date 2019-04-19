@@ -30,6 +30,12 @@ let getRatingHelper = async (diningName, diningType) => {
     }
     whereClause += ` and ofDiningTiming.diningType.name='${diningType}'`;
   }
+
+  //get all ratings for ONLY today
+  let date = convertESTDateTime(new Date());
+  let dateWOtime = date.split(" ")[0];
+  whereClause += ` and ofDiningTiming.from >= '${dateWOtime} 00:00:00 EST' and ofDiningTiming.to < '${dateWOtime} 23:59:59 EST'`;
+
   let queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(
     whereClause
   );
