@@ -41,6 +41,17 @@ class Comment {
       this
     ]);
   }
+  async setLikesByUser() {
+    let currentUser = await Backendless.UserService.getCurrentUser();
+    Backendless.Data.of(Comment).addRelation(this, "likes", [currentUser]);
+  }
+  checkUserLike() {
+    var userObjectId = Backendless.LocalCache.get("current-user-id");
+    let listUserLikes = this.likes;
+    return listUserLikes.some(element => {
+      return element.objectId === userObjectId;
+    });
+  }
 }
 
 module.exports = Comment;

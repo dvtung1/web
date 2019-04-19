@@ -3,22 +3,26 @@
 <br />
 
 <div class="open">
-    <h2>Open:</h2>
-    <br>
-      <div *ngFor="let open of openList;">
-          <span><a routerLink="/dining/{{ open.diningName }}"> {{ open.diningName }} </a></span>
-          <span>  Avg Rating: {{ open.avgScore }}</span>
-          <p> Closing at: {{ open.closedTime }}</p>
-          <p> Meal: {{ open.diningType }}</p>
-          
-      </div>
+  <h2>Open:</h2>
+  <br />
+  <div *ngFor="let open of openList">
+    <span
+      ><a routerLink="/dining/{{ open.diningName }}">
+        {{ open.diningName }}
+      </a></span
+    >
+    <span> Avg Rating: {{ open.avgScore }}</span>
+    <p>Closing at: {{ open.closedTime.substring(11, 16) }}</p>
+    <p>Meal: {{ open.diningType }}</p>
   </div>
-  <div class="closed">
-    <h2>Closed:</h2>
-    <br>
-      <div *ngFor="let closed of closedList">
-            <span><a routerLink="/dining/{{ closed }}">{{ closed }} </a></span>
-            <span>  Avg Rating: - </span>
-      </div>
+</div>
+<div class="closed">
+  <h2>Closed:</h2>
+  <br />
+  <div *ngFor="let closed of closedList">
+    <span
+      ><a routerLink="/dining/{{ closed }}">{{ closed }} </a></span
+    >
+    <span> Avg Rating: - </span>
   </div>
-  
+</div>

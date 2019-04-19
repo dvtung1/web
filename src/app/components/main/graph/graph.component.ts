@@ -2,12 +2,16 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import * as pluginDataLabels from "chartjs-plugin-datalabels";
 import { Label } from "ng2-charts";
+import { GraphService } from "src/app/services/graph.service";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 @Component({
   selector: "app-graph",
   templateUrl: "./graph.component.html",
   styleUrls: ["./graph.component.css"]
 })
 export class GraphComponent implements OnInit {
+  //@Input() childDiningName: string;
+  public diningName: string;
   public barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
@@ -24,11 +28,41 @@ export class GraphComponent implements OnInit {
   public barChartLegend = true;
   public barChartPlugins = [pluginDataLabels];
 
-  public barChartData: ChartDataSets[] = [{ data: [65, 59, 80] }];
+  public barChartData: ChartDataSets[] = [{ data: [] }];
 
-  constructor() {}
+  constructor(
+    private graphService: GraphService,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    let numExcellent;
+    let numSatisfactory;
+    let numPoor;
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      //check if contain diningName in the param route
+      if (paramMap.has("diningName")) {
+        //get diningName from the param route
+        this.diningName = paramMap.get("diningName");
+
+        this.graphService
+          .getAverageRatings(this.diningName)
+          .subscribe(response => {
+            let dataArray = [];
+            numExcellent = response.ratings.numExcellent;
+            numSatisfactory = response.ratings.numSatisfactory;
+            numPoor = response.ratings.numPoor;
+            dataArray.push(numExcellent);
+            dataArray.push(numSatisfactory);
+            dataArray.push(numPoor);
+            console.log(dataArray);
+            this.barChartData.push({
+              data: dataArray
+            });
+          });
+      }
+    });
+  }
   // events
   public chartClicked({
     event,

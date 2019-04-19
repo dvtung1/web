@@ -78,10 +78,10 @@ let calculateAverageRating = async (diningName, diningType) => {
     scoreArray.push(rating.score);
   }
   let numExcellent = scoreArray.filter(x => {
-    return x === 3;
+    return x === 5;
   }).length;
   let numSatisfactory = scoreArray.filter(x => {
-    return x === 2;
+    return x === 3;
   }).length;
   let numPoor = scoreArray.filter(x => {
     return x === 1;
@@ -122,6 +122,18 @@ exports.getAverageRating = async (req, res) => {
   }
 };
 
+let getTrendingRatingHelper = async diningName => {
+  let date = convertESTDateTime(new Date());
+  let dateWOtime = date.split(" ")[0];
+  let whereClause = `ofDiningTiming.ofPlace.name='${diningName}' and created > '04/19/2019 00:00:00 EST'`;
+  let queryBuilder = Backendless.DataQueryBuilder.create().setProperties(
+    "Avg(rating) as calc"
+  );
+  queryBuilder.setWhereClause(whereClause);
+  let result = await Backendless.Data.of(Rating).find(queryBuilder);
+  return result;
+};
+
 exports.getTrendingRating = async (req, res) => {
   try {
     let scoreArray = [];
@@ -129,7 +141,6 @@ exports.getTrendingRating = async (req, res) => {
       let result = await calculateAverageRating(diningCourt, null);
       let averageScore = result[3];
 
-      //if no rating for the dining court yet, set it to 0
       if (isNaN(averageScore)) {
         averageScore = "0";
       }
@@ -145,6 +156,29 @@ exports.getTrendingRating = async (req, res) => {
       message: "Top trending dining courts",
       scoreArray
     });
+    /*
+    let scoreArray = [];
+    for (let diningCourt of diningCourtList) {
+      let whereClause = `ofDiningTiming.ofPlace.name='Ford' and created > '04/19/2019 00:00:00 EST'`;
+      let queryBuilder = Backendless.DataQueryBuilder.create().setProperties(
+        "Avg(rating) as calc"
+      );
+      queryBuilder.setWhereClause(whereClause);
+      let result = await Backendless.Data.of(Rating).find(queryBuilder);
+      result = JSON.stringify(result, null, 2);
+      scoreArray.push({
+        diningName: diningCourt,
+        result
+      });
+    }
+    //sort the array
+    scoreArray.sort((a, b) => (a.averageScore < b.averageScore ? 1 : -1));
+
+    return res.status(200).json({
+      message: "Top trending dining courts",
+      scoreArray
+    });
+    */
   } catch (err) {
     return res.status(500).json({
       message: err.message
@@ -232,9 +266,9 @@ let whereClauseCurrentTime = place => {
 
 let convertScoreInt = rating => {
   if (rating === "excellent") {
-    return 3;
+    return 5;
   } else if (rating === "satisfactory") {
-    return 2;
+    return 3;
   } else if (rating === "poor") {
     return 1;
   }

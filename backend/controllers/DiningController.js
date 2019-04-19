@@ -12,6 +12,8 @@ const convertESTDateTime = require("../utils/ControllerHelper")
   .convertESTDateTime;
 const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
 const HOUR_AHEAD = require("../utils/ControllerHelper").HOUR_AHEAD;
+const calculateAverageRating = require("../utils/ControllerHelper")
+  .calculateAverageRating;
 /*
   Get comments along with author name and rating.
   @query name dining court name
@@ -285,22 +287,32 @@ exports.getMealTime = async (req, res) => {
     let openDiningCourts = [];
     //temp list to filter out and get closed dining court
     let openDiningCourtsName = [];
-    foundDiningTimings.forEach(diningTiming => {
+    // foundDiningTimings.forEach(diningTiming => {
+    for (let diningTiming of foundDiningTimings) {
       //convert Epoch time to EST time
       let epochTimeClosed = diningTiming.to;
       let epochTimeOpened = diningTiming.from;
       let closedTime = convertESTDateTime(new Date(parseInt(epochTimeClosed)));
       let openedTime = convertESTDateTime(new Date(parseInt(epochTimeOpened)));
+      // let diningName = diningTiming.ofPlace.name;
+      // let result = await calculateAverageRating(diningName, null);
+      // let averageScore = result[3];
+      // if (isNaN(averageScore)) {
+      //   averageScore = "0";
+      // }
 
       openDiningCourts.push({
         diningName: diningTiming.ofPlace.name,
         diningType: diningTiming.diningType.name,
         openedTime: openedTime,
         closedTime: closedTime
+        //averageScore
       });
 
       openDiningCourtsName.push(diningTiming.ofPlace.name.toLowerCase());
-    });
+    }
+    //openDiningCourts.sort((a, b) => (a.averageScore < b.averageScore ? 1 : -1));
+
     //get all the dining courts that are closed
     let closedDiningCourts = diningCourtList.filter(
       item => !openDiningCourtsName.includes(item)
@@ -493,7 +505,15 @@ exports.postLikeComment = async (req, res) => {
   try {
     let id = req.params.id; //id of the comment
     let comment = await Backendless.Data.of(Comment).findById(id);
+    //check if current user already like the comment
+    if (comment.checkUserLike()) {
+      return res.status(500).json({
+        message: "User already like the comment"
+      });
+    }
+
     comment.likes += 1;
+    await comment.setLikesByUser();
     await comment.save();
     return res.status(200).send({
       message: "Save like successfully"

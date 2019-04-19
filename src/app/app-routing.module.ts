@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: "dining/:diningName/create/:id", component: CreateCommentComponent },
   { path: "dining/:diningName/create", component: CreateCommentComponent },
   { path: "feedbackform", component: FeedbackFormComponent },
-  { path: "graph", component: GraphComponent }
+  { path: "graph/:diningName", component: GraphComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
