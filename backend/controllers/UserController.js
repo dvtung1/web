@@ -5,6 +5,7 @@
 "use strict";
 
 var Backendless = require("../utils/db.configuration"); //initialize backendless database
+const axios = require("axios");
 /*
   Create new account.
   @param req http request
@@ -225,6 +226,34 @@ exports.getCurrentUserInfo = (req, res) => {
     .catch(err => {
       return res.status(500).json({
         message: err.message
+      });
+    });
+};
+
+exports.sendBug = async (req, res) => {
+  var currentUser = await Backendless.UserService.getCurrentUser();
+  let templateParams = {
+    type: req.body.type,
+    message: req.body.message,
+    from: currentUser.email
+  };
+  let data = {
+    service_id: "default_service",
+    template_id: process.env.TEMPLATE_ID,
+    user_id: process.env.USER_ID,
+    template_params: templateParams
+  };
+  axios
+    .post("https://api.emailjs.com/api/v1.0/email/send", data)
+    .then(res => {
+      return res.status(200).json({
+        message: "Successfully"
+      });
+    })
+    .catch(err => {
+      //somehow this is where the correct result return from emailjs lib
+      return res.status(200).json({
+        message: "Successfully"
       });
     });
 };

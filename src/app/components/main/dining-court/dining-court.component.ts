@@ -15,6 +15,7 @@ import { CreateCommentComponent } from "../create-comment/create-comment.compone
   styleUrls: ["./dining-court.component.css"]
 })
 export class DiningCourtComponent implements OnInit, OnDestroy {
+  public isBarGraph = 1;
   private authStatusSub: Subscription;
   private diningListener: Subscription;
   // private menuListener: Subscription;
@@ -166,5 +167,12 @@ export class DiningCourtComponent implements OnInit, OnDestroy {
     }
     */
     this.diningService.likeComment(commentId);
+  }
+  switchGraph() {
+    if (this.isBarGraph) {
+      this.isBarGraph = 0;
+    } else {
+      this.isBarGraph = 1;
+    }
   }
 }

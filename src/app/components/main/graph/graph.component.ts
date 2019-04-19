@@ -10,8 +10,8 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
   styleUrls: ["./graph.component.css"]
 })
 export class GraphComponent implements OnInit {
-  //@Input() childDiningName: string;
-  public diningName: string;
+  @Input() diningName: string;
+  //public diningName: string;
   public barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
@@ -41,6 +41,7 @@ export class GraphComponent implements OnInit {
     let numExcellent;
     let numSatisfactory;
     let numPoor;
+    /*
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       //check if contain diningName in the param route
       if (paramMap.has("diningName")) {
@@ -60,6 +61,17 @@ export class GraphComponent implements OnInit {
             this.barChartData[0].data = dataArray;
           });
       }
+    });
+    */
+    this.graphService.getAverageRatings(this.diningName).subscribe(response => {
+      let dataArray = [];
+      numExcellent = response.ratings.numExcellent;
+      numSatisfactory = response.ratings.numSatisfactory;
+      numPoor = response.ratings.numPoor;
+      dataArray.push(numExcellent);
+      dataArray.push(numSatisfactory);
+      dataArray.push(numPoor);
+      this.barChartData[0].data = dataArray;
     });
   }
 

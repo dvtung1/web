@@ -8,6 +8,9 @@ const diningTypeList = require("../utils/ControllerHelper").diningTypeList;
 const convertESTDateTime = require("../utils/ControllerHelper")
   .convertESTDateTime;
 const PETEZA_ID = require("../utils/ControllerHelper").PETEZA_ID;
+const EXCELLENT = 3;
+const SATISFACTORY = 2;
+const POOR = 1;
 
 let getRatingHelper = async (diningName, diningType) => {
   if (diningCourtList.indexOf(diningName) === -1) {
@@ -78,13 +81,13 @@ let calculateAverageRating = async (diningName, diningType) => {
     scoreArray.push(rating.score);
   }
   let numExcellent = scoreArray.filter(x => {
-    return x === 5;
+    return x === EXCELLENT;
   }).length;
   let numSatisfactory = scoreArray.filter(x => {
-    return x === 3;
+    return x === SATISFACTORY;
   }).length;
   let numPoor = scoreArray.filter(x => {
-    return x === 1;
+    return x === POOR;
   }).length;
 
   //calculate the mean score and format it to 2 digit float
@@ -266,11 +269,11 @@ let whereClauseCurrentTime = place => {
 
 let convertScoreInt = rating => {
   if (rating === "excellent") {
-    return 5;
+    return EXCELLENT;
   } else if (rating === "satisfactory") {
-    return 3;
+    return SATISFACTORY;
   } else if (rating === "poor") {
-    return 1;
+    return POOR;
   }
   return null;
 };

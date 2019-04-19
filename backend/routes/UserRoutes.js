@@ -13,6 +13,7 @@ router.post("/signup", UserController.createAccount);
 router.post("/login", UserController.signIn);
 router.post("/recovery", UserController.recoveryPassword);
 router.post("/resend", UserController.resendConfirmation);
+router.post("/bug", userAuthentication, UserController.sendBug);
 
 router.get("/checkifloggedin", UserController.checkIfUserLoggedIn);
 router.get("/logout", userAuthentication, UserController.logOut);

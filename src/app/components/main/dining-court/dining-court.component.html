@@ -3,6 +3,21 @@
   <header class="text-capitalize">
     <strong>{{ diningName }}</strong>
   </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <div *ngIf="isBarGraph">
+          <app-graph [diningName]="diningName"></app-graph>
+        </div>
+        <div *ngIf="!isBarGraph">
+          <app-graph-two [diningName]="diningName"></app-graph-two>
+        </div>
+      </div>
+      <div class="col-4 m-auto text-center">
+        <button class="mr-5" (click)="switchGraph()">Switch graph</button>
+      </div>
+    </div>
+  </div>
   <div *ngIf="loggedIn">
     <br />
     <button (click)="middleState()">Post a Comment!</button>

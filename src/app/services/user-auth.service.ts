@@ -85,7 +85,6 @@ export class UserAuthService {
           this.router.navigate(["/"]);
           //TODO add new route when user successfully log in
           this.authStatusListener.next("authenticated");
-
         },
         error => {
           console.log(error.error.message);
@@ -105,6 +104,13 @@ export class UserAuthService {
         this.authStatusListener.next(error.error.message);
       }
     );
+  }
+
+  sendBug(type: string, message: string) {
+    return this.http.post<{ message: string }>(BACKEND_URL + "/bug", {
+      type: type,
+      message: message
+    });
   }
 
   changeUserEmail(newemail: string) {
