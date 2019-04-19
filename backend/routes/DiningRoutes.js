@@ -24,9 +24,9 @@ router.get("/comment/:id", DiningController.getCommentById);
 router.get("/mealtime", DiningController.getMealTime);
 
 //route will get the current (real-time) menu
+router.get("/menu/:place/:date", DiningController.getMenu);
 router.get("/menu/:place", DiningController.getMenu);
 //get a specific date menu
-router.get("/menu/:place/:date", DiningController.getMenu);
 
 // check to see which dining courts are open or closed
 router.get("/checkOpenClosed", DiningController.checkOpenClosed);

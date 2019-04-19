@@ -65,8 +65,8 @@ exports.getRating = async (req, res) => {
   }
 };
 
-let calculateAverageRating = async diningName => {
-  let ratings = await getRatingHelper(diningName, null);
+let calculateAverageRating = async (diningName, diningType) => {
+  let ratings = await getRatingHelper(diningName, diningType);
   let scoreArray = [];
   for (let rating of ratings) {
     scoreArray.push(rating.score);
@@ -98,7 +98,7 @@ exports.getAverageRating = async (req, res) => {
       numSatisfactory,
       numPoor,
       averageScore
-    ] = await calculateAverageRating(diningName);
+    ] = await calculateAverageRating(diningName, null);
 
     return res.status(200).json({
       message: "Get average rating successfully",
@@ -108,6 +108,28 @@ exports.getAverageRating = async (req, res) => {
         numPoor,
         averageScore
       }
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+};
+
+exports.getTrendingRating = async (req, res) => {
+  try {
+    let scoreArray = [];
+    for (let diningCourt of diningCourtList) {
+      let result = await calculateAverageRating(diningCourt, null);
+      let averageScore = result[3];
+      scoreArray.push({
+        diningName: diningCourt,
+        averageScore
+      });
+    }
+    return res.status(200).json({
+      message: "Top trending dining courts",
+      scoreArray
     });
   } catch (err) {
     return res.status(500).json({
