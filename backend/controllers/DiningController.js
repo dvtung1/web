@@ -60,6 +60,8 @@ exports.getComments = async (req, res) => {
     let commentListResult = []; //list of comments that will be return
     commentList.forEach(comment => {
       //push each comment onto the Result list
+      let commentArray = comment.likes;
+      let countLikes = commentArray.length;
       commentListResult.push({
         author: comment.byUser.email,
         text: comment.text,
@@ -67,7 +69,7 @@ exports.getComments = async (req, res) => {
         objectId: comment.objectId,
         authorId: comment.byUser.objectId,
         diningType: comment.ofDiningTiming.diningType.name,
-        likes: comment.likes
+        likes: countLikes
       });
     });
     let count = await Backendless.Data.of(Comment).getObjectCount(queryBuilder);

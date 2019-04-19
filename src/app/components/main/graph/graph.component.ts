@@ -25,10 +25,12 @@ export class GraphComponent implements OnInit {
   };
   public barChartLabels: Label[] = ["Excellent", "Satisfactory", "Poor"];
   public barChartType: ChartType = "bar";
-  public barChartLegend = true;
+  public barChartLegend = false;
   public barChartPlugins = [pluginDataLabels];
 
-  public barChartData: ChartDataSets[] = [{ data: [] }];
+  public barChartData: ChartDataSets[] = [
+    { data: [], backgroundColor: ["red", "blue", "green"] }
+  ];
 
   constructor(
     private graphService: GraphService,
@@ -55,14 +57,12 @@ export class GraphComponent implements OnInit {
             dataArray.push(numExcellent);
             dataArray.push(numSatisfactory);
             dataArray.push(numPoor);
-            console.log(dataArray);
-            this.barChartData.push({
-              data: dataArray
-            });
+            this.barChartData[0].data = dataArray;
           });
       }
     });
   }
+
   // events
   public chartClicked({
     event,
